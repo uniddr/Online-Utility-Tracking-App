@@ -1,0 +1,111 @@
+.grid1{
+    display:grid;
+    grid-template-columns:400px 800px;
+    margin-left:161px;
+    margin-top:50px;
+    width:1200px;
+    height:600px;
+    border:0px;
+    border-radius:4px;
+    padding: 0;
+    box-shadow: 0.6px 0.6px 6px 0.6px grey;
+}
+.div1
+{
+    margin: 0;
+    padding: 0;
+    border-radius: 4px 0px 0px 4px;
+    background-image:url("/image/signin-bg.png");
+}
+.p1
+{
+    margin-left:315px;
+    margin-top:80px;
+    color:rgba(130,88,65,100);
+    font-family:arial;
+    font-size:44px;
+    font-weight:bold;
+}
+.p2
+{
+    margin-left:240px;
+    color:rgba(189, 197, 193, 0.911);
+    font-family:arial;
+    font-size:20px;
+}
+.submitbutton
+{
+    border:2px solid rgba(212, 115, 4, 0.925);
+    background-color:rgba(212, 115, 4, 0.925);
+    margin-left:220px;
+    margin-top:50px;
+    width:300px;
+    height:45px;
+    text-align:center;
+    color:white;
+    border-radius:4px;
+    font-size:20px;
+    outline:none;
+}
+.submitbutton:hover
+{
+    border:2px solid rgba(148,73,73,100);
+    background-color:rgba(148,73,73,100);
+    color:white;
+    border-radius:10px;
+    font-size:25px;
+    outline:none;
+}
+
+.i1
+{
+    margin-left:220px;
+    margin-top:16px;
+    width:400px;
+    height:42px;
+    font-size:20px;
+    border:2px solid rgba(189, 197, 193, 0.911);
+    outline:none;
+    border-radius:3px;
+    box-sizing: border-box;
+    padding: 4px 7px;
+}
+.i2
+{
+    margin-left:220px;
+    width:400px;
+    height:42px;
+    font-size:20px;
+    border:2px solid rgba(189, 197, 193, 0.911);
+    outline:none;
+    border-radius:3px;
+    box-sizing: border-box;
+    padding: 5px 9px;
+}
+input::placeholder
+{
+    color:rgba(189, 197, 193, 0.911);
+}
+input:focus
+{
+    border:2px solid rgba(148,73,73,100);
+    outline:none;
+    border-radius:8px;
+    caret-color:rgba(148,73,73);
+}
+.a1
+{
+    margin-left:50px;
+    font-size:16px;
+    font-family:arial;
+    color:rgb(179, 179, 179);
+    background-color: white;
+    text-decoration:none;
+    border-width: 0px;
+}
+.a1:hover
+{
+    font-size:18px;
+    color: rgba(148,73,73,100);
+    text-decoration:underline;
+}
