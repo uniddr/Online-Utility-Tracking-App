@@ -1,0 +1,400 @@
+body {
+    padding: 0;
+    margin: 0;
+}
+
+.basecont {
+    height: 99vh;
+    min-height: 530px;
+    width: 97vw;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-51%);
+    margin: 0;
+    margin-top: 0.7vh;
+    padding: 0.5vw 1vh;
+    padding: 0;
+    background-color: rgb(255, 255, 255);
+    box-sizing: border-box;
+    border-radius: 6px;
+    text-align: center;
+}
+
+.topbar {
+    position: relative;
+    height: 9vh;
+    min-height: 10%;
+    width: 100%;
+    margin-bottom: 0.5%;
+    background-image: linear-gradient(to right, #752520, #cc534ad2);
+    font: 900 38px 'Times New Roman';
+    border-radius: 9px;
+    color: #e6e698;
+    display: inline-block;
+}
+
+.menuicon {
+    position: relative;
+    width: 60px;
+    height: 6vh;
+    float: left;
+    margin-left: 2.2vw;
+    margin-top: 1.9vh;
+    padding: 0;
+    border-radius: 10%;
+    background-image: url(../image/icons8-menu-48.png);
+    background-position: center;
+    background-size: 53px;
+    background-repeat: no-repeat;
+}
+
+.appname {
+    float: left;
+    position: relative;
+    margin-top: 2.1vh;
+    margin-left: 1.4vw;
+}
+
+.profcont {
+    float: right;
+    position: relative;
+    height: 5.5vh;
+    width: 5.5vh;
+    margin-top: 2.2vh;
+    margin-right: 2vw;
+    padding: 0;
+    border-radius: 100%;
+    background-color: rgba(58, 55, 55, 0.767);
+    background-image: url(../image/icons8-male-user-48.png);
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.profbtnoptcont {
+    position: absolute;
+    top: 8.3vh;
+    right: 1.8vw;
+    width: 95px;
+    z-index: 2;
+    background-color: #ffffffff;
+    border-radius: 6px;
+    box-sizing: border-box;
+    overflow: hidden;
+    box-shadow: 2px 2px 10px 3px rgba(0, 0, 0, 0.336);
+    /* display: inline; */
+    display: none;
+}
+
+.profbtnoptcont a {
+    margin: 0;
+    width: 100%;
+    font: 500 16px Arial;
+    color: black;
+    text-decoration: none;
+    box-sizing: border-box;
+    display: block;
+    text-align: center;
+    padding: 4% 0%;
+    border-bottom: 1px solid rgba(78, 73, 73, 0.466);
+    border-radius: 2px;
+}
+
+.leftmenucont {
+    height: 98.9%;
+    width: 200px;
+    position: absolute;
+    left: 0;
+    z-index: 3;
+    box-sizing: border-box;
+    border-radius: 8px 4px 4px 8px;
+    box-shadow: 0.9px 0.5px rgb(185, 180, 180);
+    background-image: linear-gradient(#8a322cbd, #f19a947c), url(../image/signin-bg.png);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    display: none;
+}
+
+.leftmenuback {
+    float: right;
+    height: 4%;
+    width: 19%;
+    margin-top: 13%;
+    margin-right: 8px;
+    border-radius: 60px;
+    box-sizing: border-box;
+    background-color: rgba(240, 248, 255, 0);
+    background-image: url(../image/icons8-back-50.png);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+}
+
+.leftmenuback:hover {
+    background-color: rgba(102, 43, 4, 0.767);
+    border: 3px solid rgba(241, 217, 76, 0.808);
+}
+
+.leftmenuopt {
+    float: left;
+    margin-top: 50%;
+    display: block;
+}
+
+.leftmenuoptitem {
+    display: inline-block;
+    width: 100%;
+    height: 45px;
+    text-align: center;
+    padding: 11px 0px;
+    box-sizing: border-box;
+    font: 600 18px 'Times New Roman';
+    background-color: blanchedalmond;
+    border: 0.1px solid #72433ffd;
+}
+
+.leftmenuoptitem:hover {
+    background-color: #d8746d;
+}
+
+.infocont {
+    position: relative;
+    height: 42%;
+    width: 98.6%;
+    background-color: rgb(255, 255, 255);
+    display: inline-block;
+    border-radius: 6px;
+    margin: 0;
+    margin-top: 0.2vh;
+    box-shadow: 1px 1px 10px 5px rgba(145, 139, 139, 0.514);
+    box-sizing: border-box;
+}
+
+.cc {
+    height: 65%;
+    width: 20%;
+    /* background-color: rgb(72, 72, 206); */
+    float: left;
+    position: relative;
+    margin-top: 1%;
+    margin-left: 6%;
+    font: 700 20px Arial;
+    text-align: center;
+}
+
+.cc p {
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    bottom: 60%;
+    width: 99.9%;
+    color: rgb(70, 70, 241);
+    /* background-color: antiquewhite; */
+}
+
+.ccvalue {
+    height: 50%;
+    width: 100%;
+    /* background-color: aliceblue; */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font: 700 24px Arial;
+    position: absolute;
+    bottom: 8px;
+}
+
+.tp {
+    height: 65%;
+    width: 22%;
+    /* background-color: rgb(72, 72, 206); */
+    float: left;
+    position: relative;
+    margin-top: 1%;
+    font: 700 20px Arial;
+}
+
+.tp p {
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    bottom: 60%;
+    width: 99.9%;
+    color: rgb(5, 151, 5);
+    /* background-color: antiquewhite; */
+}
+
+.tpvalue {
+    height: 50%;
+    width: 100%;
+    /* background-color: aliceblue; */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font: 700 24px Arial;
+    position: absolute;
+    bottom: 8px;
+}
+
+.td {
+    height: 65%;
+    width: 22%;
+    /* background-color: rgb(72, 72, 206); */
+    float: left;
+    position: relative;
+    margin-top: 1%;
+    font: 700 20px Arial;
+}
+
+.td p {
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    bottom: 60%;
+    width: 99.9%;
+    color: rgb(214, 46, 46);
+    /* background-color: antiquewhite; */
+}
+
+.tdvalue {
+    height: 50%;
+    width: 100%;
+    /* background-color: aliceblue; */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font: 700 24px Arial;
+    position: absolute;
+    bottom: 8px;
+}
+
+.tc {
+    height: 65%;
+    width: 24%;
+    /* background-color: rgb(255, 255, 255); */
+    float: left;
+    position: relative;
+    margin-top: 1%;
+    font: 700 20px Arial;
+}
+
+.tc p {
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    bottom: 60%;
+    width: 99.9%;
+    color: rgb(214, 186, 29);
+    /* background-color: rgb(255, 255, 255); */
+}
+
+.tcvalue {
+    height: 50%;
+    width: 100%;
+    /* background-color: rgb(255, 255, 255); */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font: 700 24px Arial;
+    position: absolute;
+    bottom: 8px;
+}
+
+.rsrctypecont {
+    height: 10%;
+    width: 120px;
+    /* background-color: white; */
+    position: absolute;
+    bottom: 3px;
+    float: left;
+    margin-left: 5%;
+}
+
+.defaultinfo {
+    margin: 0;
+    width: 70%;
+    height: 100%;
+    padding-left: 0%;
+    padding-top: 3%;
+    float: left;
+    /* background-color: rgb(255, 255, 255); */
+    font: 500 16px Arial;
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+}
+
+.upbtn {
+    width: 25%;
+    height: 95%;
+    padding-top: 20%;
+    box-sizing: border-box;
+    border: none;
+    background-color: rgba(241, 241, 241, 0);
+    background-image: url(../image/icons8-up-48.png);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 15px;
+}
+
+.optcont {
+    float: left;
+    width: 120px;
+    position: absolute;
+    bottom: 100%;
+    background-color: rgb(255, 255, 255);
+    z-index: 1;
+    box-shadow: 1px 1px 10px 3px rgba(0, 0, 0, 0.336);
+    border-radius: 4px;
+    overflow: hidden;
+    display: block;
+    display: none;
+}
+
+.optcont a {
+    display: block;
+    padding: 3% 0%;
+    text-align: left;
+    width: 100%;
+    font: 500 16px Arial;
+    color: black;
+    background-color: rgb(255, 255, 255);
+    text-decoration: none;
+    box-sizing: border-box;
+    border-bottom: 1px solid rgba(78, 73, 73, 0.87);
+    border-radius: 2px;
+}
+
+.optval {
+    margin: 0;
+    padding: 0;
+    display: inline-block;
+    width: 68%;
+    margin-left: 2%;
+}
+
+.tick {
+    margin: 0;
+    margin-left: 2px;
+    padding: 0;
+    width: 12%;
+    height: 80%;
+    display: none;
+    display: inline;
+}
+
+.infoperiodcont {
+    height: 10%;
+    width: 120px;
+    background-color: rgb(255, 255, 255);
+    position: absolute;
+    bottom: 3px;
+    float: left;
+    margin-left: 23%;
+}
+
+.randomtemp {
+    margin-top: 20px;
+    margin-bottom: 2.2%;
+}
