@@ -86,7 +86,7 @@ route.post('/auth',function(request, response)
                         console.log(request.session)
 
                         sendmail(emailaddress, pass).then( (rs) => {
-                            response.send('An email containing your password has been successfully.');
+                            response.send('An email containing your password has been sent successfully.');
                             console.log('Email has been sent successfully ' + util.inspect(rs))
                             response.end();
                         })
@@ -152,10 +152,10 @@ route.get('/analytics', function(request, response)
             response.sendFile(path.join(__dirname, '..', 'public', 'html', 'analytics.html'));
             // response.send('Welcome, ID ' + request.session.userid
             //  + `\n<a href='/logout'>Click here to logout</a>`);
-        }else
+        }
+        else
         {
-            response.send('Please login to view this page!');
-            response.end();
+            response.end('Please login to view this page!');
         }
     }
 );
