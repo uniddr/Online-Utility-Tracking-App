@@ -77,11 +77,18 @@ rtoc.addEventListener("transitionstart", function() {
 document.getElementById("rsrctypeupbtn").addEventListener('click', function() {
     lmc.style.width = "0";
     pboc.style.display = "none";
-
-    document.getElementById("rsrctypeoptvalcont").style.display = "none";
-    rtoc.style.height = "52px";
-
     ipoc.style.height = "0";
+
+    if(rtoc.style.height != "52px")
+    {
+        document.getElementById("rsrctypeoptvalcont").style.display = "none";
+        rtoc.style.height = "52px";
+    }
+    else
+    {
+        document.click();
+        return;
+    }
 
     let cur = document.getElementById("rsrctypedefaultinfo").innerHTML;
     let arr = document.getElementById("rsrctypeoptvalcont").getElementsByTagName("a");
@@ -124,9 +131,17 @@ document.getElementById("infoperiodupbtn").addEventListener('click', function() 
     pboc.style.display = "none";
     
     rtoc.style.height = "0";
-
-    document.getElementById("infoperiodoptvalcont").style.display = "none";
-    ipoc.style.height = "78px";
+    
+    if(ipoc.style.height != "78px")
+    {
+        document.getElementById("infoperiodoptvalcont").style.display = "none";
+        ipoc.style.height = "78px";
+    }
+    else
+    {
+        document.click();
+        return;
+    }
 
     let cur = document.getElementById("infoperioddefaultinfo").innerHTML;
     let arr = document.getElementById("infoperiodoptvalcont").getElementsByTagName("a");
