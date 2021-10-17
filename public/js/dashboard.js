@@ -282,3 +282,16 @@ document.getElementById("profbtnoptcont").getElementsByTagName("a")[0].addEventL
         }
     });
 });
+
+document.querySelector(".leftmenuoptitem a").addEventListener("click", function() {
+    event.stopPropagation();
+});
+document.querySelector(".leftmenuoptitem1 a").addEventListener("click", function() {
+    event.stopPropagation();
+});
+document.querySelector(".leftmenuoptitem2 a").addEventListener("click", function() {
+    event.stopPropagation();
+});
+document.querySelector(".leftmenuoptitem3 a").addEventListener("click", function() {
+    event.stopPropagation();
+});

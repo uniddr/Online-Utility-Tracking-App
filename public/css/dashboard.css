@@ -157,6 +157,11 @@ body {
     border: 0.1px solid #72433ffd;
 }
 
+.leftmenuoptitem a{
+    text-decoration: none;
+    color: black;
+}
+
 .leftmenuoptitem:hover {
     background-color: #d8746d;
 }
