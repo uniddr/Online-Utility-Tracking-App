@@ -145,6 +145,22 @@ route.post('/logout', function(request, response)
 //     }
 // );
 
+route.get('/analytics', function(request, response)
+    {
+        if(request.session.loggedin)
+        {
+            response.sendFile(path.join(__dirname, '..', 'public', 'html', 'analytics.html'));
+            // response.send('Welcome, ID ' + request.session.userid
+            //  + `\n<a href='/logout'>Click here to logout</a>`);
+        }else
+        {
+            response.send('Please login to view this page!');
+            response.end();
+        }
+    }
+);
+
+
 route.post('/infocont', function(request, response)
     {
         let rsrctype = request.body.resource;
