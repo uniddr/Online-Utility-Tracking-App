@@ -1,82 +1,92 @@
 <!DOCTYPE html>
 <head>
     <title>Utility Tracking App</title>
-    <link rel="stylesheet" href="../css/dashboard.css">
+    <link rel="stylesheet" href="css/dashboard.css">
 </head>
 
 <body>
-    <div class="basecont">
-        <div class="leftmenucont">
-            <div class="leftmenuback"></div>
-            <div class="leftmenuopt">
-                <span class="leftmenuoptitem">General</span>
-                <span class="leftmenuoptitem">User Manager</span>
-                <span class="leftmenuoptitem">Billing Info</span>
-                <span class="leftmenuoptitem">Analytics</span>
+    <div class="basecont" id="basecont">
+        <div class="leftmenucont" id="leftmenucont">
+            <div class="leftmenuback" id="leftmenuback"></div>
+            <div class="leftmenuopt" id="leftmenuopt">
+                <span class="leftmenuoptitem" id="leftmenuoptitem0">General</span>
+                <span class="leftmenuoptitem" id="leftmenuoptitem1">User Manager</span>
+                <span class="leftmenuoptitem" id="leftmenuoptitem2">Billing Info</span>
+                <span class="leftmenuoptitem" id="leftmenuoptitem3">Analytics</span>
             </div>
         </div>
-        <div class="topbar">
-            <div class="menuicon"></div>
-            <div class="appname">
+        <div class="topbar" id="topbar">
+            <div class="menuicon" id="menuicon"></div>
+            <div class="appname" id="appname">
                 Online Utility Tracker
             </div>
-            <div class="profcont"></div>
-            <div class="profbtnoptcont">
+            <div class="profcont" id="profcont"></div>
+            <div class="profbtnoptcont" id="profbtnoptcont">
+                <!-- <a href="logout"> -->
                 <a href="#~">
-                    <span class="profoptval">Sign Out</span>
+                    <span class="profoptval" id="profoptval0">Sign Out</span>
                 </a>
             </div>
         </div>
-        <div class="infocont">
-            <div class="cc">
-                <p>Current Clients</p>
-                <div class="ccvalue">fdf</div>
-            </div>
-            <div class="tp">
-                <p>Total Paid (BDT)</p>
-                <div class="tpvalue">fdf</div>
-            </div>
-            <div class="td">
-                <p>Total Due (BDT)</p>
-                <div class="tdvalue">fdf</div>
-            </div>
-            <div class="tc">
-                <p>Total Consumption (gal)</p>
-                <div class="tcvalue">fdf</div>
-            </div>
-            <div class="rsrctypecont">
-                <div class="defaultinfo">Water</div>
-                <button class="upbtn"></button>
-                <div class="optcont">
-                    <a href="#~">
-                       <span class="optval">Water</span>
-                       <img src="../image/icons8-checkmark-30.png" class="tick">
-                    </a>
-                    <a href="#~">
-                        <span class="optval">Electricity</span>
-                        <img src="../image/icons8-checkmark-30.png" class="tick">
-                    </a>
+        <div class="contentdiv" id="contentdiv">
+            <div class="infocont" id="infocont">
+                <div class="cc" id="cc">
+                    <p>Current Clients</p>
+                    <div class="ccvalue" id="ccvalue">0</div>
+                </div>
+                <div class="tp" id="tp">
+                    <p>Total Paid (BDT)</p>
+                    <div class="tpvalue" id="tpvalue">0</div>
+                </div>
+                <div class="td" id="td">
+                    <p>Total Due (BDT)</p>
+                    <div class="tdvalue" id="tdvalue">0</div>
+                </div>
+                <div class="tc" id="tc">
+                    <p id="tctitle">Total Consumption (gal)</p>
+                    <div class="tcvalue" id="tcvalue">0</div>
+                </div>
+                <div class="rsrctypecont" id="rsrctypecont">
+                    <div class="defaultinfo" id="rsrctypedefaultinfo">Water</div>
+                    <button class="upbtn" id="rsrctypeupbtn"></button>
+                    <div class="optcont" id="rsrctypeoptcont">
+                        <div class="optvalcont" id="rsrctypeoptvalcont">
+                            <a href="#~">
+                                <span class="optval" id="rsrctypeoptval0">Water</span>
+                                <img src="../image/icons8-checkmark-30.png" class="tick">
+                            </a>
+                            <a href="#~">
+                                <span class="optval" id="rsrctypeoptval1">Electricity</span>
+                                <img src="../image/icons8-checkmark-30.png" class="tick">
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="infoperiodcont" id="infoperiodcont">
+                    <div class="defaultinfo" id="infoperioddefaultinfo">This Month</div>
+                    <button class="upbtn" id="infoperiodupbtn"></button>
+                    <div class="optcont" id="infoperiodoptcont">
+                        <div class="optvalcont" id="infoperiodoptvalcont">
+                            <a href="#~">
+                                <span class="optval" id="infoperiodoptval0">All Time</span>
+                                <img src="../image/icons8-checkmark-30.png" class="tick">
+                            </a>
+                            <a href="#~">
+                                <span class="optval" id="infoperiodoptval1">This Year</span>
+                                <img src="../image/icons8-checkmark-30.png" class="tick">
+                            </a>
+                            <a href="#~">
+                                <span class="optval" id="infoperiodoptval2">This Month</span>
+                                <img src="../image/icons8-checkmark-30.png" class="tick">
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="infoperiodcont">
-                <div class="defaultinfo">This Month</div>
-                <button class="upbtn"></button>
-                <div class="optcont">
-                    <a href="#~">
-                        <span class="optval">All Time</span>
-                        <img src="../image/icons8-checkmark-30.png" class="tick">
-                    </a>
-                    <a href="#~">
-                        <span class="optval">This Year</span>
-                        <img src="../image/icons8-checkmark-30.png" class="tick">
-                    </a>
-                    <a href="#~">
-                        <span class="optval">This Month</span>
-                        <img src="../image/icons8-checkmark-30.png" class="tick">
-                    </a>
-                </div>
-            </div>
+            <div class="infocont randomtemp"></div>
         </div>
-        <div class="infocont randomtemp"></div>
     </div>
 </body>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="/js/dashboard.js"></script>

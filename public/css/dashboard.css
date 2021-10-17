@@ -102,7 +102,7 @@ body {
 
 .leftmenucont {
     height: 98.9%;
-    width: 200px;
+    width: 0;
     position: absolute;
     left: 0;
     z-index: 3;
@@ -113,7 +113,9 @@ body {
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
-    display: none;
+    overflow: hidden;
+    transition: 0.3s ease;
+    /* display: none; */
 }
 
 .leftmenuback {
@@ -139,7 +141,8 @@ body {
 .leftmenuopt {
     float: left;
     margin-top: 50%;
-    display: block;
+    /* display: block; */
+    display: none;
 }
 
 .leftmenuoptitem {
@@ -158,9 +161,18 @@ body {
     background-color: #d8746d;
 }
 
+.contentdiv {
+    margin: 0;
+    padding: 0;
+    display: inline-block;
+    width: 99%;
+    height: 87.3%;
+    background-color: #ecc6c6;
+}
+
 .infocont {
     position: relative;
-    height: 42%;
+    height: 47%;
     width: 98.6%;
     background-color: rgb(255, 255, 255);
     display: inline-block;
@@ -345,13 +357,24 @@ body {
     bottom: 100%;
     background-color: rgb(255, 255, 255);
     z-index: 1;
-    box-shadow: 1px 1px 10px 3px rgba(0, 0, 0, 0.336);
+    /* box-shadow: 1px 1px 10px 3px rgba(0, 0, 0, 0.336); */
     border-radius: 4px;
     overflow: hidden;
+    height: 0;
+    transition: height 0.3s ease;
     display: block;
-    display: none;
+    /* display: none; */
 }
-
+.optvalcont {
+    float: left;
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    /* display: none; */
+    /* display: block; */
+}
 .optcont a {
     display: block;
     padding: 3% 0%;
@@ -381,13 +404,13 @@ body {
     width: 12%;
     height: 80%;
     display: none;
-    display: inline;
+    /* display: inline; */
 }
 
 .infoperiodcont {
     height: 10%;
     width: 120px;
-    background-color: rgb(255, 255, 255);
+    /* background-color: rgb(255, 255, 255); */
     position: absolute;
     bottom: 3px;
     float: left;
