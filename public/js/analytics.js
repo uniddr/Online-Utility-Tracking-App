@@ -41,7 +41,7 @@ document.getElementById("menuicon").addEventListener('click', function() {
     rtoc.style.height = "0";
 
     poc.style.height = "0";
-    chartIt();
+
     event.stopPropagation();
 });
 
@@ -60,7 +60,7 @@ document.getElementById("profcont").addEventListener('click', function() {
     rtoc.style.height = "0";
 
     poc.style.height = "0";
-
+    
     event.stopPropagation();
 });
 
@@ -314,25 +314,6 @@ document.getElementById("profbtnoptcont").getElementsByTagName("a")[0].addEventL
     event.stopPropagation();
 });
 
-document.querySelector(".leftmenuoptitem a").addEventListener("click", function() {
-    event.stopPropagation();
-});
-document.querySelector(".leftmenuoptitem1 a").addEventListener("click", function() {
-    event.stopPropagation();
-});
-document.querySelector(".leftmenuoptitem2 a").addEventListener("click", function() {
-    event.stopPropagation();
-});
-document.querySelector(".leftmenuoptitem3 a").addEventListener("click", function() {
-    event.stopPropagation();
-});
-
-document.getElementById("displaybtn").addEventListener('click', function() {
-    alert("chart won't show :(");
-    chartIt();
-    event.stopPropagation();
-});
-
 function chartIt() {
     var ctx = document.getElementById('myChart').getContext('2d');
     alert("chart running");
@@ -373,3 +354,8 @@ function chartIt() {
         }
     });
 }
+
+document.getElementById("displaybtn").addEventListener("click", function() {
+    alert("chart won't show :(");
+    chartIt();
+});
