@@ -30,7 +30,60 @@
             </div>
         </div>
         <div class="contentdiv" id="contentdiv">
-            <div class="filtercont" id="filtercont"></div>
+            <div class="filtercont" id="filtercont">
+                <p class="infotypelabel">Select the type of information to view: </p>
+                <div class="infotypecont" id="infotypecont">
+                    <div class="defaultinfo" id="infotypedefaultinfo">Bills</div>
+                    <button class="downbtn" id="infotypedownbtn"></button>
+                    <div class="optcont" id="infotypeoptcont">
+                        <div class="optvalcont" id="infotypeoptvalcont">
+                            <a href="#~">
+                                <span class="optval" id="infotypeoptval0">Bills</span>
+                                <img src="../image/icons8-checkmark-30.png" class="tick">
+                            </a>
+                            <a href="#~">
+                                <span class="optval" id="infotypeoptval1">Usage</span>
+                                <img src="../image/icons8-checkmark-30.png" class="tick">
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <p class="rsctypelabel">Select resource type: </p>
+                <div class="rsctypecont" id="rsctypecont">
+                    <div class="defaultinfo" id="rsctypedefaultinfo">Water</div>
+                    <button class="downbtn" id="rsctypedownbtn"></button>
+                    <div class="optcont" id="rsctypeoptcont">
+                        <div class="optvalcont" id="rsctypeoptvalcont">
+                            <a href="#~">
+                                <span class="optval" id="rsctypeoptval0">Water</span>
+                                <img src="../image/icons8-checkmark-30.png" class="tick">
+                            </a>
+                            <a href="#~">
+                                <span class="optval" id="rsctypeoptval1">Electricity</span>
+                                <img src="../image/icons8-checkmark-30.png" class="tick">
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <p class="periodlabel">Select time period: </p>
+                <div class="periodcont" id="periodcont">
+                    <div class="defaultinfo" id="perioddefaultinfo">This Year</div>
+                    <button class="downbtn" id="perioddownbtn"></button>
+                    <div class="optcont" id="periodoptcont">
+                        <div class="optvalcont" id="periodoptvalcont">
+                            <a href="#~">
+                                <span class="optval" id="periodoptval0">All Time</span>
+                                <img src="../image/icons8-checkmark-30.png" class="tick">
+                            </a>
+                            <a href="#~">
+                                <span class="optval" id="periodoptval1">This Year</span>
+                                <img src="../image/icons8-checkmark-30.png" class="tick">
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <button class="displaybtn" id="displaybtn" type="button">Display Graph</button>
+            </div>
             <div class="drawingcont" id="chartcont">
                 <div class="chartcont">
                     <canvas id="myChart"></canvas>
