@@ -9,6 +9,7 @@
   "author": "me",
   "license": "ISC",
   "dependencies": {
+    "chart.js": "^3.5.1",
     "cookie-parser": "^1.4.5",
     "express": "^4.17.1",
     "express-session": "^1.17.2",

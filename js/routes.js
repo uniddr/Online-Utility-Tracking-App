@@ -11,6 +11,7 @@ var route = express();
 route.use('/css', express.static(path.join(__dirname, '..', 'public', 'css')));
 route.use('/image', express.static(path.join(__dirname, '..', 'public', 'image')));
 route.use('/js', express.static(path.join(__dirname, '..', 'public', 'js')));
+route.use('/chart', express.static(path.join(__dirname, '..', 'node_modules', 'chart.js', 'dist')));
 
 
 route.use(session(
