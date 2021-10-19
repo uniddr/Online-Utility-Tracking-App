@@ -314,33 +314,37 @@ document.getElementById("profbtnoptcont").getElementsByTagName("a")[0].addEventL
     event.stopPropagation();
 });
 
-function chartIt() {
-    var ctx = document.getElementById('myChart').getContext('2d');
-    alert("chart running");
+var myChart;
 
-    var myChart = new Chart(ctx, {
+function chartIt(reclabels, reclabel, recdata) {
+    var ctx = document.getElementById('myChart').getContext('2d');
+    // alert("chart is running");
+
+    myChart = new Chart(ctx, {
         type: 'bar',
         data: {
-            labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+            labels: reclabels,
             datasets: [{
-                label: '# of Votes',
-                data: [12, 25, 3, 5, 2, 3],
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(255, 159, 64, 0.2)'
-                ],
-                borderColor: [
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(255, 159, 64, 1)'
-                ],
+                label: reclabel,
+                data: recdata,
+                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                // backgroundColor: [
+                //     'rgba(255, 99, 132, 0.2)',
+                //     'rgba(54, 162, 235, 0.2)',
+                //     'rgba(255, 206, 86, 0.2)',
+                //     'rgba(75, 192, 192, 0.2)',
+                //     'rgba(153, 102, 255, 0.2)',
+                //     'rgba(255, 159, 64, 0.2)'
+                // ],
+                borderColor: 'rgba(255, 99, 132, 1)',
+                // borderColor: [
+                //     'rgba(255, 99, 132, 1)',
+                //     'rgba(54, 162, 235, 1)',
+                //     'rgba(255, 206, 86, 1)',
+                //     'rgba(75, 192, 192, 1)',
+                //     'rgba(153, 102, 255, 1)',
+                //     'rgba(255, 159, 64, 1)'
+                // ],
                 borderWidth: 1
             }]
         },
@@ -356,6 +360,104 @@ function chartIt() {
 }
 
 document.getElementById("displaybtn").addEventListener("click", function() {
-    alert("chart won't show :(");
-    chartIt();
+    if(myChart)
+    {
+        myChart.destroy();
+    }
+
+    let infotype = document.getElementById("infotypedefaultinfo").innerHTML;
+    let rsctype = document.getElementById("rsctypedefaultinfo").innerHTML;
+    let periodval = document.getElementById("perioddefaultinfo").innerHTML;
+
+    let dataToSend = {
+        info: infotype,
+        resource: rsctype,
+        period: periodval
+    };
+    let labelsforchart = [];
+    let labelfordataset;
+    let datafordataset = [];
+
+    // console.log(`${JSON.stringify(dataToSend)}`);
+
+    jQuery.ajax({
+        url: "/chartinfo",
+        type: "POST",
+        contentType: "application/json",
+        data: JSON.stringify(dataToSend),
+        success: function(result, status, xhr) {
+            if(status == "success")
+            {
+                console.log(result);
+                console.log(result.length);
+                if(periodval == "All Time")
+                {
+                    if(infotype == "Bills")
+                    {
+                        for(let i=0; i<result.length; i++)
+                        {
+                            labelsforchart.push(`${result[i].Year}`);
+                            datafordataset.push(result[i].Total_bill);
+                        }
+                        labelfordataset = "Yearly Bill (BDT)";
+                    }
+                    else if(infotype == "Usage")
+                    {
+                        for(let i=0; i<result.length; i++)
+                        {
+                            labelsforchart.push(`${result[i].Year}`);
+                            datafordataset.push(result[i].Used);
+                        }
+                        if(rsctype == "Water")
+                        {
+                            labelfordataset = "Yearly Use (gal)";
+                        }
+                        else if(rsctype == "Electricity")
+                        {
+                            labelfordataset = "Yearly Use (kwh)";
+                        }
+                    }
+                }
+                else if(periodval == "This Year")
+                {
+                    labelsforchart = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+                    if(infotype == "Bills")
+                    {
+                        for(let i=0; i<result.length; i++)
+                        {
+                            datafordataset.push(result[i].Monthly_Bill);
+                        }
+                        labelfordataset = "Monthly Bill (BDT)";
+                    }
+                    else if(infotype == "Usage")
+                    {
+                        for(let i=0; i<result.length; i++)
+                        {
+                            datafordataset.push(result[i].Used);
+                        }
+                        if(rsctype == "Water")
+                        {
+                            labelfordataset = "Monthly Use (gal)";
+                        }
+                        else if(rsctype == "Electricity")
+                        {
+                            labelfordataset = "Monthly Use (kwh)";
+                        }
+                    }
+                }
+
+                chartIt(labelsforchart, labelfordataset, datafordataset);
+            }
+            else
+            {
+                alert("Failed to retrieve!");
+            }
+        },
+        complete: function(xhr, status) {
+            if(status == "success")
+            {
+                // alert("Success");
+            }
+        }
+    });
 });

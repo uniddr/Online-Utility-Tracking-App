@@ -151,8 +151,6 @@ route.get('/analytics', function(request, response)
         if(request.session.loggedin)
         {
             response.sendFile(path.join(__dirname, '..', 'public', 'html', 'analytics.html'));
-            // response.send('Welcome, ID ' + request.session.userid
-            //  + `\n<a href='/logout'>Click here to logout</a>`);
         }
         else
         {
@@ -171,9 +169,6 @@ route.post('/infocont', function(request, response)
         var td = 2.0400;
         var tc = 3.0050;
 
-        // console.log(rsrctype);
-        // console.log(infoperiod);
-        // console.log(request.body);
         if(rsrctype == "Water")
         {
             var qry1 = "select count( distinct(id)) as tcc from sakila.node_users where User_type='C' and Water_service='Yes'";
@@ -223,36 +218,33 @@ route.post('/infocont', function(request, response)
             if(error1) throw error1;
             if(result1.length > 0)
             {
-                if(result1[0].tcc != 'null')
+                if(result1[0].tcc != null)
                 {
                     cc = result1[0].tcc;
                 }
                 else
                 {
-                    cc = result1[0].tcc;
+                    cc = 0;
                 }
                 // console.log(result1);
-                // call the other 3 connection.query() functions from here,
-                // one inside the callback of the other. The response.setHeader,send,end
-                // will go inside the innermost callback.
                 connection.query(qry2, function(error2, result2, fields2) {
                     if(error2) throw error2;
                     if(result2.length > 0)
                     {
-                        if(result2[0].ttp != 'null')
+                        if(result2[0].ttp != null)
                         {
                             tp = result2[0].ttp;
                         }
                         else
                         {
-                            tp = result2[0].ttp;
+                            tp = 0;
                         }
 
                         connection.query(qry3, function(error3, result3, fields3) {
                             if(error3) throw error3;
                             if(result3.length > 0)
                             {
-                                if(result3[0].ttd != 'null')
+                                if(result3[0].ttd != null)
                                 {
                                     td = result3[0].ttd;
                                 }
@@ -265,7 +257,7 @@ route.post('/infocont', function(request, response)
                                     if(error4) throw error4;
                                     if(result4.length > 0)
                                     {
-                                        if(result4[0].ttc != 'null')
+                                        if(result4[0].ttc != null)
                                         {
                                             tc = result4[0].ttc;
                                         }
@@ -276,7 +268,6 @@ route.post('/infocont', function(request, response)
 
                                         response.setHeader('Content-Type', 'application/json');
                                         response.send({curclients: cc, totalp: tp, totald: td, totalc: tc});
-                                        response.end();
                                     }
                                     else
                                     {
@@ -298,10 +289,87 @@ route.post('/infocont', function(request, response)
             }
             else
             {
-                response.status(404).end('Error fetching cc!');
+                response.status(404).send('Error fetching cc!');
             }
         });
     }
 );
+
+route.post('/chartinfo', function(request, response) {
+    let infotype = request.body.info;
+    let rsctype = request.body.resource;
+    let periodval = request.body.period;
+
+    let qry1;
+    if(infotype == "Bills")
+    {
+        if(rsctype == "Water")
+        {
+            if(periodval == "All Time")
+            {
+                qry1 = "select year(subdate(issue_date, interval 1 month)) Year, sum(total_payable) Total_bill from sakila.node_water_bill where user_id= ?  group by year(subdate(issue_date, interval 1 month)) order by year(subdate(issue_date, interval 1 month))";
+                // 
+                // qry1 = "select year(subdate(issue_date, interval 1 month)) Year, sum(total_payable - extra_cost) Total_bill from sakila.node_water_bill where user_id=? group by year(subdate(issue_date, interval 1 month)) order by year(subdate(issue_date, interval 1 month))";
+            }
+            else if(periodval == "This Year")
+            {
+                qry1 = "select total_payable Monthly_Bill from sakila.node_water_bill where user_id= ? and year(now())= case month(now()) when 1 then year(now())-1 else year(now()) end order by month(issue_date) asc";
+            }
+        }
+        else if(rsctype == "Electricity")
+        {
+            if(periodval == "All Time")
+            {
+                qry1 = "select year(subdate(issue_date, interval 1 month)) Year, sum(total_payable) Total_bill from sakila.node_electricity_bill where user_id= ? group by year(subdate(issue_date, interval 1 month)) order by year(subdate(issue_date, interval 1 month))";
+                // 
+                // qry1 = "select year(subdate(issue_date, interval 1 month)) Year, sum(total_payable - extra_cost) Total_bill from sakila.node_electricity_bill where user_id=? group by year(subdate(issue_date, interval 1 month)) order by year(subdate(issue_date, interval 1 month))";
+            }
+            else if(periodval == "This Year")
+            {
+                qry1 = "select total_payable Monthly_Bill from sakila.node_electricity_bill where user_id= ? and year(now())= case month(now()) when 1 then year(now())-1 else year(now()) end order by month(issue_date) asc";
+            }
+        }
+    }
+    else if(infotype == "Usage")
+    {
+        if(rsctype == "Water")
+        {
+            if(periodval == "All Time")
+            {
+                qry1 = "select year(record_date) Year, sum(used_amount) Used from sakila.node_usage_history where user_id= ? and resource_type='Water' group by year(record_date) order by year(record_date) asc";
+            }
+            else if(periodval == "This Year")
+            {
+                qry1 = "select used_amount Used from sakila.node_usage_history where user_id= ? and resource_type='Water' and year(record_date)=year(now()) order by month(record_date) asc";
+            }
+        }
+        else if(rsctype == "Electricity")
+        {
+            if(periodval == "All Time")
+            {
+                qry1 = "select year(record_date) Year, sum(used_amount) Used from sakila.node_usage_history where user_id= ? and resource_type='Electricity' group by year(record_date) order by year(record_date) asc";
+            }
+            else if(periodval == "This Year")
+            {
+                qry1 = "select used_amount Used from sakila.node_usage_history where user_id= ? and resource_type='Electricity' and year(record_date)=year(now()) order by month(record_date) asc";
+            }
+        }
+    }
+
+    connection.query(qry1, [request.session.userid], function(error, result, fields) {
+        if(error) throw error;
+        if(result.length > 0)
+        {
+            // without adding this +inside, the response gets sent before the qry1 value is even set.....
+            console.log(JSON.stringify(result) + "inside");
+            response.setHeader('Content-Type', 'application/json');
+            response.send(JSON.stringify(result));
+        }
+        else
+        {
+            response.status(404).send("Error retrieving chart data! Resultset length is zero!");
+        }
+    });
+});
 
 module.exports = route;
