@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="js/userdetail.js"></script>
+    <link rel="stylesheet" href="css/userdetail.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+    <div class="basecont" id="basecont">
+        <div class="leftmenucont" id="leftmenucont">
+            <div class="leftmenuback" id="leftmenuback"></div>
+            <div class="leftmenuopt" id="leftmenuopt">
+                <span class="leftmenuoptitem" id="leftmenuoptitem0">Dashboard</span>
+                <span class="leftmenuoptitem" id="leftmenuoptitem1">User Manager</span>
+                <span class="leftmenuoptitem" id="leftmenuoptitem2">Billing Info</span>
+                <span class="leftmenuoptitem" id="leftmenuoptitem3">Analytics</span>
+            </div>
+        </div>
+        <div class="topbar" id="topbar">
+            <div class="menuicon" id="menuicon"></div>
+            <div class="appname" id="appname">
+                Online Utility Tracker
+            </div>
+            <div class="profcont" id="profcont"></div>
+            <div class="profbtnoptcont" id="profbtnoptcont">
+                <!-- <a href="logout"> -->
+                <a href="#~">
+                    <span class="profoptval" id="profoptval0">Sign Out</span>
+                </a>
+            </div>
+        </div>
+        <div class="contentdiv" id="contentdiv">
+            <div id="menu-button-div">
+                <button id="username">Username</button>
+                <button id="overview">Overview</button>
+                <a href="/issued_bill"><button id="issue_bill">Issued Bills</button></a>
+                <button id="settings">Settings</button>
+                </div>
+            
+                <div id="detail-div">
+                    <div id="id" style="margin-top:110px;">
+                        <p style="color:#f9ff96">User Id</p>
+                    </div>
+                    <div id="location">
+                        <p style="color:#f9ff96">Location</p>
+                    </div>
+                    <div id="email">
+                        <p style="color:#f9ff96">E-mail</p>
+                    </div>
+                    <div id="password">
+                        <p style="color:#f9ff96">Password</p>
+                    </div>
+                    <div id="user_type">
+                        <p style="color:#f9ff96">User-type</p>
+                    </div>
+                    <div id="elec_due">
+                        <p style="color:#f9ff96">Electricity due</p>
+                    </div>
+                    <div id="water_due" style="margin-bottom:110px;">
+                        <p style="color:#f9ff96">Water due</p>
+                    </div>
+                </div>
+
+                <div id="graph-div">
+                </div>
+        </div>
+    </div>
+
+</body>
+</html>
+
+
+

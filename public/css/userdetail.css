@@ -1,0 +1,92 @@
+#detail-div
+{
+    float:left;
+    width:400px;
+    /*border:1px solid  #eff1f4;*/
+    margin-top:15px;
+    background-color:#eff1f4;
+    border-radius:3px;
+    margin-left:15px;
+    opacity:1px;
+}
+
+#menu-button-div
+{
+    margin-top:60px;
+    /*border:1px solid black;*/
+}
+
+#detail-div div
+{
+    /*border:1px solid  #a16761;*/
+    border-radius:3px;
+    text-align:left;
+    height:40px;
+    background-color:#a16761;
+    margin-top:1px;
+    width:400px;
+}
+
+#detail-div div p
+{
+    display:inline;
+    font-size:14px;
+}
+
+#graph-div
+{
+    width:600px;
+    height:300px;
+    margin-top:15px;
+    /*border:1px solid black;*/
+    margin-left:500px;
+}
+
+button
+{
+    border:1px solid #994540;
+    background-color:#994540;
+    width:200px;
+    height:40px;
+    color:white;
+    font-size:10px;
+    border-radius:6px;
+}
+
+button#overview:hover,button#issue_bill:hover,button#settings:hover
+{
+    border:1px solid #7b1515;
+    background-color:#7b1515;
+    width:200px;
+    height:40px;
+    color:white;
+    font-size:10px;
+    border-radius:10px;
+}
+
+button#username
+{
+    position:relative;
+    right:80px;
+}
+
+button#overview
+{
+    margin-left:176px;
+}
+
+button#issue_bill,button#settings
+{
+    margin-left:40px;
+}
+
+a
+{
+    text-decoration:none;
+    font-size:10px;
+}
+
+
+
+
+
