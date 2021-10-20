@@ -30,8 +30,8 @@ var connection = mysql.createConnection(
     {
         host : 'localhost',
         user : 'root',
-        password : 'DartrixDDR4L',
-        port : '3307'
+        password : 'sql5d*&T^',
+        port : '3306'
     }
 );
 
@@ -64,8 +64,16 @@ route.post('/auth',function(request, response)
                         request.session.loggedin = true;
                         request.session.userid = results[0].ID;
                         console.log(request.session)
-                        response.redirect('/dashboard');
-                        response.end();
+                        if(results[0]["User_type"]=="A")
+                        {
+                            response.redirect('/dashboard');
+                            response.end();
+                        }
+                        else if(results[0]["User_type"]=="C")
+                        {
+                            response.redirect('/detail');
+                            response.end();
+                        }
                     }else
                     {
                         response.send('Incorrect Username and/or Password!');
@@ -101,7 +109,8 @@ route.post('/auth',function(request, response)
                         response.end();
                     }
                 });
-            }else
+            }
+            else
             {
                 response.send('Please enter your Password!');
                 response.end();
@@ -385,4 +394,88 @@ route.post('/chartinfo', function(request, response) {
     });
 });
 
+route.get('/userdetail_data',function(request,response)
+{
+    var id=request.session.userid;
+    console.log(id);
+    connection.query("select * from sakila.node_users where id=?",[id],function(err,r)
+    {
+        if(err)
+        {
+            console.log(err);
+        }
+        else
+        {
+            console.log(r);
+            var json=JSON.stringify(r);
+            response.send(json);
+        }
+    });
+});
+
+
+route.get('/detail',function(request,response)
+{
+    response.sendFile(path.join(__dirname,"..","public","html","userdetail.html"));
+});
+
+route.get('/issued_bill',function(request,response)
+{
+    response.sendFile(path.join(__dirname,"..","public","html","issue.html"));
+});
+
+route.post('/get_issue_date',function(req,res)
+{
+    var resource=req.body.resource;
+    console.log("Resource : "+resource);
+    if(resource=="Water")
+    {
+        connection.query("select DISTINCT(YEAR(issue_date)) from sakila.node_water_bill",function(err,result)
+        {
+            var data=JSON.stringify(result);
+            res.send(data);
+        });
+    }
+    else if(resource=="Electricity")
+    {
+        connection.query("select DISTINCT(YEAR(issue_date)) issue_year from sakila.node_electricity_bill",function(err,result)
+        {
+           var data=JSON.stringify(result);
+           res.send(data);
+        });
+    }
+});
+
+route.post('/get_bill_data',function(req,res)
+{
+    var year=req.body.year;
+    var resource=req.body.resource;
+    if(resource=="Water")
+    {
+        var query="select bill_id,date(issue_date),date(payment_date),used_resource,usage_cost,total_payable,paid_amount,due_amount from sakila.node_water_bill where YEAR(issue_date)=? order by issue_date desc";
+        connection.query(query,[year],function(err,result)
+        {
+            console.log(result);
+            var data=JSON.stringify(result);
+            res.send(data);
+        });
+    }
+    else if(resource=="Electricity")
+    {
+        var query="select bill_id,date(issue_date),date(payment_date),used_resource,usage_cost,total_payable,paid_amount,due_amount from sakila.node_electricity_bill where YEAR(issue_date)=? order by issue_date desc";
+        connection.query(query,[year],function(err,result)
+        {
+            var data=JSON.stringify(result);
+            res.send(data);
+        });
+    }
+});
+
+route.get('/userlist',function(req,res)
+{
+    res.sendFile(path.join(__dirname,"..","public","html","userlist.html"));
+});
+
 module.exports = route;
+
+
