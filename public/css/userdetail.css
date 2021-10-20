@@ -1,3 +1,7 @@
+.contentdiv {
+    display: inline-block;
+}
+
 #detail-div
 {
     float:left;

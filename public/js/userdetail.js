@@ -1,6 +1,6 @@
-/*
 var lmc = document.getElementById("leftmenucont");
 var pboc = document.getElementById("profbtnoptcont");
+
 
 document.addEventListener('click', function() {
     lmc.style.width = "0";
@@ -27,6 +27,7 @@ document.getElementById("menuicon").addEventListener('click', function() {
     pboc.style.display = "none";
 
     lmc.style.width = "200px";
+
     event.stopPropagation();
 });
 
@@ -39,13 +40,15 @@ document.getElementById("profcont").addEventListener('click', function() {
     lmc.style.width = "0";
 
     pboc.style.display = "inline";
-
+    
     event.stopPropagation();
 });
+
 
 document.getElementById("leftmenucont").addEventListener('click', function() {
     event.stopPropagation();
 });
+
 
 document.getElementById("profbtnoptcont").getElementsByTagName("a")[0].addEventListener("click", function() {
     jQuery.ajax({
@@ -69,17 +72,8 @@ document.getElementById("profbtnoptcont").getElementsByTagName("a")[0].addEventL
             }
         }
     });
+    event.stopPropagation();
 });
-
-
-
-*/
-
-
-
-
-
-
 
 
 
