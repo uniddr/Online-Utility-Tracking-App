@@ -327,7 +327,7 @@ function chartIt(reclabels, reclabel, recdata) {
             datasets: [{
                 label: reclabel,
                 data: recdata,
-                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                backgroundColor: 'rgba(160, 28, 18, 0.74)',
                 // backgroundColor: [
                 //     'rgba(255, 99, 132, 0.2)',
                 //     'rgba(54, 162, 235, 0.2)',
@@ -336,7 +336,7 @@ function chartIt(reclabels, reclabel, recdata) {
                 //     'rgba(153, 102, 255, 0.2)',
                 //     'rgba(255, 159, 64, 0.2)'
                 // ],
-                borderColor: 'rgba(255, 99, 132, 1)',
+                borderColor: 'rgba(0, 0, 0, 1)',
                 // borderColor: [
                 //     'rgba(255, 99, 132, 1)',
                 //     'rgba(54, 162, 235, 1)',

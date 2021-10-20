@@ -159,6 +159,19 @@ route.get('/analytics', function(request, response)
     }
 );
 
+// route.get('/layout', function(request, response)
+//     {
+//         if(request.session.loggedin)
+//         {
+//             response.sendFile(path.join(__dirname, '..', 'public', 'html', 'layout.html'));
+//         }
+//         else
+//         {
+//             response.end('Please login to view this page!');
+//         }
+//     }
+// );
+
 
 route.post('/infocont', function(request, response)
     {
