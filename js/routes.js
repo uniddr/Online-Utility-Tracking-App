@@ -30,21 +30,21 @@ var connection = mysql.createConnection(
     {
         host : 'localhost',
         user : 'root',
-        password : 'sql5d*&T^',
-        port : '3306'
+        password : 'DartrixDDR4L',
+        port : '3307'
     }
 );
 
 route.get('/',function(request, response)
     {
-        if(request.session.loggedin && request.session.usertype=="A")
+        if(request.session.loggedin)
         {
             response.redirect('/dashboard');
         }
-        else if(request.session.loggedin && request.session.usertype=="C")
-        {
-            response.redirect('/detail');
-        }
+        // else if(request.session.loggedin && request.session.usertype=="C")
+        // {
+        //     response.redirect('/detail');
+        // }
         else
         {
             response.sendFile(path.join(__dirname, '..', 'public', 'html', 'signin.html'));
@@ -77,7 +77,7 @@ route.post('/auth',function(request, response)
                         }
                         else if(results[0]["User_type"]=="C")
                         {
-                            response.redirect('/detail');
+                            response.redirect('/dashboard');
                             response.end();
                         }
                     }else
@@ -133,23 +133,19 @@ route.get('/dashboard', function(request, response)
     {
         if(request.session.loggedin)
         {
-            var id=request.session.userid;
-            connection.query("select * from sakila.node_users where id=?",[id],function(err,result)
+            if(request.session.usertype=="A")
             {
-                if(result[0]["User_type"]=="A")
-                {
-                    
-                   response.sendFile(path.join(__dirname, '..', 'public', 'html', 'dashboard.html'));
-                   // response.send('Welcome, ID ' + request.session.userid
-                   //  + `\n<a href='/logout'>Click here to logout</a>`);
-                }
-                else
-                {
-                    response.sendFile(path.join(__dirname, '..', 'public', 'html', 'userdetail.html'));
-                }
-            });
-
-        }else
+                
+            response.sendFile(path.join(__dirname, '..', 'public', 'html', 'dashboard.html'));
+            // response.send('Welcome, ID ' + request.session.userid
+            //  + `\n<a href='/logout'>Click here to logout</a>`);
+            }
+            else if(request.session.usertype=="C")
+            {
+                response.sendFile(path.join(__dirname, '..', 'public', 'html', 'userdetail.html'));
+            }
+        }
+        else
         {
             response.send('Please login to view this page!');
             response.end();
@@ -176,9 +172,13 @@ route.post('/logout', function(request, response)
 
 route.get('/analytics', function(request, response)
     {
-        if(request.session.loggedin)
+        if(request.session.loggedin && request.session.usertype=="C")
         {
             response.sendFile(path.join(__dirname, '..', 'public', 'html', 'analytics.html'));
+        }
+        else if(request.session.loggedin && request.session.usertype=="A")
+        {
+            response.end("No analytics page for admin yet!");
         }
         else
         {
@@ -435,13 +435,24 @@ route.get('/userdetail_data',function(request,response)
 
 route.get('/detail',function(request,response)
 {
-    response.sendFile(path.join(__dirname,"..","public","html","userdetail.html"));
+    if(request.session.loggedin && request.session.usertype=="C")
+    {
+        response.sendFile(path.join(__dirname,"..","public","html","userdetail.html"));
+    }
+    else if(request.session.loggedin && request.session.usertype=="A")
+    {
+        response.end("Please select which client to view first!");
+    }
+    else
+    {
+        response.end('Please login to view this page!');
+    }
 });
 
-route.get('/issued_bill',function(request,response)
-{
-    response.sendFile(path.join(__dirname,"..","public","html","issue.html"));
-});
+// route.get('/issued_bill',function(request,response)
+// {
+//     response.sendFile(path.join(__dirname,"..","public","html","issue.html"));
+// });
 
 route.post('/get_issue_date',function(req,res)
 {
