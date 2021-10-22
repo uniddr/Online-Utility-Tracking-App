@@ -1,13 +1,29 @@
 <!DOCTYPE html>
 <head>
-    <script src="js/jquery-3.6.0.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="js/userlist.js"></script>
     <link rel="stylesheet" href="css/userlist.css">
 </head>
 <body>
-    <p>User list</p>
+    <div id="filter-container">
+    <button id="filter-by">Filter By</button>
+    <div class="filter-div">
+        <button class="filter-button">Location</button>
+    </div>
+    <div class="filter-div">
+        <button class="filter-button">Sub Type</button>
+    </div>
+    <div class="filter-div">
+        <button class="filter-button">Service</button>
+    </div>
+    </div>
+
+    <button class="cancel">Cancel</button>
+    <button id="prev">Previous Page</button>
+    <button id="next">Next Page</button>
+    <table id="filter-table">
+    </table>
 </body>
 </html>
-
 
 

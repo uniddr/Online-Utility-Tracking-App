@@ -9,7 +9,7 @@
             <div class="leftmenuback" id="leftmenuback"></div>
             <div class="leftmenuopt" id="leftmenuopt">
                 <span class="leftmenuoptitem" id="leftmenuoptitem0"><a href="dashboard">Dashboard</a></span>
-                <span class="leftmenuoptitem" id="leftmenuoptitem1"><a href="#~">User Manager</a></span>
+                <span class="leftmenuoptitem" id="leftmenuoptitem1"><a href="detail">User Manager</a></span>
                 <span class="leftmenuoptitem" id="leftmenuoptitem2"><a href="#~">Billing Info</a></span>
                 <span class="leftmenuoptitem" id="leftmenuoptitem3"><a href="analytics">Analytics</a></span>
             </div>
@@ -22,7 +22,7 @@
             <div class="profcont" id="profcont"></div>
             <div class="profbtnoptcont" id="profbtnoptcont">
                 <!-- <a href="logout"> -->
-                <a href="#~">
+               <a href="#~">
                     <span class="profoptval" id="profoptval0">Sign Out</span>
                 </a>
             </div>
@@ -30,11 +30,13 @@
         <div class="contentdiv" id="contentdiv">
             <div id="menu-button-div">
                 <button id="username">Username</button>
-                <button id="overview">Overview</button>
-                <a href="/issued_bill"><button id="issue_bill">Issued Bills</button></a>
-                <button id="settings">Settings</button>
+                <select id="resource-select">
+                </select>
+                <select id="resource-year">
+                </select>
+                <button id="billing-button">Display Billing List</button>
                 </div>
-            
+         
                 <div id="detail-div">
                     <div id="id" style="margin-top:110px;">
                         <p style="color:#f9ff96">User Id</p>
@@ -59,7 +61,11 @@
                     </div>
                 </div>
 
-                <div id="graph-div">
+                <div id="billing-div">
+                    <table id="billing-table">
+                    </table>
+                    <button id="prev">Previous Page</button>
+                    <button id="next">Next Page</button>
                 </div>
         </div>
     </div>

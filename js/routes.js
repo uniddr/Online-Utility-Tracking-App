@@ -37,10 +37,15 @@ var connection = mysql.createConnection(
 
 route.get('/',function(request, response)
     {
-        if(request.session.loggedin)
+        if(request.session.loggedin && request.session.usertype=="A")
         {
             response.redirect('/dashboard');
-        }else
+        }
+        else if(request.session.loggedin && request.session.usertype=="C")
+        {
+            response.redirect('/detail');
+        }
+        else
         {
             response.sendFile(path.join(__dirname, '..', 'public', 'html', 'signin.html'));
         }
@@ -63,7 +68,8 @@ route.post('/auth',function(request, response)
                     {
                         request.session.loggedin = true;
                         request.session.userid = results[0].ID;
-                        console.log(request.session)
+                        request.session.usertype=results[0].User_type;
+                        console.log(request.session);
                         if(results[0]["User_type"]=="A")
                         {
                             response.redirect('/dashboard');
@@ -127,9 +133,22 @@ route.get('/dashboard', function(request, response)
     {
         if(request.session.loggedin)
         {
-            response.sendFile(path.join(__dirname, '..', 'public', 'html', 'dashboard.html'));
-            // response.send('Welcome, ID ' + request.session.userid
-            //  + `\n<a href='/logout'>Click here to logout</a>`);
+            var id=request.session.userid;
+            connection.query("select * from sakila.node_users where id=?",[id],function(err,result)
+            {
+                if(result[0]["User_type"]=="A")
+                {
+                    
+                   response.sendFile(path.join(__dirname, '..', 'public', 'html', 'dashboard.html'));
+                   // response.send('Welcome, ID ' + request.session.userid
+                   //  + `\n<a href='/logout'>Click here to logout</a>`);
+                }
+                else
+                {
+                    response.sendFile(path.join(__dirname, '..', 'public', 'html', 'userdetail.html'));
+                }
+            });
+
         }else
         {
             response.send('Please login to view this page!');
@@ -450,20 +469,22 @@ route.post('/get_bill_data',function(req,res)
 {
     var year=req.body.year;
     var resource=req.body.resource;
+    var id=req.session.userid;
+    //console.log(id);
     if(resource=="Water")
     {
-        var query="select bill_id,date(issue_date),date(payment_date),used_resource,usage_cost,total_payable,paid_amount,due_amount from sakila.node_water_bill where YEAR(issue_date)=? order by issue_date desc";
-        connection.query(query,[year],function(err,result)
+        var query="select bill_id,date(issue_date),date(payment_date),used_resource,usage_cost,total_payable,paid_amount,due_amount from sakila.node_water_bill where YEAR(issue_date)=? and user_id=? order by issue_date desc";
+        connection.query(query,[year,id],function(err,result)
         {
-            console.log(result);
+            //console.log(result);
             var data=JSON.stringify(result);
             res.send(data);
         });
     }
     else if(resource=="Electricity")
     {
-        var query="select bill_id,date(issue_date),date(payment_date),used_resource,usage_cost,total_payable,paid_amount,due_amount from sakila.node_electricity_bill where YEAR(issue_date)=? order by issue_date desc";
-        connection.query(query,[year],function(err,result)
+        var query="select bill_id,date(issue_date),date(payment_date),used_resource,usage_cost,total_payable,paid_amount,due_amount from sakila.node_electricity_bill where YEAR(issue_date)=? and user_id=? order by issue_date desc";
+        connection.query(query,[year,id],function(err,result)
         {
             var data=JSON.stringify(result);
             res.send(data);
@@ -475,6 +496,47 @@ route.get('/userlist',function(req,res)
 {
     res.sendFile(path.join(__dirname,"..","public","html","userlist.html"));
 });
+
+
+route.get('/get-filter-menu',function(req,res)
+{
+    var query="select * from sakila.node_users";
+    connection.query(query,function(err,result)
+    {
+        //console.log(result);
+        var data=JSON.stringify(result);
+        res.send(data);
+    });
+});
+
+
+route.post('/get-filter-data',function(req,res)
+{
+    var column=req.body.column;
+    var value=req.body.value;
+    if(column=="Location")
+    {
+        var query="select * from sakila.node_users where location=?";
+        connection.query(query,[value],function(err,result)
+        {
+            //console.log(result);
+            var data=JSON.stringify(result);
+            res.send(data);
+        });
+    }
+
+    else if(column=="Sub Type")
+    {
+        var query="select * from sakila.node_users where sub_type=?";
+        connection.query(query,[value],function(err,result)
+        {
+            //console.log(result);
+            var data=JSON.stringify(result);
+            res.send(data);
+        });
+    }
+});
+
 
 module.exports = route;
 
