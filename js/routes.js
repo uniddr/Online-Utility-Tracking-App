@@ -336,7 +336,7 @@ route.post('/infocont', function(request, response)
     }
 );
 
-route.post('/chartinfo', function(request, response) {
+route.post('/clientchartinfo', function(request, response) {
     let infotype = request.body.info;
     let rsctype = request.body.resource;
     let periodval = request.body.period;

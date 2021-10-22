@@ -381,7 +381,7 @@ document.getElementById("displaybtn").addEventListener("click", function() {
     // console.log(`${JSON.stringify(dataToSend)}`);
 
     jQuery.ajax({
-        url: "/chartinfo",
+        url: "/clientchartinfo",
         type: "POST",
         contentType: "application/json",
         data: JSON.stringify(dataToSend),
