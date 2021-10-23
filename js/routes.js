@@ -352,9 +352,9 @@ route.post('/clientchartinfo', function(request, response) {
                 // 
                 // qry1 = "select year(subdate(issue_date, interval 1 month)) Year, sum(total_payable - extra_cost) Total_bill from sakila.node_water_bill where user_id=? group by year(subdate(issue_date, interval 1 month)) order by year(subdate(issue_date, interval 1 month))";
             }
-            else if(periodval == "This Year")
+            else if(periodval == "Yearly")
             {
-                qry1 = "select total_payable Monthly_Bill from sakila.node_water_bill where user_id= ? and year(now())= case month(now()) when 1 then year(now())-1 else year(now()) end order by month(issue_date) asc";
+                qry1 = "select month(idate) Month, total_payable Monthly_Bill from (select bill_id, date_sub(issue_date, interval 1 month) idate, total_payable from sakila.node_water_bill where user_id=?) as real_list where year(idate)=year(now())";
             }
         }
         else if(rsctype == "Electricity")
@@ -365,9 +365,9 @@ route.post('/clientchartinfo', function(request, response) {
                 // 
                 // qry1 = "select year(subdate(issue_date, interval 1 month)) Year, sum(total_payable - extra_cost) Total_bill from sakila.node_electricity_bill where user_id=? group by year(subdate(issue_date, interval 1 month)) order by year(subdate(issue_date, interval 1 month))";
             }
-            else if(periodval == "This Year")
+            else if(periodval == "Yearly")
             {
-                qry1 = "select total_payable Monthly_Bill from sakila.node_electricity_bill where user_id= ? and year(now())= case month(now()) when 1 then year(now())-1 else year(now()) end order by month(issue_date) asc";
+                qry1 = "select month(idate) Month, total_payable Monthly_Bill from (select bill_id, date_sub(issue_date, interval 1 month) idate, total_payable from sakila.node_electricity_bill where user_id=?) as real_list where year(idate)=year(now())";
             }
         }
     }
@@ -379,9 +379,9 @@ route.post('/clientchartinfo', function(request, response) {
             {
                 qry1 = "select year(record_date) Year, sum(used_amount) Used from sakila.node_usage_history where user_id= ? and resource_type='Water' group by year(record_date) order by year(record_date) asc";
             }
-            else if(periodval == "This Year")
+            else if(periodval == "Yearly")
             {
-                qry1 = "select used_amount Used from sakila.node_usage_history where user_id= ? and resource_type='Water' and year(record_date)=year(now()) order by month(record_date) asc";
+                qry1 = "select month(record_date) Month, used_amount Used from sakila.node_usage_history where user_id= ? and resource_type='Water' and year(record_date)=year(now()) order by month(record_date) asc";
             }
         }
         else if(rsctype == "Electricity")
@@ -390,9 +390,9 @@ route.post('/clientchartinfo', function(request, response) {
             {
                 qry1 = "select year(record_date) Year, sum(used_amount) Used from sakila.node_usage_history where user_id= ? and resource_type='Electricity' group by year(record_date) order by year(record_date) asc";
             }
-            else if(periodval == "This Year")
+            else if(periodval == "Yearly")
             {
-                qry1 = "select used_amount Used from sakila.node_usage_history where user_id= ? and resource_type='Electricity' and year(record_date)=year(now()) order by month(record_date) asc";
+                qry1 = "select month(record_date) Month, used_amount Used from sakila.node_usage_history where user_id= ? and resource_type='Electricity' and year(record_date)=year(now()) order by month(record_date) asc";
             }
         }
     }

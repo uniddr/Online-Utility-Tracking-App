@@ -418,23 +418,51 @@ document.getElementById("displaybtn").addEventListener("click", function() {
                         }
                     }
                 }
-                else if(periodval == "This Year")
+                else if(periodval == "Yearly")
                 {
                     labelsforchart = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
                     if(infotype == "Bills")
                     {
-                        for(let i=0; i<result.length; i++)
+                        let i = 1, len = 0;
+                        while(i<13 && len<result.length)
                         {
-                            datafordataset.push(result[i].Monthly_Bill);
+                            if(result[len].Month != i)
+                            {
+                                datafordataset.push(0);
+                            }
+                            else
+                            {
+                                datafordataset.push(result[len].Monthly_Bill);
+                                len++;
+                            }
+                            i++;
                         }
+                        // for(let i=0; i<result.length; i++)
+                        // {
+                        //     datafordataset.push(result[i].Monthly_Bill);
+                        // }
                         labelfordataset = "Monthly Bill (BDT)";
                     }
                     else if(infotype == "Usage")
                     {
-                        for(let i=0; i<result.length; i++)
+                        let i = 1, len = 0;
+                        while(i<13 && len<result.length)
                         {
-                            datafordataset.push(result[i].Used);
+                            if(result[len].Month != i)
+                            {
+                                datafordataset.push(0);
+                            }
+                            else
+                            {
+                                datafordataset.push(result[len].Used);
+                                len++;
+                            }
+                            i++;
                         }
+                        // for(let i=0; i<result.length; i++)
+                        // {
+                        //     datafordataset.push(result[i].Used);
+                        // }
                         if(rsctype == "Water")
                         {
                             labelfordataset = "Monthly Use (gal)";
