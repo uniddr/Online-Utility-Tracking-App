@@ -15,8 +15,9 @@ body {
     margin-top: 0.7vh;
     padding: 0.5vw 1vh;
     padding: 0;
-    background-color: rgb(255, 255, 255);
+    /*background-color: rgb(255, 255, 255);*/
     box-sizing: border-box;
+    /*border:1px solid rgb(41, 118, 219);*/
     border-radius: 6px;
     text-align: center;
 }
@@ -143,6 +144,8 @@ body {
     margin-top: 50%;
     /* display: block; */
     display: none;
+    width: 100%;
+    /* background-color: aliceblue; */
 }
 
 .leftmenuoptitem {
@@ -169,10 +172,11 @@ body {
 .contentdiv {
     margin: 0;
     padding: 0;
-    display: inline-block;
+    /*display: inline-block;*/
     width: 99%;
     height: 87.3%;
-    background-color: #ffffff;
+    /*background-color: #ffffff;*/
+    /*border:1px solid brown;*/
 }
 
 .infocont {
