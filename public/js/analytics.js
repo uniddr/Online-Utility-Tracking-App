@@ -315,6 +315,14 @@ document.getElementById("profbtnoptcont").getElementsByTagName("a")[0].addEventL
 });
 
 var myChart;
+var yearinfo = [];
+var yearinfo_currindex;
+var labelsforchart = [];
+var labelfordataset;
+var datafordataset = [];
+var infotype;
+var rsctype;
+var periodval;
 
 function chartIt(reclabels, reclabel, recdata) {
     var ctx = document.getElementById('myChart').getContext('2d');
@@ -365,21 +373,192 @@ document.getElementById("displaybtn").addEventListener("click", function() {
         myChart.destroy();
     }
 
-    let infotype = document.getElementById("infotypedefaultinfo").innerHTML;
-    let rsctype = document.getElementById("rsctypedefaultinfo").innerHTML;
-    let periodval = document.getElementById("perioddefaultinfo").innerHTML;
+    infotype = document.getElementById("infotypedefaultinfo").innerHTML;
+    rsctype = document.getElementById("rsctypedefaultinfo").innerHTML;
+    periodval = document.getElementById("perioddefaultinfo").innerHTML;
 
-    let dataToSend = {
+    var dataToSend = {
         info: infotype,
         resource: rsctype,
         period: periodval
     };
-    let labelsforchart = [];
-    let labelfordataset;
-    let datafordataset = [];
 
-    // console.log(`${JSON.stringify(dataToSend)}`);
+    datafordataset = [];
+    labelfordataset = "";
+    labelsforchart = [];
 
+    console.log(dataToSend);
+
+    jQuery.ajax({
+        url: "/avyearinfo",
+        type: "POST",
+        contentType: "application/json",
+        data: JSON.stringify(dataToSend),
+        success: function(result, status, xhr) {
+            if(status == "success")
+            {
+                console.log(result);
+                console.log(result.year.length);
+                yearinfo = [];
+                for(let i=0; i<result.year.length; i++)
+                {
+                    yearinfo.push(result.year[i].Year);
+                }
+                yearinfo_currindex = 0;
+                console.log(dataToSend);
+                dataToSend = {
+                    info: infotype,
+                    resource: rsctype,
+                    period: periodval,
+                    yr: yearinfo[yearinfo_currindex]
+                };
+            }
+            else
+            {
+                alert("Failed to retrieve!");
+            }
+        },
+        complete: function(xhr, status) {
+            if(status == "success")
+            {
+                jQuery.ajax({
+                    url: "/clientchartinfo",
+                    type: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify(dataToSend),
+                    success: function(result, status, xhr) {
+                        if(status == "success")
+                        {
+                            console.log(result);
+                            if(yearinfo.length > 1 && periodval == "Yearly")
+                            {
+                                document.getElementById("leftarrow").style.visibility = "visible";
+                            }
+                            else
+                            {
+                                document.getElementById("leftarrow").style.visibility = "hidden";
+                            }
+                            console.log(result.dat.length);
+                            if(periodval == "All Time")
+                            {
+                                if(infotype == "Bills")
+                                {
+                                    for(let i=0; i<result.dat.length; i++)
+                                    {
+                                        labelsforchart.push(`${result.dat[i].Year}`);
+                                        datafordataset.push(result.dat[i].Total_bill);
+                                    }
+                                    labelfordataset = "Yearly Bill (BDT)";
+                                }
+                                else if(infotype == "Usage")
+                                {
+                                    for(let i=0; i<result.dat.length; i++)
+                                    {
+                                        labelsforchart.push(`${result.dat[i].Year}`);
+                                        datafordataset.push(result.dat[i].Used);
+                                    }
+                                    if(rsctype == "Water")
+                                    {
+                                        labelfordataset = "Yearly Use (gal)";
+                                    }
+                                    else if(rsctype == "Electricity")
+                                    {
+                                        labelfordataset = "Yearly Use (kwh)";
+                                    }
+                                }
+                            }
+                            else if(periodval == "Yearly")
+                            {
+                                labelsforchart = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+                                if(infotype == "Bills")
+                                {
+                                    let i = 1, len = 0;
+                                    while(i<13 && len<result.dat.length)
+                                    {
+                                        if(result.dat[len].Month != i)
+                                        {
+                                            datafordataset.push(0);
+                                        }
+                                        else
+                                        {
+                                            datafordataset.push(result.dat[len].Monthly_Bill);
+                                            len++;
+                                        }
+                                        i++;
+                                    }
+                                    labelfordataset = "Monthly Bill (BDT)";
+                                }
+                                else if(infotype == "Usage")
+                                {
+                                    let i = 1, len = 0;
+                                    while(i<13 && len<result.dat.length)
+                                    {
+                                        if(result.dat[len].Month != i)
+                                        {
+                                            datafordataset.push(0);
+                                        }
+                                        else
+                                        {
+                                            datafordataset.push(result.dat[len].Used);
+                                            len++;
+                                        }
+                                        i++;
+                                    }
+                                    if(rsctype == "Water")
+                                    {
+                                        labelfordataset = "Monthly Use (gal)";
+                                    }
+                                    else if(rsctype == "Electricity")
+                                    {
+                                        labelfordataset = "Monthly Use (kwh)";
+                                    }
+                                }
+                            }
+                            document.getElementById("yearlabel").innerHTML = dataToSend['yr'];
+                            chartIt(labelsforchart, labelfordataset, datafordataset);
+                        }
+                        else
+                        {
+                            alert("Failed to retrieve!");
+                        }
+                    },
+                    complete: function(xhr, status) {
+                        if(status == "success")
+                        {
+                            // alert("Success");
+                        }
+                    }
+                });
+            }
+        }
+    });
+});
+
+document.getElementById("leftarrow").addEventListener('click', function() {
+    if(yearinfo_currindex < yearinfo.length-1)
+    {
+        dataToSend = {
+            info: infotype,
+            resource: rsctype,
+            period: periodval,
+            yr: yearinfo[++yearinfo_currindex]
+        };
+
+        if(yearinfo_currindex > 0)
+        {
+            document.getElementById("rightarrow").style.visibility = "visible";
+        }
+        else
+        {
+            document.getElementById("rightarrow").style.visibility = "hidden";
+        }
+
+        if(yearinfo_currindex >= yearinfo.length-1)
+        {
+            document.getElementById("leftarrow").style.visibility = "hidden";
+        }
+    }
+    console.log(dataToSend);
     jQuery.ajax({
         url: "/clientchartinfo",
         type: "POST",
@@ -389,80 +568,76 @@ document.getElementById("displaybtn").addEventListener("click", function() {
             if(status == "success")
             {
                 console.log(result);
-                console.log(result.length);
-                if(periodval == "All Time")
-                {
-                    if(infotype == "Bills")
-                    {
-                        for(let i=0; i<result.length; i++)
-                        {
-                            labelsforchart.push(`${result[i].Year}`);
-                            datafordataset.push(result[i].Total_bill);
-                        }
-                        labelfordataset = "Yearly Bill (BDT)";
-                    }
-                    else if(infotype == "Usage")
-                    {
-                        for(let i=0; i<result.length; i++)
-                        {
-                            labelsforchart.push(`${result[i].Year}`);
-                            datafordataset.push(result[i].Used);
-                        }
-                        if(rsctype == "Water")
-                        {
-                            labelfordataset = "Yearly Use (gal)";
-                        }
-                        else if(rsctype == "Electricity")
-                        {
-                            labelfordataset = "Yearly Use (kwh)";
-                        }
-                    }
-                }
-                else if(periodval == "Yearly")
+                datafordataset = [];
+                labelfordataset = "";
+                labelsforchart = [];
+                document.getElementById("yearlabel").innerHTML = dataToSend['yr'];
+                console.log(result.dat.length);
+                // if(periodval == "All Time")
+                // {
+                //     if(infotype == "Bills")
+                //     {
+                //         for(let i=0; i<result.dat.length; i++)
+                //         {
+                //             labelsforchart.push(`${result.dat[i].Year}`);
+                //             datafordataset.push(result.dat[i].Total_bill);
+                //         }
+                //         labelfordataset = "Yearly Bill (BDT)";
+                //     }
+                //     else if(infotype == "Usage")
+                //     {
+                //         for(let i=0; i<result.dat.length; i++)
+                //         {
+                //             labelsforchart.push(`${result.dat[i].Year}`);
+                //             datafordataset.push(result.dat[i].Used);
+                //         }
+                //         if(rsctype == "Water")
+                //         {
+                //             labelfordataset = "Yearly Use (gal)";
+                //         }
+                //         else if(rsctype == "Electricity")
+                //         {
+                //             labelfordataset = "Yearly Use (kwh)";
+                //         }
+                //     }
+                // }
+                if(periodval == "Yearly")
                 {
                     labelsforchart = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
                     if(infotype == "Bills")
                     {
                         let i = 1, len = 0;
-                        while(i<13 && len<result.length)
+                        while(i<13 && len<result.dat.length)
                         {
-                            if(result[len].Month != i)
+                            if(result.dat[len].Month != i)
                             {
                                 datafordataset.push(0);
                             }
                             else
                             {
-                                datafordataset.push(result[len].Monthly_Bill);
+                                datafordataset.push(result.dat[len].Monthly_Bill);
                                 len++;
                             }
                             i++;
                         }
-                        // for(let i=0; i<result.length; i++)
-                        // {
-                        //     datafordataset.push(result[i].Monthly_Bill);
-                        // }
                         labelfordataset = "Monthly Bill (BDT)";
                     }
                     else if(infotype == "Usage")
                     {
                         let i = 1, len = 0;
-                        while(i<13 && len<result.length)
+                        while(i<13 && len<result.dat.length)
                         {
-                            if(result[len].Month != i)
+                            if(result.dat[len].Month != i)
                             {
                                 datafordataset.push(0);
                             }
                             else
                             {
-                                datafordataset.push(result[len].Used);
+                                datafordataset.push(result.dat[len].Used);
                                 len++;
                             }
                             i++;
                         }
-                        // for(let i=0; i<result.length; i++)
-                        // {
-                        //     datafordataset.push(result[i].Used);
-                        // }
                         if(rsctype == "Water")
                         {
                             labelfordataset = "Monthly Use (gal)";
@@ -473,7 +648,141 @@ document.getElementById("displaybtn").addEventListener("click", function() {
                         }
                     }
                 }
+                if(myChart)
+                {
+                    myChart.destroy();
+                }
+                document.getElementById("yearlabel").innerHTML = dataToSend['yr'];
+                chartIt(labelsforchart, labelfordataset, datafordataset);
+            }
+            else
+            {
+                alert("Failed to retrieve!");
+            }
+        },
+        complete: function(xhr, status) {
+            if(status == "success")
+            {
+                // alert("Success");
+            }
+        }
+    });
+});
 
+document.getElementById("rightarrow").addEventListener('click', function() {
+    if(yearinfo_currindex > 0)
+    {
+        dataToSend = {
+            info: infotype,
+            resource: rsctype,
+            period: periodval,
+            yr: yearinfo[--yearinfo_currindex]
+        };
+        if(yearinfo_currindex <= 0)
+        {
+            document.getElementById("rightarrow").style.visibility = "hidden";
+            document.getElementById("leftarrow").style.visibility = "visible";
+        }
+        else
+        {
+            document.getElementById("leftarrow").style.visibility = "visible";
+        }
+    }
+    console.log(dataToSend);
+    jQuery.ajax({
+        url: "/clientchartinfo",
+        type: "POST",
+        contentType: "application/json",
+        data: JSON.stringify(dataToSend),
+        success: function(result, status, xhr) {
+            if(status == "success")
+            {
+                console.log(result);
+                datafordataset = [];
+                labelfordataset = "";
+                labelsforchart = [];
+                document.getElementById("yearlabel").innerHTML = dataToSend['yr'];
+                console.log(result.dat.length);
+                // if(periodval == "All Time")
+                // {
+                //     if(infotype == "Bills")
+                //     {
+                //         for(let i=0; i<result.dat.length; i++)
+                //         {
+                //             labelsforchart.push(`${result.dat[i].Year}`);
+                //             datafordataset.push(result.dat[i].Total_bill);
+                //         }
+                //         labelfordataset = "Yearly Bill (BDT)";
+                //     }
+                //     else if(infotype == "Usage")
+                //     {
+                //         for(let i=0; i<result.dat.length; i++)
+                //         {
+                //             labelsforchart.push(`${result.dat[i].Year}`);
+                //             datafordataset.push(result.dat[i].Used);
+                //         }
+                //         if(rsctype == "Water")
+                //         {
+                //             labelfordataset = "Yearly Use (gal)";
+                //         }
+                //         else if(rsctype == "Electricity")
+                //         {
+                //             labelfordataset = "Yearly Use (kwh)";
+                //         }
+                //     }
+                // }
+                if(periodval == "Yearly")
+                {
+                    labelsforchart = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+                    if(infotype == "Bills")
+                    {
+                        let i = 1, len = 0;
+                        while(i<13 && len<result.dat.length)
+                        {
+                            if(result.dat[len].Month != i)
+                            {
+                                datafordataset.push(0);
+                            }
+                            else
+                            {
+                                datafordataset.push(result.dat[len].Monthly_Bill);
+                                len++;
+                            }
+                            i++;
+                        }
+                        labelfordataset = "Monthly Bill (BDT)";
+                    }
+                    else if(infotype == "Usage")
+                    {
+                        let i = 1, len = 0;
+                        while(i<13 && len<result.dat.length)
+                        {
+                            if(result.dat[len].Month != i)
+                            {
+                                datafordataset.push(0);
+                            }
+                            else
+                            {
+                                datafordataset.push(result.dat[len].Used);
+                                len++;
+                            }
+                            i++;
+                        }
+                        if(rsctype == "Water")
+                        {
+                            labelfordataset = "Monthly Use (gal)";
+                        }
+                        else if(rsctype == "Electricity")
+                        {
+                            labelfordataset = "Monthly Use (kwh)";
+                        }
+                    }
+                }
+                if(myChart)
+                {
+                    myChart.destroy();
+                }
+                document.getElementById("yearlabel").innerHTML = dataToSend['yr'];
                 chartIt(labelsforchart, labelfordataset, datafordataset);
             }
             else

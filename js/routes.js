@@ -336,7 +336,7 @@ route.post('/infocont', function(request, response)
     }
 );
 
-route.post('/clientchartinfo', function(request, response) {
+route.post('/avyearinfo', function(request, response) {
     let infotype = request.body.info;
     let rsctype = request.body.resource;
     let periodval = request.body.period;
@@ -346,15 +346,57 @@ route.post('/clientchartinfo', function(request, response) {
     {
         if(rsctype == "Water")
         {
+            qry1 = "select distinct(year(idate)) Year from (select bill_id, date_sub(issue_date, interval 1 month) idate from sakila.node_water_bill where user_id=?) as real_list order by year(idate) desc";
+        }
+        else if(rsctype == "Electricity")
+        {
+            qry1 = "select distinct(year(idate)) Year from (select bill_id, date_sub(issue_date, interval 1 month) idate from sakila.node_electricity_bill where user_id=?) as real_list order by year(idate) desc";
+        }
+    }
+    else if(infotype == "Usage")
+    {
+        if(rsctype == "Water")
+        {
+            qry1 = "select distinct(year(record_date)) Year from sakila.node_usage_history where user_id=? and resource_type='Water' order by year(record_date) desc";
+        }
+        else if(rsctype == "Electricity")
+        {
+            qry1 = "select distinct(year(record_date)) Year from sakila.node_usage_history where user_id=? and resource_type='Electricity' order by year(record_date) desc";
+        }
+    }
+    connection.query(qry1, [request.session.userid], function(error1, result1, fields1) {
+        if(error1) throw error1;
+        if(result1.length > 0)
+        {
+            console.log(JSON.stringify({year: result1}));
+            response.setHeader('Content-Type', 'application/json');
+            response.send(JSON.stringify({year: result1}));
+        }
+        else
+        {   
+            response.status(404).send("Error retrieving year data! Resultset length is zero!");
+        }
+    });
+});
+
+route.post('/clientchartinfo', function(request, response) {
+    let infotype = request.body.info;
+    let rsctype = request.body.resource;
+    let periodval = request.body.period;
+    let ytq = request.body.yr;
+
+    let qry1;
+    if(infotype == "Bills")
+    {
+        if(rsctype == "Water")
+        {
             if(periodval == "All Time")
             {
                 qry1 = "select year(subdate(issue_date, interval 1 month)) Year, sum(total_payable) Total_bill from sakila.node_water_bill where user_id= ?  group by year(subdate(issue_date, interval 1 month)) order by year(subdate(issue_date, interval 1 month))";
-                // 
-                // qry1 = "select year(subdate(issue_date, interval 1 month)) Year, sum(total_payable - extra_cost) Total_bill from sakila.node_water_bill where user_id=? group by year(subdate(issue_date, interval 1 month)) order by year(subdate(issue_date, interval 1 month))";
             }
             else if(periodval == "Yearly")
             {
-                qry1 = "select month(idate) Month, total_payable Monthly_Bill from (select bill_id, date_sub(issue_date, interval 1 month) idate, total_payable from sakila.node_water_bill where user_id=?) as real_list where year(idate)=year(now())";
+                qry1 = `select month(idate) Month, total_payable Monthly_Bill from (select bill_id, date_sub(issue_date, interval 1 month) idate, total_payable from sakila.node_water_bill where user_id=?) as real_list where year(idate)=${ytq}`;
             }
         }
         else if(rsctype == "Electricity")
@@ -362,12 +404,10 @@ route.post('/clientchartinfo', function(request, response) {
             if(periodval == "All Time")
             {
                 qry1 = "select year(subdate(issue_date, interval 1 month)) Year, sum(total_payable) Total_bill from sakila.node_electricity_bill where user_id= ? group by year(subdate(issue_date, interval 1 month)) order by year(subdate(issue_date, interval 1 month))";
-                // 
-                // qry1 = "select year(subdate(issue_date, interval 1 month)) Year, sum(total_payable - extra_cost) Total_bill from sakila.node_electricity_bill where user_id=? group by year(subdate(issue_date, interval 1 month)) order by year(subdate(issue_date, interval 1 month))";
             }
             else if(periodval == "Yearly")
             {
-                qry1 = "select month(idate) Month, total_payable Monthly_Bill from (select bill_id, date_sub(issue_date, interval 1 month) idate, total_payable from sakila.node_electricity_bill where user_id=?) as real_list where year(idate)=year(now())";
+                qry1 = `select month(idate) Month, total_payable Monthly_Bill from (select bill_id, date_sub(issue_date, interval 1 month) idate, total_payable from sakila.node_electricity_bill where user_id=?) as real_list where year(idate)=${ytq}`;
             }
         }
     }
@@ -381,7 +421,7 @@ route.post('/clientchartinfo', function(request, response) {
             }
             else if(periodval == "Yearly")
             {
-                qry1 = "select month(record_date) Month, used_amount Used from sakila.node_usage_history where user_id= ? and resource_type='Water' and year(record_date)=year(now()) order by month(record_date) asc";
+                qry1 = `select month(record_date) Month, used_amount Used from sakila.node_usage_history where user_id= ? and resource_type='Water' and year(record_date)=${ytq} order by month(record_date) asc`;
             }
         }
         else if(rsctype == "Electricity")
@@ -392,22 +432,20 @@ route.post('/clientchartinfo', function(request, response) {
             }
             else if(periodval == "Yearly")
             {
-                qry1 = "select month(record_date) Month, used_amount Used from sakila.node_usage_history where user_id= ? and resource_type='Electricity' and year(record_date)=year(now()) order by month(record_date) asc";
+                qry1 = `select month(record_date) Month, used_amount Used from sakila.node_usage_history where user_id= ? and resource_type='Electricity' and year(record_date)=${ytq} order by month(record_date) asc`;
             }
         }
     }
-
-    connection.query(qry1, [request.session.userid], function(error, result, fields) {
-        if(error) throw error;
-        if(result.length > 0)
+    connection.query(qry1, [request.session.userid], function(error1, result1, fields1) {
+        if(error1) throw error1;
+        if(result1.length > 0)
         {
-            // without adding this +inside, the response gets sent before the qry1 value is even set.....
-            console.log(JSON.stringify(result) + "inside");
+            console.log(JSON.stringify({dat: result1}));
             response.setHeader('Content-Type', 'application/json');
-            response.send(JSON.stringify(result));
+            response.send(JSON.stringify({dat: result1}));
         }
         else
-        {
+        {   
             response.status(404).send("Error retrieving chart data! Resultset length is zero!");
         }
     });
