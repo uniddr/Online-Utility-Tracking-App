@@ -413,10 +413,19 @@ route.post('/chartinfo', function(request, response) {
     });
 });
 
-route.get('/userdetail_data',function(request,response)
+route.post('/userdetail_data',function(request,response)
 {
-    var id=request.session.userid;
-    console.log(id);
+    var user_id=request.session.userid;
+    var client_id=Number.parseInt(request.body.id);
+    //console.log(id);
+    if(client_id)
+    {
+        id=client_id;
+    }
+    else
+    {
+        id=user_id;
+    }
     connection.query("select * from sakila.node_users where id=?",[id],function(err,r)
     {
         if(err)
@@ -425,7 +434,7 @@ route.get('/userdetail_data',function(request,response)
         }
         else
         {
-            console.log(r);
+            //console.log(r);
             var json=JSON.stringify(r);
             response.send(json);
         }
@@ -469,8 +478,17 @@ route.post('/get_bill_data',function(req,res)
 {
     var year=req.body.year;
     var resource=req.body.resource;
-    var id=req.session.userid;
+    var user_id=req.session.userid;
+    var client_id=Number.parseInt(req.body.id);
     //console.log(id);
+    if(client_id)
+    {
+        id=client_id;
+    }
+    else
+    {
+        id=user_id;
+    }
     if(resource=="Water")
     {
         var query="select bill_id,date(issue_date),date(payment_date),used_resource,usage_cost,total_payable,paid_amount,due_amount from sakila.node_water_bill where YEAR(issue_date)=? and user_id=? order by issue_date desc";
@@ -534,6 +552,30 @@ route.post('/get-filter-data',function(req,res)
             var data=JSON.stringify(result);
             res.send(data);
         });
+    }
+
+    else if(column=="Service")
+    {
+        if(value=="Water")
+        {
+            var query="select * from sakila.node_users where water_service='yes'";
+            connection.query(query,[value],function(err,result)
+            {
+                //console.log(result);
+                var data=JSON.stringify(result);
+                res.send(data);
+            });
+        }
+        else if(value=="Electricity")
+        {
+            var query="select * from sakila.node_users where elec_service='yes'";
+            connection.query(query,[value],function(err,result)
+            {
+                //console.log(result);
+                var data=JSON.stringify(result);
+                res.send(data);
+            });
+        }
     }
 });
 

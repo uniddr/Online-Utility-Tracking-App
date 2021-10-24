@@ -1,3 +1,87 @@
+var lmc = document.getElementById("leftmenucont");
+var pboc = document.getElementById("profbtnoptcont");
+
+
+document.addEventListener('click', function() {
+    lmc.style.width = "0";
+
+    pboc.style.display = "none";
+});
+
+lmc.addEventListener("transitionend", function() {
+    if(document.getElementById("leftmenuopt").style.display == "block")
+    {
+        document.getElementById("leftmenuopt").style.display = "none";
+    }
+    else
+    {
+        document.getElementById("leftmenuopt").style.display = "block";
+    }
+});
+
+lmc.addEventListener("transitionstart", function() {
+    document.getElementById("leftmenuopt").style.display = "none";
+});
+
+document.getElementById("menuicon").addEventListener('click', function() {
+    pboc.style.display = "none";
+
+    lmc.style.width = "200px";
+
+    event.stopPropagation();
+});
+
+document.getElementById("leftmenuback").addEventListener("click", function() {
+    lmc.style.width = "0";
+    event.stopPropagation();
+});
+
+document.getElementById("profcont").addEventListener('click', function() {
+    lmc.style.width = "0";
+
+    pboc.style.display = "inline";
+    
+    event.stopPropagation();
+});
+
+
+document.getElementById("leftmenucont").addEventListener('click', function() {
+    event.stopPropagation();
+});
+
+
+document.getElementById("profbtnoptcont").getElementsByTagName("a")[0].addEventListener("click", function() {
+    jQuery.ajax({
+        async: "true",
+        url: "/logout",
+        type: "POST",
+        success: function(result, status, xhr) {
+            if(status == "success")
+            {
+                // alert(`${xhr.status}: ${xhr.statusText}`);
+            }
+            else
+            {
+                alert("Failed to logout!");
+            }
+        },
+        complete: function(xhr, status) {
+            if(status == "success")
+            {
+                window.location.href = "/";
+            }
+        }
+    });
+    event.stopPropagation();
+});
+
+
+
+
+
+
+
+
 $(document).ready(function()
 {
 
@@ -195,34 +279,65 @@ $(document).ready(function()
                 {
                     length++;
                 row=fTable.insertRow(length);
+
+                var url="";
+                var a=document.createElement("A");
+                a.appendChild(document.createTextNode(data[k]["ID"]));
+                url="/detail?"+"u_id="+data[k]["ID"];
+                a.href=url;
                 var cell=row.insertCell(0);
-                cell.appendChild(document.createTextNode(data[k]["ID"]));
+                cell.appendChild(a);
 
+                a=document.createElement("A");
+                a.appendChild(document.createTextNode(data[k]["Username"]));
+                url="/detail?"+"u_id="+data[k]["ID"];
+                a.href=url;
                 cell=row.insertCell(1);
-                cell.appendChild(document.createTextNode(data[k]["Username"]));
+                cell.appendChild(a);
 
+                a=document.createElement("A");
+                a.appendChild(document.createTextNode(data[k]["Email"]));
+                url="/detail?"+"u_id="+data[k]["ID"];
+                a.href=url;
                 cell=row.insertCell(2);
-                cell.appendChild(document.createTextNode(data[k]["Email"]));
+                cell.appendChild(a);
 
+                a=document.createElement("A");
+                a.appendChild(document.createTextNode(data[k]["Location"]));
+                url="/detail?"+"u_id="+data[k]["ID"];
+                a.href=url;
                 cell=row.insertCell(3);
-                cell.appendChild(document.createTextNode(data[k]["Location"]));
+                cell.appendChild(a);
 
+                a=document.createElement("A");
+                a.appendChild(document.createTextNode(data[k]["Sub_type"]));
+                url="/detail?"+"u_id="+data[k]["ID"];
+                a.href=url;
                 cell=row.insertCell(4);
-                cell.appendChild(document.createTextNode(data[k]["Sub_type"]));
+                cell.appendChild(a);
                 
+                a=document.createElement("A");
+                a.appendChild(document.createTextNode(data[k]["Elec_service"]));
+                url="/detail?"+"u_id="+data[k]["ID"];
+                a.href=url;
                 cell=row.insertCell(5);
                 if(data[k]["Elec_service"]!=null)
                 {
-                    cell.appendChild(document.createTextNode(data[k]["Elec_service"]));
+                    cell.appendChild(a);
                 }
                 else
                 {
                     cell.appendChild(document.createTextNode(""));
                 }
+
+                a=document.createElement("A");
+                a.appendChild(document.createTextNode(data[k]["Water_service"]));
+                url="/detail?"+"u_id="+data[k]["ID"];
+                a.href=url;
                 cell=row.insertCell(6);
                 if(data[k]["Water_service"]!=null)
                 {
-                    cell.appendChild(document.createTextNode(data[k]["Water_service"]));
+                    cell.appendChild(a);
                 }
                 else
                 {
@@ -253,7 +368,8 @@ $(document).ready(function()
                 }
             }
 
-
+            document.getElementById("prev").style.visibility="visible";
+            document.getElementById("next").style.visibility="visible";
         });
      });
 
@@ -292,11 +408,13 @@ $(document).ready(function()
              var fTable=document.getElementById("filter-table");
              var length=fTable.rows.length;
 
-             var id=fTable.rows[length-1].cells[0].innerHTML;
+             var id=fTable.rows[length-1].cells[0].textContent;
+             //console.log(id);
              var lastIndex=baseData[id]["Index"];
-             console.log(lastIndex);
+             //console.log(lastIndex);
 
              var start=lastIndex+1;
+             var url="";
 
              if(length>0&& data[start]!=null)
              {
@@ -313,41 +431,71 @@ $(document).ready(function()
                  {
                      length++;
                  row=fTable.insertRow(length);
-                 var cell=row.insertCell(0);
-                 cell.appendChild(document.createTextNode(data[start]["ID"]));
- 
-                 cell=row.insertCell(1);
-                 cell.appendChild(document.createTextNode(data[start]["Username"]));
- 
-                 cell=row.insertCell(2);
-                 cell.appendChild(document.createTextNode(data[start]["Email"]));
- 
-                 cell=row.insertCell(3);
-                 cell.appendChild(document.createTextNode(data[start]["Location"]));
- 
-                 cell=row.insertCell(4);
-                 cell.appendChild(document.createTextNode(data[start]["Sub_type"]));
 
-                 cell=row.insertCell(5);
+                var a=document.createElement("A");
+                a.appendChild(document.createTextNode(data[start]["ID"]));
+                url="/detail?"+"u_id="+data[start]["ID"];
+                a.href=url;
+                var cell=row.insertCell(0);
+                cell.appendChild(a);
+ 
+                a=document.createElement("A");
+                a.appendChild(document.createTextNode(data[start]["Username"]));
+                url="/detail?"+"u_id="+data[start]["ID"];
+                a.href=url;
+                cell=row.insertCell(1);
+                cell.appendChild(a);
+ 
+                a=document.createElement("A");
+                a.appendChild(document.createTextNode(data[start]["Email"]));
+                url="/detail?"+"u_id="+data[start]["ID"];
+                a.href=url;
+                cell=row.insertCell(2);
+                cell.appendChild(a);
+ 
+                a=document.createElement("A");
+                a.appendChild(document.createTextNode(data[start]["Location"]));
+                url="/detail?"+"u_id="+data[start]["ID"];
+                a.href=url;
+                cell=row.insertCell(3);
+                cell.appendChild(a);
+ 
+                a=document.createElement("A");
+                a.appendChild(document.createTextNode(data[start]["Sub_type"]));
+                url="/detail?"+"u_id="+data[start]["ID"];
+                a.href=url;
+                cell=row.insertCell(4);
+                cell.appendChild(a);
+
+                a=document.createElement("A");
+                a.appendChild(document.createTextNode(data[start]["Elec_service"]));
+                url="/detail?"+"u_id="+data[start]["ID"];
+                a.href=url;
+                cell=row.insertCell(5);
                  if(data[start]["Elec_service"]!=null)
                  {
-                     cell.appendChild(document.createTextNode(data[start]["Elec_service"]));
+                     cell.appendChild(a);
                  }
                  else
                  {
                      cell.appendChild(document.createTextNode(""));
                  }
+
+                 a=document.createElement("A");
+                 a.appendChild(document.createTextNode(data[start]["Water_service"]));
+                 url="/detail?"+"u_id="+data[start]["ID"];
+                 a.href=url;
                  cell=row.insertCell(6);
                  if(data[start]["Water_service"]!=null)
                  {
-                     cell.appendChild(document.createTextNode(data[start]["Water_service"]));
+                     cell.appendChild(a);
                  }
                  else
                  {
                      cell.appendChild(document.createTextNode(""));
                  }
+                 start++;
              }
-             start++;
             }
          });
 
@@ -388,7 +536,7 @@ $(document).ready(function()
             var baseData=JSON.parse(JSON.stringify(jsonObj));
             console.log(baseData);
 
-            var firstIndex=fTable.rows[1].cells[0].innerHTML;
+            var firstIndex=fTable.rows[1].cells[0].textContent;
             var start=baseData[firstIndex]["Index"]-2;
 
             if(length>0 && data[start]!=null)
@@ -404,41 +552,72 @@ $(document).ready(function()
             {
                 if(data[start]!=null)
                 {
+                
                     length++;
-                row=fTable.insertRow(length);
-                var cell=row.insertCell(0);
-                cell.appendChild(document.createTextNode(data[start]["ID"]));
-
-                cell=row.insertCell(1);
-                cell.appendChild(document.createTextNode(data[start]["Username"]));
-
-                cell=row.insertCell(2);
-                cell.appendChild(document.createTextNode(data[start]["Email"]));
-
-                cell=row.insertCell(3);
-                cell.appendChild(document.createTextNode(data[start]["Location"]));
-
-                cell=row.insertCell(4);
-                cell.appendChild(document.createTextNode(data[start]["Sub_type"]));
-
-                cell=row.insertCell(5);
-                if(data[start]["Elec_service"]!=null)
-                {
-                    cell.appendChild(document.createTextNode(data[start]["Elec_service"]));
-                }
-                else
-                {
-                    cell.appendChild(document.createTextNode(""));
-                }
-                cell=row.insertCell(6);
-                if(data[start]["Water_service"]!=null)
-                {
-                    cell.appendChild(document.createTextNode(data[start]["Water_service"]));
-                }
-                else
-                {
-                    cell.appendChild(document.createTextNode(""));
-                }
+                    row=fTable.insertRow(length);
+   
+                   var a=document.createElement("A");
+                   a.appendChild(document.createTextNode(data[start]["ID"]));
+                   url="/detail?"+"u_id="+data[start]["ID"];
+                   a.href=url;
+                   var cell=row.insertCell(0);
+                   cell.appendChild(a);
+    
+                   a=document.createElement("A");
+                   a.appendChild(document.createTextNode(data[start]["Username"]));
+                   url="/detail?"+"u_id="+data[start]["ID"];
+                   a.href=url;
+                   cell=row.insertCell(1);
+                   cell.appendChild(a);
+    
+                   a=document.createElement("A");
+                   a.appendChild(document.createTextNode(data[start]["Email"]));
+                   url="/detail?"+"u_id="+data[start]["ID"];
+                   a.href=url;
+                   cell=row.insertCell(2);
+                   cell.appendChild(a);
+    
+                   a=document.createElement("A");
+                   a.appendChild(document.createTextNode(data[start]["Location"]));
+                   url="/detail?"+"u_id="+data[start]["ID"];
+                   a.href=url;
+                   cell=row.insertCell(3);
+                   cell.appendChild(a);
+    
+                   a=document.createElement("A");
+                   a.appendChild(document.createTextNode(data[start]["Sub_type"]));
+                   url="/detail?"+"u_id="+data[start]["ID"];
+                   a.href=url;
+                   cell=row.insertCell(4);
+                   cell.appendChild(a);
+   
+                   a=document.createElement("A");
+                   a.appendChild(document.createTextNode(data[start]["Elec_service"]));
+                   url="/detail?"+"u_id="+data[start]["ID"];
+                   a.href=url;
+                   cell=row.insertCell(5);
+                    if(data[start]["Elec_service"]!=null)
+                    {
+                        cell.appendChild(a);
+                    }
+                    else
+                    {
+                        cell.appendChild(document.createTextNode(""));
+                    }
+   
+                    a=document.createElement("A");
+                    a.appendChild(document.createTextNode(data[start]["Water_service"]));
+                    url="/detail?"+"u_id="+data[start]["ID"];
+                    a.href=url;
+                    cell=row.insertCell(6);
+                    if(data[start]["Water_service"]!=null)
+                    {
+                        cell.appendChild(a);
+                    }
+                    else
+                    {
+                        cell.appendChild(document.createTextNode(""));
+                    }
                 start++;   
             }
            }

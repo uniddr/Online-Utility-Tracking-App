@@ -220,5 +220,20 @@ button#billing-button:hover
     visibility:hidden;
 }
 
+#prev:hover
+{
+    background-color:#e9cbb5;
+    border:2px solid #e9cbb5;
+    border-radius:6px;
+}
+
+#next:hover
+{
+    background-color:#e9cbb5;
+    border:2px solid #e9cbb5;
+    border-radius:6px;
+}
+
+
 
 

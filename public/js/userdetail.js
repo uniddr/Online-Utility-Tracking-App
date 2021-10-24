@@ -82,7 +82,13 @@ document.getElementById("profbtnoptcont").getElementsByTagName("a")[0].addEventL
 $(document).ready(function()
 {
     var count=0;
-        $.get('/userdetail_data',function(d)
+    var qs=new URLSearchParams(window.location.search);
+    var id=qs.get("u_id");
+        $.post('/userdetail_data',
+        {
+            id:id
+        }
+        ,function(d)
         {
             var res=JSON.parse(d);
             
@@ -97,7 +103,7 @@ $(document).ready(function()
             var pid=document.createElement('P');
             pid.appendChild(document.createTextNode(res[0]["ID"]));
             //pid.appendChild(document.createTextNode("pid"));
-            pid.style.marginLeft="130px";
+            pid.style.marginLeft="60px";
             pid.style.color="white";
             divid.appendChild(pid);
 
@@ -106,7 +112,7 @@ $(document).ready(function()
             var plocation=document.createElement('P');
             plocation.appendChild(document.createTextNode(res[0]["Location"]));
             //plocation.appendChild(document.createTextNode("plocation"));
-            plocation.style.marginLeft="122px";
+            plocation.style.marginLeft="52px";
             plocation.style.color="white";
             divlocation.appendChild(plocation);
     
@@ -114,7 +120,7 @@ $(document).ready(function()
             var pemail=document.createElement('P');
             pemail.appendChild(document.createTextNode(res[0]["Email"]));
             //pemail.appendChild(document.createTextNode("pemail@gmail.com"));
-            pemail.style.marginLeft="134px";
+            pemail.style.marginLeft="64px";
             pemail.style.color="white";
             divemail.appendChild(pemail);
     
@@ -122,7 +128,7 @@ $(document).ready(function()
             var puser_type=document.createElement('P');
             puser_type.appendChild(document.createTextNode(res[0]["User_type"]));
             //puser_type.appendChild(document.createTextNode("puser_type"));
-            puser_type.style.marginLeft="120px";
+            puser_type.style.marginLeft="50px";
             puser_type.style.color="white";
             divuser_type.appendChild(puser_type);
     
@@ -130,14 +136,14 @@ $(document).ready(function()
             var ppassword=document.createElement('P');
             ppassword.appendChild(document.createTextNode(res[0]["Password"]));
             //ppassword.appendChild(document.createTextNode("ppassword"));
-            ppassword.style.marginLeft="120px";
+            ppassword.style.marginLeft="50px";
             ppassword.style.color="white";
             divpassword.appendChild(ppassword);
     
             
             var divelec_due=document.getElementById("elec_due");
             var pelec_due=document.createElement('P');
-            pelec_due.style.marginLeft="90px";
+            pelec_due.style.marginLeft="20px";
             pelec_due.style.color="white";
             if(res[0]["Elec_service"]=="yes")
             {
@@ -155,7 +161,7 @@ $(document).ready(function()
             
             var divwater_due=document.getElementById("water_due");
             var pwater_due=document.createElement('P');
-            pwater_due.style.marginLeft="117px";
+            pwater_due.style.marginLeft="47px";
             pwater_due.style.color="white";
             //pwater_due.appendChild(document.createTextNode("pwater_due"));
             //divwater_due.appendChild(pwater_due);
@@ -284,29 +290,18 @@ $(document).ready(function()
 
     $.post('/get_bill_data',
     {resource:resource,
-    year: Number.parseInt(year)
+    year: Number.parseInt(year),
+    id:id
     },
     function(d)
     {
         //console.log(d);
         var data=JSON.parse(d);
-        var keys=[];
-        var base={};
-        for(var k=0;k<data.length;k++)
+        if(data.length>0)
         {
-            keys.push(data[k]["bill_id"].toString());
-            data[k]["Index"]=k;
+            document.getElementById("next").style.visibility="visible";
+            document.getElementById("prev").style.visibility="visible";
         }
-
-        for(var i=0;i<data.length;i++)
-        {
-            var key=data[i]["bill_id"].toString();
-            base[key]=data[i];
-        }
-
-        //var baseData=JSON.parse(JSON.stringify(base));
-        //console.log(keys);
-        //console.log(data);
         for(var k=0;k<maxRow;k++)
         {
             length++;
@@ -337,9 +332,6 @@ $(document).ready(function()
             cell7.appendChild(document.createTextNode(data[k]["due_amount"]));
 
             }
-            document.getElementById("next").style.visibility="visible";
-            document.getElementById("prev").style.visibility="visible";
-
         }
     });
 });
@@ -357,7 +349,8 @@ $("#next").click(function()
 
     $.post('/get_bill_data',
     {resource:resource,
-    year: Number.parseInt(year)
+    year: Number.parseInt(year),
+    id: id
     },
     function(d)
     {
@@ -444,7 +437,8 @@ $("#prev").click(function()
 
     $.post('/get_bill_data',
     {resource:resource,
-    year: Number.parseInt(year)
+    year: Number.parseInt(year),
+    id: id
     },
     function(d)
     {
