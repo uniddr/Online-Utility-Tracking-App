@@ -81,7 +81,7 @@ document.getElementById("profbtnoptcont").getElementsByTagName("a")[0].addEventL
 
 $(document).ready(function()
 {
-
+    var annoying;
     $.post('/get-user-type',function(d)
     {
         console.log(d);
@@ -96,13 +96,17 @@ $(document).ready(function()
     var count=0;
     var qs=new URLSearchParams(window.location.search);
     var id=qs.get("u_id");
-        $.post('/userdetail_data',
-        {
+        $.ajax({
+        url: '/userdetail_data',
+        type: 'POST',
+        // contentType: 'application/json',
+        data: {
             id:id
-        }
-        ,function(d)
+        },
+        success: function(d)
         {
             var res=JSON.parse(d);
+            console.log(res);
             if(count==0)
             {
 
@@ -117,6 +121,8 @@ $(document).ready(function()
             pid.style.marginLeft="60px";
             pid.style.color="white";
             divid.appendChild(pid);
+            annoying = document.querySelectorAll(".iddiv p")[1].innerHTML;
+            console.log(annoying);
 
                 
             var divlocation=document.getElementById("location");
@@ -187,13 +193,15 @@ $(document).ready(function()
                 divwater_due.appendChild(pwater_due);
             }
         }
-        });
+        },
 
 
 
         
 
     // this part is added for issue bill section
+    complete: function(a,b) 
+    {
     var resource=[];
     resource.push("Water");
     resource.push("Electricity");
@@ -205,9 +213,12 @@ $(document).ready(function()
         document.getElementById("resource-select").appendChild(resource_op);
     }
 
-    $.post('/get_issue_date',
-    {resource:"Water"},
-    function(d)
+    $.ajax({
+    url: '/get_issue_date',
+    type: 'POST',
+    // contentType: 'application/json',
+    data: {resource:"Water", id: annoying},
+    success: function(d)
     {
         console.log(d);
         var data=JSON.parse(d);
@@ -220,7 +231,10 @@ $(document).ready(function()
             resource_op.appendChild(document.createTextNode(text));
             document.getElementById("resource-year").appendChild(resource_op);
         }
+    }
     });
+}
+});
 
 
     $("#resource-select").change(function()

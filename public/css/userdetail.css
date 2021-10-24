@@ -182,6 +182,10 @@ td
     text-align:center;
 }
 
+.iddiv {
+    margin-top:110px;
+}
+
 button#billing-button
 {
     border:1px solid #994540;
