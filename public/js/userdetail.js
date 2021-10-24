@@ -81,11 +81,32 @@ document.getElementById("profbtnoptcont").getElementsByTagName("a")[0].addEventL
 
 $(document).ready(function()
 {
+    var annoying;
+    $.post('/get-user-type',function(d)
+    {
+        console.log(d);
+        if(d.type=="C")
+        {
+            var leftmenuDiv=document.getElementById("leftmenuopt");
+            leftmenuDiv.removeChild(leftmenuDiv.children[1]);
+            leftmenuDiv.removeChild(leftmenuDiv.children[1]);
+        }
+    });
+
     var count=0;
-        $.get('/userdetail_data',function(d)
+    var qs=new URLSearchParams(window.location.search);
+    var id=qs.get("u_id");
+        $.ajax({
+        url: '/userdetail_data',
+        type: 'POST',
+        // contentType: 'application/json',
+        data: {
+            id:id
+        },
+        success: function(d)
         {
             var res=JSON.parse(d);
-            
+            console.log(res);
             if(count==0)
             {
 
@@ -97,16 +118,18 @@ $(document).ready(function()
             var pid=document.createElement('P');
             pid.appendChild(document.createTextNode(res[0]["ID"]));
             //pid.appendChild(document.createTextNode("pid"));
-            pid.style.marginLeft="130px";
+            pid.style.marginLeft="60px";
             pid.style.color="white";
             divid.appendChild(pid);
+            annoying = document.querySelectorAll(".iddiv p")[1].innerHTML;
+            console.log(annoying);
 
                 
             var divlocation=document.getElementById("location");
             var plocation=document.createElement('P');
             plocation.appendChild(document.createTextNode(res[0]["Location"]));
             //plocation.appendChild(document.createTextNode("plocation"));
-            plocation.style.marginLeft="122px";
+            plocation.style.marginLeft="52px";
             plocation.style.color="white";
             divlocation.appendChild(plocation);
     
@@ -114,7 +137,7 @@ $(document).ready(function()
             var pemail=document.createElement('P');
             pemail.appendChild(document.createTextNode(res[0]["Email"]));
             //pemail.appendChild(document.createTextNode("pemail@gmail.com"));
-            pemail.style.marginLeft="134px";
+            pemail.style.marginLeft="64px";
             pemail.style.color="white";
             divemail.appendChild(pemail);
     
@@ -122,7 +145,7 @@ $(document).ready(function()
             var puser_type=document.createElement('P');
             puser_type.appendChild(document.createTextNode(res[0]["User_type"]));
             //puser_type.appendChild(document.createTextNode("puser_type"));
-            puser_type.style.marginLeft="120px";
+            puser_type.style.marginLeft="50px";
             puser_type.style.color="white";
             divuser_type.appendChild(puser_type);
     
@@ -130,14 +153,14 @@ $(document).ready(function()
             var ppassword=document.createElement('P');
             ppassword.appendChild(document.createTextNode(res[0]["Password"]));
             //ppassword.appendChild(document.createTextNode("ppassword"));
-            ppassword.style.marginLeft="120px";
+            ppassword.style.marginLeft="50px";
             ppassword.style.color="white";
             divpassword.appendChild(ppassword);
     
             
             var divelec_due=document.getElementById("elec_due");
             var pelec_due=document.createElement('P');
-            pelec_due.style.marginLeft="90px";
+            pelec_due.style.marginLeft="20px";
             pelec_due.style.color="white";
             if(res[0]["Elec_service"]=="yes")
             {
@@ -155,7 +178,7 @@ $(document).ready(function()
             
             var divwater_due=document.getElementById("water_due");
             var pwater_due=document.createElement('P');
-            pwater_due.style.marginLeft="117px";
+            pwater_due.style.marginLeft="47px";
             pwater_due.style.color="white";
             //pwater_due.appendChild(document.createTextNode("pwater_due"));
             //divwater_due.appendChild(pwater_due);
@@ -170,13 +193,15 @@ $(document).ready(function()
                 divwater_due.appendChild(pwater_due);
             }
         }
-        });
+        },
 
 
 
         
 
     // this part is added for issue bill section
+    complete: function(a,b) 
+    {
     var resource=[];
     resource.push("Water");
     resource.push("Electricity");
@@ -188,22 +213,28 @@ $(document).ready(function()
         document.getElementById("resource-select").appendChild(resource_op);
     }
 
-    $.post('/get_issue_date',
-    {resource:"Water"},
-    function(d)
+    $.ajax({
+    url: '/get_issue_date',
+    type: 'POST',
+    // contentType: 'application/json',
+    data: {resource:"Water", id: annoying},
+    success: function(d)
     {
         console.log(d);
         var data=JSON.parse(d);
         console.log(data);
         for(var k=0;k<data.length;k++)
         {
-            var text=data[k]["(YEAR(issue_date))"];
+            var text=data[k]["(YEAR(idate))"];
             var resource_op=document.createElement("OPTION");
             resource_op.setAttribute("value",text);
             resource_op.appendChild(document.createTextNode(text));
             document.getElementById("resource-year").appendChild(resource_op);
         }
+    }
     });
+}
+});
 
 
     $("#resource-select").change(function()
@@ -224,7 +255,7 @@ $(document).ready(function()
             console.log(data);
             for(var k=0;k<data.length;k++)
             {
-                var text=data[k]["(YEAR(issue_date))"];
+                var text=data[k]["(YEAR(idate))"];
                 var resource_op=document.createElement("OPTION");
                 resource_op.setAttribute("value",text);
                 resource_op.appendChild(document.createTextNode(text));
@@ -284,29 +315,18 @@ $(document).ready(function()
 
     $.post('/get_bill_data',
     {resource:resource,
-    year: Number.parseInt(year)
+    year: Number.parseInt(year),
+    id:id
     },
     function(d)
     {
         //console.log(d);
         var data=JSON.parse(d);
-        var keys=[];
-        var base={};
-        for(var k=0;k<data.length;k++)
+        if(data.length>0)
         {
-            keys.push(data[k]["bill_id"].toString());
-            data[k]["Index"]=k;
+            document.getElementById("next").style.visibility="visible";
+            document.getElementById("prev").style.visibility="visible";
         }
-
-        for(var i=0;i<data.length;i++)
-        {
-            var key=data[i]["bill_id"].toString();
-            base[key]=data[i];
-        }
-
-        //var baseData=JSON.parse(JSON.stringify(base));
-        //console.log(keys);
-        //console.log(data);
         for(var k=0;k<maxRow;k++)
         {
             length++;
@@ -317,11 +337,11 @@ $(document).ready(function()
             cell1.appendChild(document.createTextNode(data[k]["bill_id"]));
 
             var cell2=row.insertCell(1);
-            var date=new Date(data[k]["date(issue_date)"]).toString().substr(3,12);
+            var date=new Date(data[k]["issue_date"]).toString().substr(3,12);
             cell2.appendChild(document.createTextNode(date));
 
             var cell3=row.insertCell(2);
-            var date=new Date(data[k]["date(payment_date)"]).toString().substr(3,12);
+            var date=new Date(data[k]["payment_date"]).toString().substr(3,12);
             cell3.appendChild(document.createTextNode(date));
 
             var cell4=row.insertCell(3);
@@ -337,9 +357,6 @@ $(document).ready(function()
             cell7.appendChild(document.createTextNode(data[k]["due_amount"]));
 
             }
-            document.getElementById("next").style.visibility="visible";
-            document.getElementById("prev").style.visibility="visible";
-
         }
     });
 });
@@ -357,7 +374,8 @@ $("#next").click(function()
 
     $.post('/get_bill_data',
     {resource:resource,
-    year: Number.parseInt(year)
+    year: Number.parseInt(year),
+    id: id
     },
     function(d)
     {
@@ -406,11 +424,11 @@ $("#next").click(function()
             cell1.appendChild(document.createTextNode(data[start]["bill_id"]));
 
             var cell2=row.insertCell(1);
-            var date=new Date(data[start]["date(issue_date)"]).toString().substr(3,12);
+            var date=new Date(data[start]["issue_date"]).toString().substr(3,12);
             cell2.appendChild(document.createTextNode(date));
 
             var cell3=row.insertCell(2);
-            var date=new Date(data[start]["date(payment_date)"]).toString().substr(3,12);
+            var date=new Date(data[start]["payment_date"]).toString().substr(3,12);
             cell3.appendChild(document.createTextNode(date));
 
             var cell4=row.insertCell(3);
@@ -444,7 +462,8 @@ $("#prev").click(function()
 
     $.post('/get_bill_data',
     {resource:resource,
-    year: Number.parseInt(year)
+    year: Number.parseInt(year),
+    id: id
     },
     function(d)
     {
@@ -493,11 +512,11 @@ $("#prev").click(function()
             cell1.appendChild(document.createTextNode(data[start]["bill_id"]));
 
             var cell2=row.insertCell(1);
-            var date=new Date(data[start]["date(issue_date)"]).toString().substr(3,12);
+            var date=new Date(data[start]["issue_date"]).toString().substr(3,12);
             cell2.appendChild(document.createTextNode(date));
 
             var cell3=row.insertCell(2);
-            var date=new Date(data[start]["date(payment_date)"]).toString().substr(3,12);
+            var date=new Date(data[start]["payment_date"]).toString().substr(3,12);
             cell3.appendChild(document.createTextNode(date));
 
             var cell4=row.insertCell(3);
