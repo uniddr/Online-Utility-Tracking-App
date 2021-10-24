@@ -42,6 +42,40 @@
 
     <button class="cancel">Cancel</button>
     <button class="new-user">Create New User</button>
+    <div id="my-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="close">&times;</span>
+                <h2>Add a Client to the Database</h2>
+            </div>
+            <div class="modal-body">
+                <form action="add_user" method="post">
+                    <input type="username" id="username" placeholder="Enter Client's name" name="username"><br>
+                    <input type="password" id="password" placeholder="Enter Client's password" name="password"><br>
+                    <input type="email" id="email" placeholder="Enter Client's email" name="email"><br>
+                    <input type="user_type" id="user_type" placeholder="Enter Client's type (A/C)" name="user_type"><br>
+                    <input type="location" id="location" placeholder="Enter Client's Location" name="location"><br>
+                    <input type="sub_type" id="sub_type" placeholder="Enter Client's Subtype" name="sub_type"><br>
+                    <label for="elec_service">Consume Electricity Service:</label><br>
+                    <select name="elec_service" id="elec_service">
+                        <option selected hidden value="">Select Service</option>
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                    </select>
+                    <br>
+                    <label for="water_service">Consume Water Service:</label><br>
+                    <select name="water_service" id="water_service">
+                        <option selected hidden value="">Select Service</option>
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                    </select><br>
+                    <br>
+                    <button id="add_user" name="add_user">Add the Client to Database</button>
+                    <p id="changed"></p>
+                </form>
+            </div>
+        </div>
+    </div>
     <div id="filter-table-div">
     <table id="filter-table">
     </table>

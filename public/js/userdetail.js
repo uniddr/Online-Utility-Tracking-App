@@ -247,7 +247,7 @@ $(document).ready(function()
         }
         var resource=$(this).val();
         $.post('/get_issue_date',
-        {resource:resource},
+        {resource:resource, id: annoying},
         function(d)
         {
             console.log(d);
