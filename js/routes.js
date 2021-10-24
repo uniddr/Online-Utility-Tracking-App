@@ -178,7 +178,7 @@ route.get('/analytics', function(request, response)
         }
         else if(request.session.loggedin && request.session.usertype=="A")
         {
-            response.end("No analytics page for admin yet!");
+            response.sendFile(path.join(__dirname, '..', 'public', 'html', 'adminAnalytics.html'));
         }
         else
         {
@@ -339,7 +339,6 @@ route.post('/infocont', function(request, response)
 route.post('/avyearinfo', function(request, response) {
     let infotype = request.body.info;
     let rsctype = request.body.resource;
-    let periodval = request.body.period;
 
     let qry1;
     if(infotype == "Bills")
@@ -365,6 +364,48 @@ route.post('/avyearinfo', function(request, response) {
         }
     }
     connection.query(qry1, [request.session.userid], function(error1, result1, fields1) {
+        if(error1) throw error1;
+        if(result1.length > 0)
+        {
+            console.log(JSON.stringify({year: result1}));
+            response.setHeader('Content-Type', 'application/json');
+            response.send(JSON.stringify({year: result1}));
+        }
+        else
+        {   
+            response.status(404).send("Error retrieving year data! Resultset length is zero!");
+        }
+    });
+});
+
+route.post('/adminavyearinfo', function(request, response) {
+    let infotype = request.body.info;
+    let rsctype = request.body.resource;
+
+    let qry1;
+    if(infotype == "Earned")
+    {
+        if(rsctype == "Water")
+        {
+            qry1 = "select distinct(year(idate)) Year from (select bill_id, date_sub(issue_date, interval 1 month) idate from sakila.node_water_bill) as real_list order by year(idate) desc";
+        }
+        else if(rsctype == "Electricity")
+        {
+            qry1 = "select distinct(year(idate)) Year from (select bill_id, date_sub(issue_date, interval 1 month) idate from sakila.node_electricity_bill) as real_list order by year(idate) desc";
+        }
+    }
+    else if(infotype == "Usage")
+    {
+        if(rsctype == "Water")
+        {
+            qry1 = "select distinct(year(record_date)) Year from sakila.node_usage_history where resource_type='Water' order by year(record_date) desc";
+        }
+        else if(rsctype == "Electricity")
+        {
+            qry1 = "select distinct(year(record_date)) Year from sakila.node_usage_history where resource_type='Electricity' order by year(record_date) desc";
+        }
+    }
+    connection.query(qry1, function(error1, result1, fields1) {
         if(error1) throw error1;
         if(result1.length > 0)
         {
@@ -451,6 +492,78 @@ route.post('/clientchartinfo', function(request, response) {
     });
 });
 
+route.post('/adminchartinfo', function(request, response) {
+    let infotype = request.body.info;
+    let rsctype = request.body.resource;
+    let periodval = request.body.period;
+    let ytq = request.body.yr;
+
+    let qry1;
+    if(infotype == "Earned")
+    {
+        if(rsctype == "Water")
+        {
+            if(periodval == "All Time")
+            {
+                qry1 = "select year(subdate(issue_date, interval 1 month)) Year, sum(paid_amount) Total_earned from sakila.node_water_bill group by year(subdate(issue_date, interval 1 month)) order by year(subdate(issue_date, interval 1 month))";
+            }
+            else if(periodval == "Yearly")
+            {
+                qry1 = `select month(idate) Month, sum(paid_amount) Monthly_Earned from (select bill_id, date_sub(issue_date, interval 1 month) idate, paid_amount from sakila.node_water_bill) as real_list where year(idate)=${ytq} group by month(idate)`;
+            }
+        }
+        else if(rsctype == "Electricity")
+        {
+            if(periodval == "All Time")
+            {
+                qry1 = "select year(subdate(issue_date, interval 1 month)) Year, sum(paid_amount) Total_earned from sakila.node_electricity_bill group by year(subdate(issue_date, interval 1 month)) order by year(subdate(issue_date, interval 1 month))";
+            }
+            else if(periodval == "Yearly")
+            {
+                qry1 = `select month(idate) Month, sum(paid_amount) Monthly_Earned from (select bill_id, date_sub(issue_date, interval 1 month) idate, paid_amount from sakila.node_electricity_bill) as real_list where year(idate)=${ytq} group by month(idate)`;
+            }
+        }
+    }
+    else if(infotype == "Usage")
+    {
+        if(rsctype == "Water")
+        {
+            if(periodval == "All Time")
+            {
+                qry1 = "select year(record_date) Year, sum(used_amount) Used from sakila.node_usage_history where resource_type='Water' group by year(record_date) order by year(record_date) asc";
+            }
+            else if(periodval == "Yearly")
+            {
+                qry1 = `select month(record_date) Month, sum(used_amount) Used from sakila.node_usage_history where resource_type='Water' and year(record_date)=${ytq} group by month(record_date) order by month(record_date) asc`;
+            }
+        }
+        else if(rsctype == "Electricity")
+        {
+            if(periodval == "All Time")
+            {
+                qry1 = "select year(record_date) Year, sum(used_amount) Used from sakila.node_usage_history where resource_type='Electricity' group by year(record_date) order by year(record_date) asc";
+            }
+            else if(periodval == "Yearly")
+            {
+                qry1 = `select month(record_date) Month, sum(used_amount) Used from sakila.node_usage_history where resource_type='Electricity' and year(record_date)=${ytq} group by month(record_date) order by month(record_date) asc`;
+            }
+        }
+    }
+    connection.query(qry1, function(error1, result1, fields1) {
+        if(error1) throw error1;
+        if(result1.length > 0)
+        {
+            console.log(JSON.stringify({dat: result1}));
+            response.setHeader('Content-Type', 'application/json');
+            response.send(JSON.stringify({dat: result1}));
+        }
+        else
+        {   
+            response.status(404).send("Error retrieving chart data! Resultset length is zero!");
+        }
+    });
+});
+
 route.get('/userdetail_data',function(request,response)
 {
     var id=request.session.userid;
@@ -498,7 +611,7 @@ route.post('/get_issue_date',function(req,res)
     console.log("Resource : "+resource);
     if(resource=="Water")
     {
-        connection.query("select DISTINCT(YEAR(issue_date)) from sakila.node_water_bill",function(err,result)
+        connection.query("select DISTINCT(YEAR(idate)) from (select date_sub(issue_date, interval 1 month) idate from sakila.node_water_bill) as real_table",function(err,result)
         {
             var data=JSON.stringify(result);
             res.send(data);
@@ -506,7 +619,7 @@ route.post('/get_issue_date',function(req,res)
     }
     else if(resource=="Electricity")
     {
-        connection.query("select DISTINCT(YEAR(issue_date)) issue_year from sakila.node_electricity_bill",function(err,result)
+        connection.query("select DISTINCT(YEAR(idate)) issue_year from (select date_sub(issue_date, interval 1 month) idate from sakila.node_electricity_bill) as real_table",function(err,result)
         {
            var data=JSON.stringify(result);
            res.send(data);
@@ -522,7 +635,7 @@ route.post('/get_bill_data',function(req,res)
     //console.log(id);
     if(resource=="Water")
     {
-        var query="select bill_id,date(issue_date),date(payment_date),used_resource,usage_cost,total_payable,paid_amount,due_amount from sakila.node_water_bill where YEAR(issue_date)=? and user_id=? order by issue_date desc";
+        var query="select bill_id, issue_date, payment_date, used_resource, usage_cost, total_payable, paid_amount, due_amount from sakila.node_water_bill where YEAR(date_sub(issue_date, interval 1 month))=? and user_id=? order by issue_date desc";
         connection.query(query,[year,id],function(err,result)
         {
             //console.log(result);
@@ -532,7 +645,7 @@ route.post('/get_bill_data',function(req,res)
     }
     else if(resource=="Electricity")
     {
-        var query="select bill_id,date(issue_date),date(payment_date),used_resource,usage_cost,total_payable,paid_amount,due_amount from sakila.node_electricity_bill where YEAR(issue_date)=? and user_id=? order by issue_date desc";
+        var query="select bill_id,issue_date, payment_date,used_resource,usage_cost,total_payable,paid_amount,due_amount from sakila.node_electricity_bill where YEAR(date_sub(issue_date, interval 1 month))=? and user_id=? order by issue_date desc";
         connection.query(query,[year,id],function(err,result)
         {
             var data=JSON.stringify(result);
