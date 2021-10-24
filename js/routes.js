@@ -775,6 +775,36 @@ route.post('/get-user-type',function(req,res)
     }
 });
 
+route.post('/add_user', function(request, response)
+    {
+        console.log(request.body);
+        var qry = "insert into sakila.node_users (`Username`,`Password`,`Email`,`User_type`,`Location`,`Sub_type`,`Elec_service`,`Elec_due`,`Water_service`,`Water_due`) values('"+ request.body.username +"', '"+ request.body.password +"', '"+ request.body.email +"', '"+ request.body.user_type +"', '"+ request.body.location +"', '"+ request.body.sub_type +"', '"+ request.body.elec_service +"', '"+ 0.00 +"', '"+ request.body.water_service +"', '"+ 0.00 +"')";
+        connection.query(qry, function(err){
+            if(err) throw err;
+            response.send('Data Inserted Successfully');
+        });
+    }
+);
+
+route.get('/user_manager', function(request, response)
+    {
+        if(request.session.loggedin && request.session.usertype == "A")
+        {
+            response.sendFile(path.join(__dirname, '..', 'public', 'html', 'add_user.html'));
+            // response.send('Welcome, ID ' + request.session.userid
+            //  + `\n<a href='/logout'>Click here to logout</a>`);
+        }
+        else if(request.session.loggedin && request.session.usertype == "C")
+        {
+            response.send("The page you are looking for does not exist!");
+        }
+        else
+        {
+            response.send('Please login to view this page!');
+        }
+    }
+);
+
 module.exports = route;
 
 
