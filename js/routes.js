@@ -680,7 +680,18 @@ route.post('/get_bill_data',function(req,res)
 
 route.get('/userlist',function(req,res)
 {
-    res.sendFile(path.join(__dirname,"..","public","html","userlist.html"));
+    if(req.session.loggedin && req.session.usertype == "A")
+    {
+        res.sendFile(path.join(__dirname,"..","public","html","userlist.html"));
+    }
+    else if(req.session.loggedin && req.session.usertype == "C")
+    {
+        res.redirect('/dashboard');
+    }
+    else
+    {
+        res.send("You are not logged in!");
+    }
 });
 
 
