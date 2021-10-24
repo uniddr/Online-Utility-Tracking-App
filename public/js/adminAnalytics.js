@@ -390,7 +390,7 @@ document.getElementById("displaybtn").addEventListener("click", function() {
     console.log(dataToSend);
 
     jQuery.ajax({
-        url: "/avyearinfo",
+        url: "/adminavyearinfo",
         type: "POST",
         contentType: "application/json",
         data: JSON.stringify(dataToSend),
@@ -422,7 +422,7 @@ document.getElementById("displaybtn").addEventListener("click", function() {
             if(status == "success")
             {
                 jQuery.ajax({
-                    url: "/clientchartinfo",
+                    url: "/adminchartinfo",
                     type: "POST",
                     contentType: "application/json",
                     data: JSON.stringify(dataToSend),
@@ -441,14 +441,14 @@ document.getElementById("displaybtn").addEventListener("click", function() {
                             console.log(result.dat.length);
                             if(periodval == "All Time")
                             {
-                                if(infotype == "Bills")
+                                if(infotype == "Earned")
                                 {
                                     for(let i=0; i<result.dat.length; i++)
                                     {
                                         labelsforchart.push(`${result.dat[i].Year}`);
-                                        datafordataset.push(result.dat[i].Total_bill);
+                                        datafordataset.push(result.dat[i].Total_earned);
                                     }
-                                    labelfordataset = "Yearly Bill (BDT)";
+                                    labelfordataset = "Yearly Earned (BDT)";
                                 }
                                 else if(infotype == "Usage")
                                 {
@@ -470,7 +470,7 @@ document.getElementById("displaybtn").addEventListener("click", function() {
                             else if(periodval == "Yearly")
                             {
                                 labelsforchart = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-                                if(infotype == "Bills")
+                                if(infotype == "Earned")
                                 {
                                     let i = 1, len = 0;
                                     while(i<13 && len<result.dat.length)
@@ -481,12 +481,12 @@ document.getElementById("displaybtn").addEventListener("click", function() {
                                         }
                                         else
                                         {
-                                            datafordataset.push(result.dat[len].Monthly_Bill);
+                                            datafordataset.push(result.dat[len].Monthly_Earned);
                                             len++;
                                         }
                                         i++;
                                     }
-                                    labelfordataset = "Monthly Bill (BDT)";
+                                    labelfordataset = "Monthly Earned (BDT)";
                                 }
                                 else if(infotype == "Usage")
                                 {
@@ -561,7 +561,7 @@ document.getElementById("leftarrow").addEventListener('click', function() {
     }
     console.log(dataToSend);
     jQuery.ajax({
-        url: "/clientchartinfo",
+        url: "/adminchartinfo",
         type: "POST",
         contentType: "application/json",
         data: JSON.stringify(dataToSend),
@@ -577,7 +577,7 @@ document.getElementById("leftarrow").addEventListener('click', function() {
                 if(periodval == "Yearly")
                 {
                     labelsforchart = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-                    if(infotype == "Bills")
+                    if(infotype == "Earned")
                     {
                         let i = 1, len = 0;
                         while(i<13 && len<result.dat.length)
@@ -588,12 +588,12 @@ document.getElementById("leftarrow").addEventListener('click', function() {
                             }
                             else
                             {
-                                datafordataset.push(result.dat[len].Monthly_Bill);
+                                datafordataset.push(result.dat[len].Monthly_Earned);
                                 len++;
                             }
                             i++;
                         }
-                        labelfordataset = "Monthly Bill (BDT)";
+                        labelfordataset = "Monthly Earned (BDT)";
                     }
                     else if(infotype == "Usage")
                     {
@@ -663,7 +663,7 @@ document.getElementById("rightarrow").addEventListener('click', function() {
     }
     console.log(dataToSend);
     jQuery.ajax({
-        url: "/clientchartinfo",
+        url: "/adminchartinfo",
         type: "POST",
         contentType: "application/json",
         data: JSON.stringify(dataToSend),
@@ -676,38 +676,10 @@ document.getElementById("rightarrow").addEventListener('click', function() {
                 labelsforchart = [];
                 document.getElementById("yearlabel").innerHTML = dataToSend['yr'];
                 console.log(result.dat.length);
-                // if(periodval == "All Time")
-                // {
-                //     if(infotype == "Bills")
-                //     {
-                //         for(let i=0; i<result.dat.length; i++)
-                //         {
-                //             labelsforchart.push(`${result.dat[i].Year}`);
-                //             datafordataset.push(result.dat[i].Total_bill);
-                //         }
-                //         labelfordataset = "Yearly Bill (BDT)";
-                //     }
-                //     else if(infotype == "Usage")
-                //     {
-                //         for(let i=0; i<result.dat.length; i++)
-                //         {
-                //             labelsforchart.push(`${result.dat[i].Year}`);
-                //             datafordataset.push(result.dat[i].Used);
-                //         }
-                //         if(rsctype == "Water")
-                //         {
-                //             labelfordataset = "Yearly Use (gal)";
-                //         }
-                //         else if(rsctype == "Electricity")
-                //         {
-                //             labelfordataset = "Yearly Use (kwh)";
-                //         }
-                //     }
-                // }
                 if(periodval == "Yearly")
                 {
                     labelsforchart = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-                    if(infotype == "Bills")
+                    if(infotype == "Earned")
                     {
                         let i = 1, len = 0;
                         while(i<13 && len<result.dat.length)
@@ -718,12 +690,12 @@ document.getElementById("rightarrow").addEventListener('click', function() {
                             }
                             else
                             {
-                                datafordataset.push(result.dat[len].Monthly_Bill);
+                                datafordataset.push(result.dat[len].Monthly_Earned);
                                 len++;
                             }
                             i++;
                         }
-                        labelfordataset = "Monthly Bill (BDT)";
+                        labelfordataset = "Monthly Earned (BDT)";
                     }
                     else if(infotype == "Usage")
                     {

@@ -203,7 +203,7 @@ $(document).ready(function()
         console.log(data);
         for(var k=0;k<data.length;k++)
         {
-            var text=data[k]["(YEAR(issue_date))"];
+            var text=data[k]["(YEAR(idate))"];
             var resource_op=document.createElement("OPTION");
             resource_op.setAttribute("value",text);
             resource_op.appendChild(document.createTextNode(text));
@@ -230,7 +230,7 @@ $(document).ready(function()
             console.log(data);
             for(var k=0;k<data.length;k++)
             {
-                var text=data[k]["(YEAR(issue_date))"];
+                var text=data[k]["(YEAR(idate))"];
                 var resource_op=document.createElement("OPTION");
                 resource_op.setAttribute("value",text);
                 resource_op.appendChild(document.createTextNode(text));
@@ -312,11 +312,11 @@ $(document).ready(function()
             cell1.appendChild(document.createTextNode(data[k]["bill_id"]));
 
             var cell2=row.insertCell(1);
-            var date=new Date(data[k]["date(issue_date)"]).toString().substr(3,12);
+            var date=new Date(data[k]["issue_date"]).toString().substr(3,12);
             cell2.appendChild(document.createTextNode(date));
 
             var cell3=row.insertCell(2);
-            var date=new Date(data[k]["date(payment_date)"]).toString().substr(3,12);
+            var date=new Date(data[k]["payment_date"]).toString().substr(3,12);
             cell3.appendChild(document.createTextNode(date));
 
             var cell4=row.insertCell(3);
@@ -399,11 +399,11 @@ $("#next").click(function()
             cell1.appendChild(document.createTextNode(data[start]["bill_id"]));
 
             var cell2=row.insertCell(1);
-            var date=new Date(data[start]["date(issue_date)"]).toString().substr(3,12);
+            var date=new Date(data[start]["issue_date"]).toString().substr(3,12);
             cell2.appendChild(document.createTextNode(date));
 
             var cell3=row.insertCell(2);
-            var date=new Date(data[start]["date(payment_date)"]).toString().substr(3,12);
+            var date=new Date(data[start]["payment_date"]).toString().substr(3,12);
             cell3.appendChild(document.createTextNode(date));
 
             var cell4=row.insertCell(3);
@@ -487,11 +487,11 @@ $("#prev").click(function()
             cell1.appendChild(document.createTextNode(data[start]["bill_id"]));
 
             var cell2=row.insertCell(1);
-            var date=new Date(data[start]["date(issue_date)"]).toString().substr(3,12);
+            var date=new Date(data[start]["issue_date"]).toString().substr(3,12);
             cell2.appendChild(document.createTextNode(date));
 
             var cell3=row.insertCell(2);
-            var date=new Date(data[start]["date(payment_date)"]).toString().substr(3,12);
+            var date=new Date(data[start]["payment_date"]).toString().substr(3,12);
             cell3.appendChild(document.createTextNode(date));
 
             var cell4=row.insertCell(3);

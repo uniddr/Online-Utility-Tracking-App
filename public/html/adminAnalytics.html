@@ -2,7 +2,7 @@
 <head>
     <title>Utility Tracking App</title>
     <link rel="stylesheet" href="css/dashboard.css">
-    <link rel="stylesheet" href="css/analytics.css">
+    <link rel="stylesheet" href="css/adminAnalytics.css">
 </head>
 
 <body>
@@ -11,8 +11,8 @@
             <div class="leftmenuback" id="leftmenuback"></div>
             <div class="leftmenuopt" id="leftmenuopt">
                 <span class="leftmenuoptitem" id="leftmenuoptitem0"><a href="dashboard">Dashboard</a></span>
-                <!-- <span class="leftmenuoptitem" id="leftmenuoptitem1"><a href="detail">User Manager</a></span>
-                <span class="leftmenuoptitem" id="leftmenuoptitem2"><a href="#~">Billing Info</a></span> -->
+                <span class="leftmenuoptitem" id="leftmenuoptitem1"><a href="detail">User Manager</a></span>
+                <span class="leftmenuoptitem" id="leftmenuoptitem2"><a href="#~">Billing Info</a></span>
                 <span class="leftmenuoptitem" id="leftmenuoptitem3"><a href="analytics">Analytics</a></span>
             </div>
         </div>
@@ -33,12 +33,12 @@
             <div class="filtercont" id="filtercont">
                 <p class="infotypelabel">Select the type of information to view: </p>
                 <div class="infotypecont" id="infotypecont">
-                    <div class="defaultinfo" id="infotypedefaultinfo">Bills</div>
+                    <div class="defaultinfo" id="infotypedefaultinfo">Earned</div>
                     <button class="downbtn" id="infotypedownbtn"></button>
                     <div class="optcont" id="infotypeoptcont">
                         <div class="optvalcont" id="infotypeoptvalcont">
                             <a href="#~">
-                                <span class="optval" id="infotypeoptval0">Bills</span>
+                                <span class="optval" id="infotypeoptval0">Earned</span>
                                 <img src="../image/icons8-checkmark-30.png" class="tick">
                             </a>
                             <a href="#~">
@@ -98,4 +98,4 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="/chart/chart.js"></script>
-<script src="/js/analytics.js"></script>
+<script src="/js/adminAnalytics.js"></script>

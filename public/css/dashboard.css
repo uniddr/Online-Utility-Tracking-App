@@ -144,6 +144,8 @@ body {
     margin-top: 50%;
     /* display: block; */
     display: none;
+    width: 100%;
+    /* background-color: aliceblue; */
 }
 
 .leftmenuoptitem {
