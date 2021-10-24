@@ -30,8 +30,8 @@ var connection = mysql.createConnection(
     {
         host : 'localhost',
         user : 'root',
-        password : 'DartrixDDR4L',
-        port : '3307'
+        password : 'sql5d*&T^',
+        port : '3306'
     }
 );
 
@@ -595,13 +595,19 @@ route.post('/userdetail_data',function(request,response)
 
 route.get('/detail',function(request,response)
 {
+    var id=Number.parseInt(request.query.u_id);
+    console.log(id);
     if(request.session.loggedin && request.session.usertype=="C")
     {
         response.sendFile(path.join(__dirname,"..","public","html","userdetail.html"));
     }
-    else if(request.session.loggedin && request.session.usertype=="A")
+    else if(request.session.loggedin && request.session.usertype=="A" && Number.isNaN(id))
     {
         response.end("Please select which client to view first!");
+    }
+    else if(request.session.loggedin && request.session.usertype=="A" && id!=null)
+    {
+        response.sendFile(path.join(__dirname,"..","public","html","userdetail.html"));
     }
     else
     {
@@ -741,6 +747,21 @@ route.post('/get-filter-data',function(req,res)
     }
 });
 
+route.post('/get-user-type',function(req,res)
+{
+    var id=req.session.usertype;
+    if(req.session.loggedin)
+    {
+        res.send(
+        {
+            type:id
+        });
+    }
+    else
+    {
+        res.end("You are not logged in");
+    }
+});
 
 module.exports = route;
 

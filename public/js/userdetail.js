@@ -81,6 +81,18 @@ document.getElementById("profbtnoptcont").getElementsByTagName("a")[0].addEventL
 
 $(document).ready(function()
 {
+
+    $.post('/get-user-type',function(d)
+    {
+        console.log(d);
+        if(d.type=="C")
+        {
+            var leftmenuDiv=document.getElementById("leftmenuopt");
+            leftmenuDiv.removeChild(leftmenuDiv.children[1]);
+            leftmenuDiv.removeChild(leftmenuDiv.children[1]);
+        }
+    });
+
     var count=0;
     var qs=new URLSearchParams(window.location.search);
     var id=qs.get("u_id");
@@ -91,7 +103,6 @@ $(document).ready(function()
         ,function(d)
         {
             var res=JSON.parse(d);
-            
             if(count==0)
             {
 
