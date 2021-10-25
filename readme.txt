@@ -5,4 +5,4 @@ a one line description for some of the table attributes that might seem confusin
 contain the SQL statements to insert dummy data into the tables.
 
 The latest Node.js installation is also required to run our application. The application can be run by going to the project directory and using the "node app.js"
-command in the terminal after the Node.js has been installed. The application can then be viewed by typing "localhost:3000" in the url bar of the browser.
+command in the terminal after Node.js has been installed. The application can then be viewed by typing "localhost:3000" in the url bar of the browser.
