@@ -211,7 +211,7 @@ $(document).ready(function()
     {
         console.log(d);
         var data=JSON.parse(d);
-        console.log(data);
+        //console.log(data);
         for(var k=0;k<data.length;k++)
         {
             var text=data[k]["(YEAR(idate))"];
