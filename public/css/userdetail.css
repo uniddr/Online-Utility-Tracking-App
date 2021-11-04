@@ -4,6 +4,7 @@
     width:340px;
     /*border:1px solid  #eff1f4;*/
     margin-top:15px;
+    padding: 110px 0px;
     background-color:#eff1f4;
     border-radius:3px;
     margin-left:15px;
@@ -25,6 +26,10 @@
     width:340px;
     background-color:#a16761;
     margin-top:1px;
+}
+
+.iddiv {
+    margin-top:110px;
 }
 
 #detail-div div p

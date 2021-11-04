@@ -31,8 +31,8 @@ var connection = mysql.createConnection(
     {
         host : 'localhost',
         user : 'root',
-        password : 'sql5d*&T^',
-        port : '3306'
+        password : 'DartrixDDR4L',
+        port : '3307'
     }
 );
 
@@ -629,15 +629,16 @@ route.post('/get_issue_date',function(req,res)
     console.log("Resource : "+resource);
     if(resource=="Water")
     {
-        connection.query("select DISTINCT(YEAR(idate)) from (select date_sub(issue_date, interval 1 month) idate from sakila.node_water_bill) as real_table",function(err,result)
+        connection.query("select DISTINCT(YEAR(idate)) from (select date_sub(issue_date, interval 1 month) idate from sakila.node_water_bill where user_id=?) as real_table",[parseInt(`${req.body.id}`)],function(err,result)
         {
             var data=JSON.stringify(result);
+            
             res.send(data);
         });
     }
     else if(resource=="Electricity")
     {
-        connection.query("select DISTINCT(YEAR(idate)) issue_year from (select date_sub(issue_date, interval 1 month) idate from sakila.node_electricity_bill) as real_table",function(err,result)
+        connection.query("select DISTINCT(YEAR(idate)) issue_year from (select date_sub(issue_date, interval 1 month) idate from sakila.node_electricity_bill where user_id=?) as real_table",[parseInt(`${req.body.id}`)],function(err,result)
         {
            var data=JSON.stringify(result);
            res.send(data);
@@ -683,7 +684,18 @@ route.post('/get_bill_data',function(req,res)
 
 route.get('/userlist',function(req,res)
 {
-    res.sendFile(path.join(__dirname,"..","public","html","userlist.html"));
+    if(req.session.loggedin && req.session.usertype == "A")
+    {
+        res.sendFile(path.join(__dirname,"..","public","html","userlist.html"));
+    }
+    else if(req.session.loggedin && req.session.usertype == "C")
+    {
+        res.redirect('/dashboard');
+    }
+    else
+    {
+        res.send("You are not logged in!");
+    }
 });
 
 route.get('/get-filter-menu',function(req,res)
@@ -704,7 +716,7 @@ route.post('/get-filter-data',function(req,res)
     var value=req.body.value;
     if(column=="Location")
     {
-        var query="select * from sakila.node_users where location=?";
+        var query="select * from sakila.node_users where location=? and User_type='C'";
         connection.query(query,[value],function(err,result)
         {
             //console.log(result);
@@ -715,7 +727,7 @@ route.post('/get-filter-data',function(req,res)
 
     else if(column=="Sub Type")
     {
-        var query="select * from sakila.node_users where sub_type=?";
+        var query="select * from sakila.node_users where sub_type=? and User_type='C'";
         connection.query(query,[value],function(err,result)
         {
             //console.log(result);
@@ -728,7 +740,7 @@ route.post('/get-filter-data',function(req,res)
     {
         if(value=="Water")
         {
-            var query="select * from sakila.node_users where water_service='yes'";
+            var query="select * from sakila.node_users where water_service='yes' and User_type='C'";
             connection.query(query,[value],function(err,result)
             {
                 //console.log(result);
@@ -738,7 +750,7 @@ route.post('/get-filter-data',function(req,res)
         }
         else if(value=="Electricity")
         {
-            var query="select * from sakila.node_users where elec_service='yes'";
+            var query="select * from sakila.node_users where elec_service='yes' and User_type='C'";
             connection.query(query,[value],function(err,result)
             {
                 //console.log(result);
@@ -868,6 +880,35 @@ route.post('/get-filter-bill-data',function(req,res)
 });
 
 ;
+route.post('/add_user', function(request, response)
+    {
+        console.log(request.body);
+        var qry = "insert into sakila.node_users (`Username`,`Password`,`Email`,`User_type`,`Location`,`Sub_type`,`Elec_service`,`Elec_due`,`Water_service`,`Water_due`) values('"+ request.body.username +"', '"+ request.body.password +"', '"+ request.body.email +"', '"+ request.body.user_type +"', '"+ request.body.location +"', '"+ request.body.sub_type +"', '"+ request.body.elec_service +"', '"+ 0.00 +"', '"+ request.body.water_service +"', '"+ 0.00 +"')";
+        connection.query(qry, function(err){
+            if(err) throw err;
+            response.send('Data Inserted Successfully');
+        });
+    }
+);
+
+route.get('/user_manager', function(request, response)
+    {
+        if(request.session.loggedin && request.session.usertype == "A")
+        {
+            response.sendFile(path.join(__dirname, '..', 'public', 'html', 'add_user.html'));
+            // response.send('Welcome, ID ' + request.session.userid
+            //  + `\n<a href='/logout'>Click here to logout</a>`);
+        }
+        else if(request.session.loggedin && request.session.usertype == "C")
+        {
+            response.send("The page you are looking for does not exist!");
+        }
+        else
+        {
+            response.send('Please login to view this page!');
+        }
+    }
+);
 
 module.exports = route;
 

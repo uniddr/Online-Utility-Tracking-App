@@ -215,7 +215,7 @@ $(document).ready(function()
 
      $(".filter-div").on("click",".filter-menu",function(e)
      {
-        var maxRow=2;
+        var maxRow=10;
         var eventParent=e.target.parentNode;
         var column=$(eventParent.parentNode.children[0]).text();
         var value=$(e.target).text();
@@ -375,7 +375,7 @@ $(document).ready(function()
 
      $("#next").click(function()
      {
-         var maxRow=2;
+         var maxRow=10;
          var column=$(this).data("column");
          var value=$(this).data("value");
          //console.log(column+" "+value);
@@ -503,7 +503,7 @@ $(document).ready(function()
 
      $("#prev").click(function()
      {
-        var maxRow=2;
+        var maxRow=10;
         var fTable=document.getElementById("filter-table");
         var length=fTable.rows.length;
         
@@ -628,6 +628,32 @@ $(document).ready(function()
      });
 
 });
+
+const modal = document.querySelector('#my-modal');
+const modalBtn = document.querySelector('.new-user');
+const closeBtn = document.querySelector('.close');
+
+// Events
+modalBtn.addEventListener('click', openModal);
+closeBtn.addEventListener('click', closeModal);
+window.addEventListener('click', outsideClick);
+
+// Open
+function openModal() {
+    modal.style.display = 'block';
+}
+
+// Close
+function closeModal() {
+    modal.style.display = 'none';
+}
+
+// Close If Outside Click
+function outsideClick(e) {
+    if (e.target == modal) {
+        modal.style.display = 'none';
+    }
+}
 
 
 

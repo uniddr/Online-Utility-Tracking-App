@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<head>
+    <title>Utility Tracking App</title>
+    <link rel="stylesheet" href="css/dashboard.css">
+</head>
+
+<body>
+    <div class="basecont" id="basecont">
+        <div class="leftmenucont" id="leftmenucont">
+            <div class="leftmenuback" id="leftmenuback"></div>
+            <div class="leftmenuopt" id="leftmenuopt">
+                <span class="leftmenuoptitem" id="leftmenuoptitem0"><a href="dashboard">Dashboard</a></span>
+                <span class="leftmenuoptitem" id="leftmenuoptitem1"><a href="detail">User Manager</a></span>
+                <span class="leftmenuoptitem" id="leftmenuoptitem2"><a href="#~">Billing Info</a></span>
+                <span class="leftmenuoptitem" id="leftmenuoptitem3"><a href="analytics">Analytics</a></span>
+            </div>
+        </div>
+        <div class="topbar" id="topbar">
+            <div class="menuicon" id="menuicon"></div>
+            <div class="appname" id="appname">
+                Online Utility Tracker
+            </div>
+            <div class="profcont" id="profcont"></div>
+            <div class="profbtnoptcont" id="profbtnoptcont">
+                <!-- <a href="logout"> -->
+                <a href="#~">
+                    <span class="profoptval" id="profoptval0">Sign Out</span>
+                </a>
+            </div>
+        </div>
+        <div class="contentdiv" id="contentdiv">
+            <div class="infocont" id="infocont">
+                <div class="cc" id="cc">
+                    <p>Current Clients</p>
+                    <div class="ccvalue" id="ccvalue">0</div>
+                </div>
+                <div class="tp" id="tp">
+                    <p>Total Paid (BDT)</p>
+                    <div class="tpvalue" id="tpvalue">0</div>
+                </div>
+                <div class="td" id="td">
+                    <p>Total Due (BDT)</p>
+                    <div class="tdvalue" id="tdvalue">0</div>
+                </div>
+                <div class="tc" id="tc">
+                    <p id="tctitle">Total Consumption (gal)</p>
+                    <div class="tcvalue" id="tcvalue">0</div>
+                </div>
+                <div class="rsrctypecont" id="rsrctypecont">
+                    <div class="defaultinfo" id="rsrctypedefaultinfo">Water</div>
+                    <button class="upbtn" id="rsrctypeupbtn"></button>
+                    <div class="optcont" id="rsrctypeoptcont">
+                        <div class="optvalcont" id="rsrctypeoptvalcont">
+                            <a href="#~">
+                                <span class="optval" id="rsrctypeoptval0">Water</span>
+                                <img src="../image/icons8-checkmark-30.png" class="tick">
+                            </a>
+                            <a href="#~">
+                                <span class="optval" id="rsrctypeoptval1">Electricity</span>
+                                <img src="../image/icons8-checkmark-30.png" class="tick">
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="infoperiodcont" id="infoperiodcont">
+                    <div class="defaultinfo" id="infoperioddefaultinfo">This Month</div>
+                    <button class="upbtn" id="infoperiodupbtn"></button>
+                    <div class="optcont" id="infoperiodoptcont">
+                        <div class="optvalcont" id="infoperiodoptvalcont">
+                            <a href="#~">
+                                <span class="optval" id="infoperiodoptval0">All Time</span>
+                                <img src="../image/icons8-checkmark-30.png" class="tick">
+                            </a>
+                            <a href="#~">
+                                <span class="optval" id="infoperiodoptval1">This Year</span>
+                                <img src="../image/icons8-checkmark-30.png" class="tick">
+                            </a>
+                            <a href="#~">
+                                <span class="optval" id="infoperiodoptval2">This Month</span>
+                                <img src="../image/icons8-checkmark-30.png" class="tick">
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="infocont randomtemp"></div>
+        </div>
+    </div>
+</body>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="/js/clientDashboard.js"></script>
+
+
