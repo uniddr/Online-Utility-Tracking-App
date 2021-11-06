@@ -1128,7 +1128,7 @@ route.post('/get-usage_cost',function(req,res)
     var service=req.body.service;
     if(service=="Water")
     {
-        var query="select usage_cost,extra_cost from sakila.node_water_bill where issue_date>=(select date_sub(?,interval 1 month)) and user_id=?";
+        var query="select usage_cost from sakila.node_water_bill where issue_date>=(select date_sub(?,interval 1 month)) and user_id=?";
         connection.query(query,[date,id],function(err,result)
         {
             res.send(JSON.stringify(result));
@@ -1176,7 +1176,7 @@ route.post('/issue-bill',function(req,res)
             bill_id=r1[0]["bill_id"]+1;
             if(!Number.isNaN(paid_amount))
             {
-                connection.query(elec_query_1,[bill_id,user_id,i_date,p_date,used,extra,usage_cost,paid_amount],function(err,r)
+                connection.query(elec_query_1,[bill_id,user_id,i_date,p_date,used,usage_cost,extra,paid_amount],function(err,r)
                 {
                     res.end();
                 });
@@ -1184,7 +1184,7 @@ route.post('/issue-bill',function(req,res)
 
             else if(Number.isNaN(paid_amount))
             {
-                connection.query(elec_query_2,[bill_id,user_id,i_date,used,extra,usage_cost],function(err,r)
+                connection.query(elec_query_2,[bill_id,user_id,i_date,used,usage_cost,extra],function(err,r)
                 {
                     res.end();
                 });
@@ -1207,7 +1207,7 @@ else if(service=="Water")
         bill_id=r1[0]["bill_id"]+1;
          if(!Number.isNaN(paid_amount))
         {
-            connection.query(water_query_1,[bill_id,user_id,i_date,p_date,used,extra,usage_cost,paid_amount],function(err,r)
+            connection.query(water_query_1,[bill_id,user_id,i_date,p_date,used,usage_cost,extra,paid_amount],function(err,r)
             {
                 res.end();
             });
@@ -1215,7 +1215,7 @@ else if(service=="Water")
 
         else if(Number.isNaN(paid_amount))
         {
-            connection.query(water_query_2,[bill_id,user_id,i_date,used,extra,usage_cost],function(err,r)
+            connection.query(water_query_2,[bill_id,user_id,i_date,used,usage_cost,extra],function(err,r)
             {
                 res.end();
             });
