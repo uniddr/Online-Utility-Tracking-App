@@ -708,7 +708,7 @@ route.get('/detail',function(request,response)
     {
         response.end("Please select which client to view first!");
     }
-    else if(request.session.loggedin && request.session.usertype=="A" && id!=null)
+    else if(request.session.loggedin && request.session.usertype=="A" && !Number.isNaN(id))
     {
         response.sendFile(path.join(__dirname,"..","public","html","userdetail.html"));
     }
@@ -717,6 +717,7 @@ route.get('/detail',function(request,response)
         response.end('Please login to view this page!');
     }
 });
+
 
 // route.get('/issued_bill',function(request,response)
 // {
