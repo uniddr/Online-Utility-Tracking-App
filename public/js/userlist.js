@@ -219,15 +219,22 @@ $(document).ready(function()
         var eventParent=e.target.parentNode;
         var column=$(eventParent.parentNode.children[0]).text();
         var value=$(e.target).text();
+        var uid=document.getElementById("user-id-input");
+        uid.value="";
+
         $("#prev").data("column",column);
         $("#prev").data("value",value);
+        $("#prev").data("id",uid);
         $("#next").data("column",column);
         $("#next").data("value",value);
+        $("#next").data("id",uid);
+
 
         $.post('get-filter-data',
         {
             column:column,
-            value:value
+            value:value,
+            id:""
         },
         function(d)
         {
@@ -373,17 +380,21 @@ $(document).ready(function()
         });
      });
 
+
      $("#next").click(function()
      {
          var maxRow=10;
          var column=$(this).data("column");
          var value=$(this).data("value");
+         var uid=document.getElementById("user-id-input").value;
+         //console.log(column+" "+value+" "+uid);
          //console.log(column+" "+value);
 
          $.post('get-filter-data',
          {
              column:column,
-             value:value
+             value:value,
+             id:uid
          },
          function(d)
          {
@@ -509,12 +520,15 @@ $(document).ready(function()
         
         var column=$(this).data("column");
         var value=$(this).data("value");
+        var uid=document.getElementById("user-id-input").value;
+        console.log(column+" "+value+" "+uid);
         //console.log(column+" "+value);
 
         $.post('get-filter-data',
         {
             column:column,
-            value:value
+            value:value,
+            id:uid
         },
         function(d)
         {
@@ -623,9 +637,177 @@ $(document).ready(function()
            }
 
         });
-
-
      });
+
+
+     
+     $(".submit-user-id").click(function(e)
+     {
+        var maxRow=10;
+        var eventParent=e.target.parentNode;
+        var column=$("#prev").data("column");
+        var value=$("#prev").data("value");
+        var uid=document.getElementById("user-id-input").value;
+        console.log(column+" "+value+" "+uid);
+
+        $("#prev").data("column",column);
+        $("#prev").data("value",value);
+        $("#prev").data("id",uid);
+        $("#next").data("column",column);
+        $("#next").data("value",value);
+        $("#next").data("id",uid);
+
+        $.post('get-filter-data',
+        {
+            column:column,
+            value:value,
+            id: uid
+        },
+        function(d)
+        {
+            var data=JSON.parse(d);
+            console.log(data);
+
+            var fTable=document.getElementById("filter-table");
+            var length=fTable.rows.length;
+
+            if(length>0)
+            {
+                for(var k=0;k<length;k++)
+                {
+                    fTable.deleteRow(0);
+                }
+            }
+
+            var row=fTable.insertRow(0);
+
+            var h1=document.createElement("TH");
+            var h2=document.createElement("TH");
+            var h3=document.createElement("TH");
+            var h4=document.createElement("TH");
+            var h5=document.createElement("TH");
+            var h6=document.createElement("TH");
+            var h7=document.createElement("TH");
+            
+            h1.appendChild(document.createTextNode("ID"));
+            h2.appendChild(document.createTextNode("Username"));
+            h3.appendChild(document.createTextNode("Email"));
+            h4.appendChild(document.createTextNode("Location"));
+            h5.appendChild(document.createTextNode("Sub Type"));
+            h6.appendChild(document.createTextNode("Electricity Service"));
+            h7.appendChild(document.createTextNode("Water Service"));
+            
+            row.appendChild(h1);
+            row.appendChild(h2);
+            row.appendChild(h3);
+            row.appendChild(h4);
+            row.appendChild(h5);
+            row.appendChild(h6);
+            row.appendChild(h7);
+
+            length=0;
+            
+            for(var k=0;k<maxRow;k++)
+            {
+                if(data[k]!=null)
+                {
+                    length++;
+                row=fTable.insertRow(length);
+
+                var url="";
+                var a=document.createElement("A");
+                a.appendChild(document.createTextNode(data[k]["ID"]));
+                url="/detail?"+"u_id="+data[k]["ID"];
+                a.href=url;
+                var cell=row.insertCell(0);
+                cell.appendChild(a);
+
+                a=document.createElement("A");
+                a.appendChild(document.createTextNode(data[k]["Username"]));
+                url="/detail?"+"u_id="+data[k]["ID"];
+                a.href=url;
+                cell=row.insertCell(1);
+                cell.appendChild(a);
+
+                a=document.createElement("A");
+                a.appendChild(document.createTextNode(data[k]["Email"]));
+                url="/detail?"+"u_id="+data[k]["ID"];
+                a.href=url;
+                cell=row.insertCell(2);
+                cell.appendChild(a);
+
+                a=document.createElement("A");
+                a.appendChild(document.createTextNode(data[k]["Location"]));
+                url="/detail?"+"u_id="+data[k]["ID"];
+                a.href=url;
+                cell=row.insertCell(3);
+                cell.appendChild(a);
+
+                a=document.createElement("A");
+                a.appendChild(document.createTextNode(data[k]["Sub_type"]));
+                url="/detail?"+"u_id="+data[k]["ID"];
+                a.href=url;
+                cell=row.insertCell(4);
+                cell.appendChild(a);
+                
+                a=document.createElement("A");
+                a.appendChild(document.createTextNode(data[k]["Elec_service"]));
+                url="/detail?"+"u_id="+data[k]["ID"];
+                a.href=url;
+                cell=row.insertCell(5);
+                if(data[k]["Elec_service"]!=null)
+                {
+                    cell.appendChild(a);
+                }
+                else
+                {
+                    cell.appendChild(document.createTextNode(""));
+                }
+
+                a=document.createElement("A");
+                a.appendChild(document.createTextNode(data[k]["Water_service"]));
+                url="/detail?"+"u_id="+data[k]["ID"];
+                a.href=url;
+                cell=row.insertCell(6);
+                if(data[k]["Water_service"]!=null)
+                {
+                    cell.appendChild(a);
+                }
+                else
+                {
+                    cell.appendChild(document.createTextNode(""));
+                }
+
+            }
+           }
+
+            var divParent=document.getElementsByClassName("filter-div");
+            var c=0;
+            length=divParent.length;
+            for(var k=0;k<length;k++)
+            {
+                if(divParent[k].children[1]!=null)
+                {
+                    divParent[k].removeChild(divParent[k].children[1]);
+                    c=k;
+                }
+            }
+            var fButton=document.getElementsByClassName("filter-button");
+            for(var k=0;k<length;k++)
+            {
+                fButton[k].style.visibility="hidden";
+                if(c<k)
+                {
+                    fButton[k].style.top="0px";
+                }
+            }
+
+            document.getElementById("prev").style.visibility="visible";
+            document.getElementById("next").style.visibility="visible";
+        });
+     });
+     
+
 
 });
 

@@ -793,7 +793,7 @@ route.get('/userlist',function(req,res)
     }
     else if(req.session.loggedin && req.session.usertype == "C")
     {
-        res.redirect('/dashboard');
+       res.redirect('/dashboard');
     }
     else
     {
@@ -817,7 +817,10 @@ route.post('/get-filter-data',function(req,res)
 {
     var column=req.body.column;
     var value=req.body.value;
-    if(column=="Location")
+    var id=Number.parseInt(req.body.id);
+    console.log(id);
+
+    if(column=="Location" && Number.isNaN(id))
     {
         var query="select * from sakila.node_users where location=? and User_type='C'";
         connection.query(query,[value],function(err,result)
@@ -828,12 +831,38 @@ route.post('/get-filter-data',function(req,res)
         });
     }
 
-    else if(column=="Sub Type")
+    else if(column=="Location" && !Number.isNaN(id))
+    {
+        var query="select * from sakila.node_users where location=? and  id=? and User_type='C'";
+        connection.query(query,[value,id],function(err,result)
+        {
+            if(err)
+            {
+                console.log(err);
+            }
+            console.log(result);
+            var data=JSON.stringify(result);
+            res.send(data);
+        });
+    }
+
+    else if(column=="Sub Type" && Number.isNaN(id))
     {
         var query="select * from sakila.node_users where sub_type=? and User_type='C'";
         connection.query(query,[value],function(err,result)
         {
-            //console.log(result);
+            console.log(result);
+            var data=JSON.stringify(result);
+            res.send(data);
+        });
+    }
+
+    else if(column=="Sub Type" && !Number.isNaN(id))
+    {
+        var query="select * from sakila.node_users where sub_type=? and id=? and User_type='C'";
+        connection.query(query,[value,id],function(err,result)
+        {
+            console.log(result);
             var data=JSON.stringify(result);
             res.send(data);
         });
@@ -841,22 +870,44 @@ route.post('/get-filter-data',function(req,res)
 
     else if(column=="Service")
     {
-        if(value=="Water")
+        if(value=="Water" && Number.isNaN(id))
         {
             var query="select * from sakila.node_users where water_service='Yes' and User_type='C'";
-            connection.query(query,[value],function(err,result)
+            connection.query(query,function(err,result)
             {
                 //console.log(result);
                 var data=JSON.stringify(result);
                 res.send(data);
             });
         }
-        else if(value=="Electricity")
+        else if(value=="Water" && !Number.isNaN(id))
         {
-            var query="select * from sakila.node_users where elec_service='Yes' and User_type='C'";
-            connection.query(query,[value],function(err,result)
+            var query="select * from sakila.node_users where water_service='Yes' and id=? and User_type='C'";
+            connection.query(query,[id],function(err,result)
             {
                 //console.log(result);
+                var data=JSON.stringify(result);
+                res.send(data);
+            });
+        }
+
+        else if(value=="Electricity" && Number.isNaN(id))
+        {
+            var query="select * from sakila.node_users where elec_service='Yes' and User_type='C'";
+            connection.query(query,function(err,result)
+            {
+                //console.log(result);
+                var data=JSON.stringify(result);
+                res.send(data);
+            });
+        }
+
+        else if(value=="Electricity" && !Number.isNaN(id))
+        {
+            var query="select * from sakila.node_users where elec_service='Yes' and id=? and User_type='C'";
+            connection.query(query,[id],function(err,result)
+            {
+                console.log(result);
                 var data=JSON.stringify(result);
                 res.send(data);
             });
@@ -882,17 +933,17 @@ route.post('/get-user-type',function(req,res)
 
 route.get('/bill-list',function(req,res)
 {
-    //if(req.session.loggedin && req.session.usertype=="A")
+    if(req.session.loggedin && req.session.usertype=="A")
     {
         res.sendFile(path.join(__dirname,"..","public","html","billlist.html"));
     }
-    //else if(req.session.loggedin && req.session.usertype=="C")
+    else if(req.session.loggedin && req.session.usertype=="C")
     {
-        //res.send("Oops!!!You have no permission to view this page");
+        res.send("Oops!!!You have no permission to view this page");
     }
-    //else
+    else
     {
-        //res.send("You are not logged in");
+        res.send("You are not logged in");
     }
 });
 
@@ -1094,7 +1145,91 @@ route.post('/get-usage_cost',function(req,res)
     }
 });
 
+route.post('/issue-bill',function(req,res)
+{
+    var bill_id="";
+    var user_id=Number.parseInt(req.body.user_id);
+    var used=Number.parseInt(req.body.used_resource);
+    var extra=Number.parseInt(req.body.extra_cost);
+    var paid_amount=Number.parseInt(req.body.paid_amount);
+    var usage_cost=Number.parseInt(req.body.usage_cost);
+    var i_date=req.body.issue_date;
+    var p_date=req.body.payment_date;
+    var service=req.body.service;
+    console.log(user_id+" "+used+" "+extra+" "+usage_cost+" "+paid_amount+" "+i_date+" "+p_date+" "+service);
+    var query1="select bill_id from(select * from sakila.node_electricity_bill order by bill_id desc)b limit 1";
+    var query2="select bill_id from(select * from sakila.node_water_bill order by bill_id desc)b limit 1";
+    var elec_query_1="insert into sakila.node_electricity_bill values(?,?,?,?,?,?,?,?)";
+    var elec_query_2="insert into sakila.node_electricity_bill values(?,?,?,null,?,?,?,null)";
+    var water_query_1="insert into sakila.node_water_bill values(?,?,?,?,?,?,?,?)";
+    var water_query_2="insert into sakila.node_water_bill values(?,?,?,null,?,?,?,null)";
+    if(service=="Electricity")
+    {
+        connection.query(query1,function(err1,r1)
+    {
+        if(err1)
+        {
+            console.log(err1);
+        }
+        else
+        {
+            bill_id=r1[0]["bill_id"]+1;
+            if(!Number.isNaN(paid_amount))
+            {
+                connection.query(elec_query_1,[bill_id,user_id,i_date,p_date,used,extra,usage_cost,paid_amount],function(err,r)
+                {
+                    res.end();
+                });
+            }
+
+            else if(Number.isNaN(paid_amount))
+            {
+                connection.query(elec_query_2,[bill_id,user_id,i_date,used,extra,usage_cost],function(err,r)
+                {
+                    res.end();
+                });
+            }
+
+        }
+    });
+}
+
+else if(service=="Water")
+{
+    connection.query(query2,function(err1,r1)
+{
+    if(err1)
+    {
+        console.log(err1);
+    }
+    else
+    {
+        bill_id=r1[0]["bill_id"]+1;
+         if(!Number.isNaN(paid_amount))
+        {
+            connection.query(water_query_1,[bill_id,user_id,i_date,p_date,used,extra,usage_cost,paid_amount],function(err,r)
+            {
+                res.end();
+            });
+        }
+
+        else if(Number.isNaN(paid_amount))
+        {
+            connection.query(water_query_2,[bill_id,user_id,i_date,used,extra,usage_cost],function(err,r)
+            {
+                res.end();
+            });
+        }
+
+    }
+});
+}
+   
+});
+
+
 module.exports = route;
+
 
 
 

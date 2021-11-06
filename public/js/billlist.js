@@ -195,7 +195,8 @@ $(document).ready(function()
         var eventParent=e.target.parentNode;
         var column=$(eventParent.parentNode.children[0]).text();
         var value=$(e.target).text();
-        var user_id=document.getElementById("user-id-input").value;
+        var user_id=document.getElementById("user-id-input");
+        user_id.value="";
 
         $("#prev").data("column",column);
         $("#prev").data("value",value);
@@ -206,7 +207,7 @@ $(document).ready(function()
         {
             column:column,
             value:value,
-            user_id:user_id
+            user_id: ""
         },
         function(d)
         {
@@ -635,7 +636,6 @@ $(document).ready(function()
         var column=$("#prev").data("column");
         var value=$("#prev").data("value");
         console.log(column+" "+value);
-
         var user_id=document.getElementById("user-id-input").value;
 
         $.post('get-filter-bill-data',
@@ -911,7 +911,6 @@ $(document).ready(function()
      });
 
 });
-
 
 
 const modal = document.querySelector('#my-modal');

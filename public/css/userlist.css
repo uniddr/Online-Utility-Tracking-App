@@ -303,7 +303,7 @@ td a
 .modal {
     display: none;
     position: fixed;
-    z-index: 1;
+    z-index: 10;
     left: 0;
     top: 0;
     height: 100%;
@@ -390,6 +390,49 @@ td a
 {
     background: #f55c8d;
 }
+
+#user-id-input
+{
+    position:absolute;
+    top:130px;
+    left:860px;
+    border:2px solid #994540;
+    border-radius:6px;
+    width:200px;
+    height:25px;
+    outline:none;
+}
+
+
+#user-id-input:focus
+{
+    border:3px solid #994540;
+    border-radius:8px;
+    width:200px;
+    height:25px;
+}
+
+.submit-user-id
+{
+    position:absolute;
+    top:130px;
+    left:1100px;
+    background-color:#994540;
+    border:1px solid #994540;
+    border-radius:4px;
+    width:140px;
+    height:30px;
+    color:white;
+}
+
+.submit-user-id:hover
+{
+    background-color:#d6656f;
+    border:1px solid #d6656f;
+    border-radius:8px;
+}
+
+
 
 
 

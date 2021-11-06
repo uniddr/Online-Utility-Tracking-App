@@ -39,7 +39,7 @@
     
         <button class="cancel">Cancel</button>
         <button class="new-bill">Issue New Bill</button>
-        <input type="text" id="user-id-input" placeholder="Enter User ID">
+        <input type="text" id="user-id-input" placeholder="Filter By Client ID">
         <button class="submit-user-id">Submit</button>
 
         <div id="my-modal" class="modal">
@@ -49,7 +49,7 @@
                     <h2>Issue New Bill</h2>
                 </div>
                 <div class="modal-body">
-                    <form action="add_bill" method="post">
+                    <form action="issue-bill" method="post">
                         <label for="service">Select Client's Service:</label><br>
                         <select name="service" id="service">
                             <option value="Water">Water</option>
@@ -63,7 +63,7 @@
                         <input type="text" id="payment_date" placeholder="Enter Payment Date" name="payment_date"><br>
                         <input type="text" id="paid_amount" placeholder="Enter Paid Amount" name="paid_amount"><br>
                         <br>
-                        <button id="add_bill" name="add_bill">Add the Bill to Database</button>
+                        <button id="add_bill">Add the Bill to Database</button>
                         <p id="changed"></p>
                     </form>
                 </div>
