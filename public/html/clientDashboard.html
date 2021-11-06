@@ -2,6 +2,7 @@
 <head>
     <title>Utility Tracking App</title>
     <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/clientDashboard.css">
 </head>
 
 <body>
@@ -30,21 +31,17 @@
         </div>
         <div class="contentdiv" id="contentdiv">
             <div class="infocont" id="infocont">
-                <div class="cc" id="cc">
-                    <p>Current Clients</p>
-                    <div class="ccvalue" id="ccvalue">0</div>
+                <div class="rc" id="rc">
+                    <p id="rctitle">Resource Consumption This Month (gal)</p>
+                    <div class="rcvalue" id="rcvalue">0</div>
                 </div>
-                <div class="tp" id="tp">
-                    <p>Total Paid (BDT)</p>
-                    <div class="tpvalue" id="tpvalue">0</div>
+                <div class="uc" id="uc">
+                    <p>Usage Cost (BDT)</p>
+                    <div class="ucvalue" id="ucvalue">0</div>
                 </div>
-                <div class="td" id="td">
-                    <p>Total Due (BDT)</p>
-                    <div class="tdvalue" id="tdvalue">0</div>
-                </div>
-                <div class="tc" id="tc">
-                    <p id="tctitle">Total Consumption (gal)</p>
-                    <div class="tcvalue" id="tcvalue">0</div>
+                <div class="ec" id="ec">
+                    <p>Extra Cost (BDT)</p>
+                    <div class="ecvalue" id="ecvalue">0</div>
                 </div>
                 <div class="rsrctypecont" id="rsrctypecont">
                     <div class="defaultinfo" id="rsrctypedefaultinfo">Water</div>
@@ -62,26 +59,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="infoperiodcont" id="infoperiodcont">
-                    <div class="defaultinfo" id="infoperioddefaultinfo">This Month</div>
-                    <button class="upbtn" id="infoperiodupbtn"></button>
-                    <div class="optcont" id="infoperiodoptcont">
-                        <div class="optvalcont" id="infoperiodoptvalcont">
-                            <a href="#~">
-                                <span class="optval" id="infoperiodoptval0">All Time</span>
-                                <img src="../image/icons8-checkmark-30.png" class="tick">
-                            </a>
-                            <a href="#~">
-                                <span class="optval" id="infoperiodoptval1">This Year</span>
-                                <img src="../image/icons8-checkmark-30.png" class="tick">
-                            </a>
-                            <a href="#~">
-                                <span class="optval" id="infoperiodoptval2">This Month</span>
-                                <img src="../image/icons8-checkmark-30.png" class="tick">
-                            </a>
-                        </div>
-                    </div>
-                </div>
+                
             </div>
             <div class="infocont randomtemp"></div>
         </div>

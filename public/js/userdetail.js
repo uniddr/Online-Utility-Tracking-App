@@ -88,8 +88,7 @@ $(document).ready(function()
         if(d.type=="C")
         {
             var leftmenuDiv=document.getElementById("leftmenuopt");
-            leftmenuDiv.removeChild(leftmenuDiv.children[1]);
-            leftmenuDiv.removeChild(leftmenuDiv.children[1]);
+            leftmenuDiv.removeChild(leftmenuDiv.children[2]);
         }
     });
 
