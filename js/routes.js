@@ -1,5 +1,6 @@
 var express = require('express');
 var session = require('express-session');
+var url = require('url');
 var path = require('path');
 var mysql = require('mysql');
 var cookieparser = require('cookie-parser');
@@ -695,7 +696,9 @@ route.post('/userdetail_data',function(request,response)
 
 route.get('/detail',function(request,response)
 {
-    var id=Number.parseInt(request.query.u_id);
+    var URL=url.parse(request.originalUrl,true);
+    var data=URL.query;
+    var id=Number.parseInt(data.u_id);
     console.log(id);
     if(request.session.loggedin && request.session.usertype=="C")
     {
@@ -795,7 +798,6 @@ route.get('/userlist',function(req,res)
     }
 });
 
-
 route.get('/get-filter-menu',function(req,res)
 {
     var query="select * from sakila.node_users";
@@ -875,6 +877,109 @@ route.post('/get-user-type',function(req,res)
     }
 });
 
+route.get('/bill-list',function(req,res)
+{
+    res.sendFile(path.join(__dirname,"..","public","html","billlist.html"));
+});
+
+route.get('/get-filter-bill-menu',function(req,res)
+{
+    var query="select bill_id, user_id, year(issue_date) as issue, year(payment_date) as payment, used_resource, usage_cost, extra_cost, total_payable, paid_amount, due_amount from sakila.node_electricity_bill union all select bill_id, user_id, year(issue_date) as issue, year(payment_date) as payment, used_resource, usage_cost, extra_cost, total_payable, paid_amount, due_amount from sakila.node_water_bill order by bill_id";
+    connection.query(query,function(err,result)
+    {
+        if(err)
+        {
+            console.log(err);
+        }
+        else
+        {
+            //console.log(result);
+            var data=JSON.stringify(result);
+            res.send(data);
+        }
+    });
+});
+
+route.post('/get-filter-bill-data',function(req,res)
+{
+    var column=req.body.column;
+    var value=req.body.value;
+    var user_id=Number.parseInt(req.body.user_id);
+    //console.log("User ID : "+user_id);
+
+    if(column=="Service")
+    {
+        if(value=="Water" && Number.isNaN(user_id))
+        {
+            var query="select * from sakila.node_water_bill";
+            connection.query(query,function(err,result)
+            {
+                //console.log(result);
+                var data=JSON.stringify(result);
+                res.send(data);
+            });
+        }
+        else if(value=="Electricity" && Number.isNaN(user_id))
+        {
+            var query="select * from sakila.node_electricity_bill";
+            connection.query(query,function(err,result)
+            {
+                //console.log(result);
+                var data=JSON.stringify(result);
+                res.send(data);
+            });
+        }
+
+        else if(value=="Water" && !Number.isNaN(user_id))
+        {
+            var query="select * from sakila.node_water_bill where user_id=?";
+            connection.query(query,[user_id],function(err,result)
+            {
+                //console.log(result);
+                var data=JSON.stringify(result);
+                res.send(data);
+            });
+        }
+        else if(value=="Electricity" && !Number.isNaN(user_id))
+        {
+            var query="select * from sakila.node_electricity_bill where user_id=?";
+            connection.query(query,[user_id],function(err,result)
+            {
+                //console.log(result);
+                var data=JSON.stringify(result);
+                res.send(data);
+            });
+        }
+    }
+    else if(column=="Issue Year")
+    {
+        var user_id=Number.parseInt(user_id);
+
+        if(Number.isNaN(user_id))
+        {
+        var query="select * from sakila.node_electricity_bill where year(issue_date)=? union all select * from sakila.node_water_bill where year(issue_date)=? order by bill_id";
+        connection.query(query,[value,value],function(err,result)
+        {
+            //console.log(result);
+            var data=JSON.stringify(result);
+            res.send(data);
+        });
+    }
+
+    else if(!Number.isNaN(user_id))
+    {
+    var query="select * from(select * from sakila.node_electricity_bill where year(issue_date)=? union all select * from sakila.node_water_bill where year(issue_date)=? order by bill_id) b where b.user_id=?";
+    connection.query(query,[value,value,user_id],function(err,result)
+    {
+        //console.log(result);
+        var data=JSON.stringify(result);
+        res.send(data);
+    });
+}
+    }
+});
+
+;
 route.post('/add_user', function(request, response)
     {
         console.log(request.body);
@@ -906,5 +1011,6 @@ route.get('/user_manager', function(request, response)
 );
 
 module.exports = route;
+
 
 
