@@ -142,7 +142,7 @@ route.get('/dashboard', function(request, response)
             }
             else if(request.session.usertype=="C")
             {
-                response.sendFile(path.join(__dirname, '..', 'public', 'html', 'userdetail.html'));
+                response.sendFile(path.join(__dirname, '..', 'public', 'html', 'clientDashboard.html'));
             }
         }
         else
@@ -336,6 +336,106 @@ route.post('/infocont', function(request, response)
     }
 );
 
+route.post('/clientinfocont', function(request, response)
+    {
+        let rsrctype = request.body.resource;
+        var uc = 0.0;
+        var ec = 0.0;
+        var rc = 0.0;
+        var rate = 0.00;
+        var qry1 = "", qry2 = "", qry3 = "";
+
+        if(rsrctype == "Water")
+        {
+            qry1 = "select used_amount trc from sakila.node_usage_history where month(record_date)=month(now()) and year(record_date)=year(now()) and resource_type='Water' and user_id=?";
+
+            qry2 = "select Rate from sakila.node_area_rates where Area=(select Location from sakila.node_users where ID=?) and resource_type='Water'";
+            
+            qry3 = "select Water_due e_cost from sakila.node_users where ID=?";
+        }
+        else if(rsrctype == "Electricity")
+        {
+            qry1 = "select used_amount trc from sakila.node_usage_history where month(record_date)=month(now()) and year(record_date)=year(now()) and resource_type='Electricity' and user_id=?";
+
+            qry2 = "select Rate from sakila.node_area_rates where Area=(select Location from sakila.node_users where ID=?) and resource_type='Electricity'";
+            
+            qry3 = "select Elec_due e_cost from sakila.node_users where ID=?";
+        }
+        connection.query(qry1, [request.session.userid], function(error1, result1, fields1)
+        {
+            if(error1) throw error1;
+            if(result1.length > 0)
+            {
+                if(result1[0].trc != null)
+                {
+                    rc = result1[0].trc;
+                }
+                else
+                {
+                    rc = 0;
+                }
+                console.log(result1);
+                connection.query(qry2, [request.session.userid], function(error2, result2, fields2) {
+                    if(error2) throw error2;
+                    if(result2.length > 0)
+                    {
+                        if(result2[0].Rate != null)
+                        {
+                            rate = result2[0].Rate;
+                            uc = rc*rate;
+                        }
+                        else
+                        {
+                            rate = 0;
+                            uc = rc*rate;
+                        }
+                        console.log(result2);
+                        connection.query(qry3, [request.session.userid], function(error3, result3, fields3) {
+                            if(error3) throw error3;
+                            if(result3.length > 0)
+                            {
+                                if(result3[0].e_cost != null)
+                                {
+                                    ec = result3[0].e_cost;
+                                }
+                                else
+                                {
+                                    ec = 0.0;
+                                }
+                                console.log(result3);
+                                console.log(rc+"---"+uc+"-----"+ec);
+                                response.setHeader('Content-Type', 'application/json');
+                                response.send({totalrc: rc, totaluc: uc, totalec: ec});
+                            }
+                            else
+                            {
+                                // response.end('Error fetching e_cost!');
+                                console.log("error at e_cost: "+rc+"---"+uc+"-----"+ec);
+                                response.setHeader('Content-Type', 'application/json');
+                                response.send({totalrc: rc, totaluc: uc, totalec: ec});
+                            }
+                        });
+                    }
+                    else
+                    {
+                        // response.end('Error fetching Rate!');
+                        console.log("error at rate: "+rc+"---"+uc+"-----"+ec);
+                        response.setHeader('Content-Type', 'application/json');
+                        response.send({totalrc: rc, totaluc: uc, totalec: ec});
+                    }
+                });
+            }
+            else
+            {
+                // response.send('Error fetching trc!');
+                console.log("error at trc: "+rc+"---"+uc+"-----"+ec);
+                response.setHeader('Content-Type', 'application/json');
+                response.send({totalrc: rc, totaluc: uc, totalec: ec});
+            }
+        });
+    }
+);
+
 route.post('/avyearinfo', function(request, response) {
     let infotype = request.body.info;
     let rsctype = request.body.resource;
@@ -433,22 +533,22 @@ route.post('/clientchartinfo', function(request, response) {
         {
             if(periodval == "All Time")
             {
-                qry1 = "select year(subdate(issue_date, interval 1 month)) Year, sum(total_payable) Total_bill from sakila.node_water_bill where user_id= ?  group by year(subdate(issue_date, interval 1 month)) order by year(subdate(issue_date, interval 1 month))";
+                qry1 = "select year(subdate(issue_date, interval 1 month)) Year, sum(usage_cost+extra_cost) Total_bill from sakila.node_water_bill where user_id= ?  group by year(subdate(issue_date, interval 1 month)) order by year(subdate(issue_date, interval 1 month))";
             }
             else if(periodval == "Yearly")
             {
-                qry1 = `select month(idate) Month, total_payable Monthly_Bill from (select bill_id, date_sub(issue_date, interval 1 month) idate, total_payable from sakila.node_water_bill where user_id=?) as real_list where year(idate)=${ytq}`;
+                qry1 = `select month(idate) Month, (total_payable) Monthly_Bill from (select bill_id, date_sub(issue_date, interval 1 month) idate, (usage_cost+extra_cost) total_payable from sakila.node_water_bill where user_id=?) as real_list where year(idate)=${ytq}`;
             }
         }
         else if(rsctype == "Electricity")
         {
             if(periodval == "All Time")
             {
-                qry1 = "select year(subdate(issue_date, interval 1 month)) Year, sum(total_payable) Total_bill from sakila.node_electricity_bill where user_id= ? group by year(subdate(issue_date, interval 1 month)) order by year(subdate(issue_date, interval 1 month))";
+                qry1 = "select year(subdate(issue_date, interval 1 month)) Year, sum(usage_cost+extra_cost) Total_bill from sakila.node_electricity_bill where user_id= ? group by year(subdate(issue_date, interval 1 month)) order by year(subdate(issue_date, interval 1 month))";
             }
             else if(periodval == "Yearly")
             {
-                qry1 = `select month(idate) Month, total_payable Monthly_Bill from (select bill_id, date_sub(issue_date, interval 1 month) idate, total_payable from sakila.node_electricity_bill where user_id=?) as real_list where year(idate)=${ytq}`;
+                qry1 = `select month(idate) Month, (total_payable) Monthly_Bill from (select bill_id, date_sub(issue_date, interval 1 month) idate, (usage_cost+extra_cost) total_payable from sakila.node_electricity_bill where user_id=?) as real_list where year(idate)=${ytq}`;
             }
         }
     }
@@ -660,7 +760,7 @@ route.post('/get_bill_data',function(req,res)
     }
     if(resource=="Water")
     {
-        var query="select bill_id, issue_date, payment_date, used_resource, usage_cost, total_payable, paid_amount, due_amount from sakila.node_water_bill where YEAR(date_sub(issue_date, interval 1 month))=? and user_id=? order by issue_date desc";
+        var query="select bill_id, issue_date, payment_date, used_resource, usage_cost, (usage_cost+extra_cost) total_payable, paid_amount, (usage_cost+extra_cost-paid_amount) due_amount from sakila.node_water_bill where YEAR(date_sub(issue_date, interval 1 month))=? and user_id=? order by issue_date desc";
         connection.query(query,[year,id],function(err,result)
         {
             //console.log(result);
@@ -670,7 +770,7 @@ route.post('/get_bill_data',function(req,res)
     }
     else if(resource=="Electricity")
     {
-        var query="select bill_id,issue_date, payment_date,used_resource,usage_cost,total_payable,paid_amount,due_amount from sakila.node_electricity_bill where YEAR(date_sub(issue_date, interval 1 month))=? and user_id=? order by issue_date desc";
+        var query="select bill_id,issue_date, payment_date,used_resource,usage_cost,(usage_cost+extra_cost) total_payable,paid_amount,(usage_cost+extra_cost-paid_amount) due_amount from sakila.node_electricity_bill where YEAR(date_sub(issue_date, interval 1 month))=? and user_id=? order by issue_date desc";
         connection.query(query,[year,id],function(err,result)
         {
             var data=JSON.stringify(result);
@@ -738,7 +838,7 @@ route.post('/get-filter-data',function(req,res)
     {
         if(value=="Water")
         {
-            var query="select * from sakila.node_users where water_service='yes' and User_type='C'";
+            var query="select * from sakila.node_users where water_service='Yes' and User_type='C'";
             connection.query(query,[value],function(err,result)
             {
                 //console.log(result);
@@ -748,7 +848,7 @@ route.post('/get-filter-data',function(req,res)
         }
         else if(value=="Electricity")
         {
-            var query="select * from sakila.node_users where elec_service='yes' and User_type='C'";
+            var query="select * from sakila.node_users where elec_service='Yes' and User_type='C'";
             connection.query(query,[value],function(err,result)
             {
                 //console.log(result);

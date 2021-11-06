@@ -88,8 +88,7 @@ $(document).ready(function()
         if(d.type=="C")
         {
             var leftmenuDiv=document.getElementById("leftmenuopt");
-            leftmenuDiv.removeChild(leftmenuDiv.children[1]);
-            leftmenuDiv.removeChild(leftmenuDiv.children[1]);
+            // leftmenuDiv.removeChild(leftmenuDiv.children[2]);
         }
     });
 
@@ -162,7 +161,7 @@ $(document).ready(function()
             var pelec_due=document.createElement('P');
             pelec_due.style.marginLeft="20px";
             pelec_due.style.color="white";
-            if(res[0]["Elec_service"]=="yes")
+            if(res[0]["Elec_service"]=="Yes")
             {
                 pelec_due.appendChild(document.createTextNode(res[0]["Elec_due"]));
                 divelec_due.appendChild(pelec_due);
@@ -182,7 +181,7 @@ $(document).ready(function()
             pwater_due.style.color="white";
             //pwater_due.appendChild(document.createTextNode("pwater_due"));
             //divwater_due.appendChild(pwater_due);
-            if(res[0]["Water_service"]=="yes")
+            if(res[0]["Water_service"]=="Yes")
             {
                 pwater_due.appendChild(document.createTextNode(res[0]["Water_due"]));
                 divwater_due.appendChild(pwater_due);
