@@ -71,17 +71,10 @@
 {
     position:relative;
     z-index:4;
-<<<<<<< HEAD
     /*height:130px;*/
     width:214px;
-    background-color:white;
-    /*border:1px solid white;*/
-=======
-    /* height:130px; */
-    width:218px;
     /*border:1px solid white;*/
     background-color:rgba(139, 138, 143, 0.082);
->>>>>>> d610835ba33dd120a44b601e074abf9555077584
     /*border-radius:2px;*/
     overflow-y:scroll;
     overflow-x:hidden;
@@ -123,12 +116,8 @@
 
 #filter-menu-base::-webkit-scrollbar
 {
-<<<<<<< HEAD
-    width:3px;
-=======
     width:4px;
     background-color: rgb(97, 94, 94);
->>>>>>> d610835ba33dd120a44b601e074abf9555077584
 }
 
 #filter-menu-base::-webkit-scrollbar-thumb
