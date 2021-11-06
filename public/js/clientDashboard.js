@@ -190,6 +190,8 @@ function setinfocontval() {
 }
 jQuery(document).ready(function() {
     document.getElementsByClassName("optvalcont")[0].getElementsByTagName("a")[0].click();
+    var leftmenuDiv=document.getElementById("leftmenuopt");
+    leftmenuDiv.removeChild(leftmenuDiv.children[2]);
 });
 
 function optclickhandler(caller) {

@@ -34,6 +34,7 @@
     position:relative;
     width:212px;
     margin-left:100px;
+    background-color: rgba(0, 0, 0, 0);
     /*border:1px solid black;*/
 }
 
@@ -70,10 +71,10 @@
 {
     position:relative;
     z-index:4;
-    height:130px;
+    /* height:130px; */
     width:218px;
     /*border:1px solid white;*/
-    background-color:white;
+    background-color:rgba(139, 138, 143, 0.082);
     /*border-radius:2px;*/
     overflow-y:scroll;
     overflow-x:hidden;
@@ -115,18 +116,19 @@
 
 #filter-menu-base::-webkit-scrollbar
 {
-    width:8px;
+    width:4px;
+    background-color: rgb(97, 94, 94);
 }
 
 #filter-menu-base::-webkit-scrollbar-thumb
 {
-    background:#c9cfcf;
+    background:#c9cfcf00;
     border-radius:12px;
 }
 
 #filter-menu-base::-webkit-scrollbar-track
 {
-    background:white;
+    background:rgba(53, 29, 29, 0);
 }
 
 #filter-table-div
