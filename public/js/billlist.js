@@ -1,3 +1,80 @@
+var lmc = document.getElementById("leftmenucont");
+var pboc = document.getElementById("profbtnoptcont");
+
+
+document.addEventListener('click', function() {
+    lmc.style.width = "0";
+
+    pboc.style.display = "none";
+});
+
+lmc.addEventListener("transitionend", function() {
+    if(document.getElementById("leftmenuopt").style.display == "block")
+    {
+        document.getElementById("leftmenuopt").style.display = "none";
+    }
+    else
+    {
+        document.getElementById("leftmenuopt").style.display = "block";
+    }
+});
+
+lmc.addEventListener("transitionstart", function() {
+    document.getElementById("leftmenuopt").style.display = "none";
+});
+
+document.getElementById("menuicon").addEventListener('click', function() {
+    pboc.style.display = "none";
+
+    lmc.style.width = "200px";
+
+    event.stopPropagation();
+});
+
+document.getElementById("leftmenuback").addEventListener("click", function() {
+    lmc.style.width = "0";
+    event.stopPropagation();
+});
+
+document.getElementById("profcont").addEventListener('click', function() {
+    lmc.style.width = "0";
+
+    pboc.style.display = "inline";
+    
+    event.stopPropagation();
+});
+
+
+document.getElementById("leftmenucont").addEventListener('click', function() {
+    event.stopPropagation();
+});
+
+
+document.getElementById("profbtnoptcont").getElementsByTagName("a")[0].addEventListener("click", function() {
+    jQuery.ajax({
+        async: "true",
+        url: "/logout",
+        type: "POST",
+        success: function(result, status, xhr) {
+            if(status == "success")
+            {
+                // alert(`${xhr.status}: ${xhr.statusText}`);
+            }
+            else
+            {
+                alert("Failed to logout!");
+            }
+        },
+        complete: function(xhr, status) {
+            if(status == "success")
+            {
+                window.location.href = "/";
+            }
+        }
+    });
+    event.stopPropagation();
+});
+
 
 
 
@@ -83,7 +160,7 @@ $(document).ready(function()
             }
             else if(c!=-1&&c<k)
             {
-                fButton[k].style.top="-80px";
+                fButton[k].style.top="-40px";
             }
         }
     });
@@ -723,5 +800,32 @@ $(document).ready(function()
      });
 
 });
+
+
+const modal = document.querySelector('#my-modal');
+const modalBtn = document.querySelector('.new-bill');
+const closeBtn = document.querySelector('.close');
+
+// Events
+modalBtn.addEventListener('click', openModal);
+closeBtn.addEventListener('click', closeModal);
+window.addEventListener('click', outsideClick);
+
+// Open
+function openModal() {
+    modal.style.display = 'block';
+}
+
+// Close
+function closeModal() {
+    modal.style.display = 'none';
+}
+
+// Close If Outside Click
+function outsideClick(e) {
+    if (e.target == modal) {
+        modal.style.display = 'none';
+    }
+}
 
 

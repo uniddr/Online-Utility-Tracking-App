@@ -71,8 +71,8 @@
 {
     position:relative;
     z-index:4;
-    /* height:130px; */
-    width:218px;
+    /*height:130px;*/
+    width:214px;
     /*border:1px solid white;*/
     background-color:rgba(139, 138, 143, 0.082);
     /*border-radius:2px;*/
@@ -88,7 +88,7 @@
     background-color:#e9cbb5;
     color:#5c5252;
     height:30px;
-    width:210px;
+    width:214px;
     border-radius:0px;
     text-align:left;
     z-index:4;
@@ -373,79 +373,8 @@ td a
     cursor: pointer;
 }
 
-/*Needed for sorting table*/
-#sort-container
-{
-    display:inline-block;
-    margin-left:400px;
-    margin-top:-40px;
-    width:400px;
-    /*border:1px solid black;*/
-}
-
-#sort-by
-{
-    margin-top:15px;
-    width:212px;
-    height:30px;
-    z-index:150;
-}
-
-.sort-div
-{
-    position:relative;
-    width:212px;
-    /*border:1px solid black;*/
-}
 
 
-.sort-button
-{
-    position:relative;
-    display:block;
-    width:212px;
-    height:25px;
-    z-index:50;
-    visibility:hidden;
-}
 
-#sort-menu-base
-{
-    position:relative;
-    z-index:100;
-    height:150px;
-    width:210px;
-    border:1px solid brown;
-    background-color:brown;
-    border-radius:2px;
-    overflow-y:scroll;
-    overflow-x:hidden;
-    z-index:80;
-}
-
-.sort-menu
-{
-    display:block;
-    background-color:#993645;
-    height:30px;
-    width:198px;
-    border-radius:3px;
-}
-
-
-#sort-menu-base::-webkit-scrollbar
-{
-    width:12px;
-}
-
-#sort-menu-base::-webkit-scrollbar-thumb
-{
-    background:brown;
-}
-
-#sort-menu-base::-webkit-scrollbar-track
-{
-    background:white;
-}
 
 

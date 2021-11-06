@@ -1,10 +1,32 @@
 <!DOCTYPE html>
 <head>
     <link rel="stylesheet" href="css/billlist.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="js/billlist.js"></script>
+    <link rel="stylesheet" href="css/dashboard.css">
 </head>
 <body>
+    <div class="basecont" id="basecont">
+        <div class="leftmenucont" id="leftmenucont">
+            <div class="leftmenuback" id="leftmenuback"></div>
+            <div class="leftmenuopt" id="leftmenuopt">
+                <span class="leftmenuoptitem" id="leftmenuoptitem0"><a href="dashboard">Dashboard</a></span>
+                <span class="leftmenuoptitem" id="leftmenuoptitem1"><a href="userlist">User Manager</a></span>
+                <span class="leftmenuoptitem" id="leftmenuoptitem2"><a href="bill-list">Billing Info</a></span>
+                <span class="leftmenuoptitem" id="leftmenuoptitem3"><a href="analytics">Analytics</a></span>
+            </div>
+        </div>
+        <div class="topbar" id="topbar">
+            <div class="menuicon" id="menuicon"></div>
+            <div class="appname" id="appname">
+                Online Utility Tracker
+            </div>
+            <div class="profcont" id="profcont"></div>
+            <div class="profbtnoptcont" id="profbtnoptcont">
+                <!-- <a href="logout"> -->
+               <a href="#~">
+                    <span class="profoptval" id="profoptval0">Sign Out</span>
+                </a>
+            </div>
+        </div>
     <div id="filter-container">
         <button id="filter-by">Filter By</button>
         <div class="filter-div">
@@ -19,6 +41,42 @@
         <button class="new-bill">Issue New Bill</button>
         <input type="text" id="user-id-input" placeholder="Enter User ID">
         <button class="submit-user-id">Submit</button>
+
+        <div id="my-modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <span class="close">&times;</span>
+                    <h2>Issue New Bill</h2>
+                </div>
+                <div class="modal-body">
+                    <form action="add_bill" method="post">
+                        <input type="username" id="username" placeholder="Enter Client's name" name="username"><br>
+                        <input type="password" id="password" placeholder="Enter Client's password" name="password"><br>
+                        <input type="email" id="email" placeholder="Enter Client's email" name="email"><br>
+                        <input type="user_type" id="user_type" placeholder="Enter Client's type (A/C)" name="user_type"><br>
+                        <input type="location" id="location" placeholder="Enter Client's Location" name="location"><br>
+                        <input type="sub_type" id="sub_type" placeholder="Enter Client's Subtype" name="sub_type"><br>
+                        <label for="elec_service">Consume Electricity Service:</label><br>
+                        <select name="elec_service" id="elec_service">
+                            <option selected hidden value="">Select Service</option>
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
+                        </select>
+                        <br>
+                        <label for="water_service">Consume Water Service:</label><br>
+                        <select name="water_service" id="water_service">
+                            <option selected hidden value="">Select Service</option>
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
+                        </select><br>
+                        <br>
+                        <button id="add_bill" name="add_bill">Add the Client to Database</button>
+                        <p id="changed"></p>
+                    </form>
+                </div>
+            </div>
+        </div>
+
         <div id="filter-table-div">
         <table id="filter-table">
         </table>
@@ -30,6 +88,7 @@
 
 
 
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="js/billlist.js"></script>
 
 

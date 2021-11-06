@@ -224,7 +224,7 @@ $(document).ready(function()
         //console.log(data);
         for(var k=0;k<data.length;k++)
         {
-            var text=data[k]["(YEAR(idate))"];
+            var text=data[k]["issue_year"];
             var resource_op=document.createElement("OPTION");
             resource_op.setAttribute("value",text);
             resource_op.appendChild(document.createTextNode(text));
@@ -254,7 +254,7 @@ $(document).ready(function()
             console.log(data);
             for(var k=0;k<data.length;k++)
             {
-                var text=data[k]["(YEAR(idate))"];
+                var text=data[k]["issue_year"];
                 var resource_op=document.createElement("OPTION");
                 resource_op.setAttribute("value",text);
                 resource_op.appendChild(document.createTextNode(text));
