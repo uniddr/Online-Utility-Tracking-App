@@ -184,7 +184,7 @@ $(document).ready(function()
             }
             else if(c!=-1&&c<k)
             {
-                fButton[k].style.top="-120px";
+                fButton[k].style.top="-50px";
             }
         }
     });
