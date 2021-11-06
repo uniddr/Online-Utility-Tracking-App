@@ -1157,8 +1157,7 @@ route.post('/issue-bill',function(req,res)
     var p_date=req.body.payment_date;
     var service=req.body.service;
     console.log(user_id+" "+used+" "+extra+" "+usage_cost+" "+paid_amount+" "+i_date+" "+p_date+" "+service);
-    var query1="select bill_id from(select * from sakila.node_electricity_bill order by bill_id desc)b limit 1";
-    var query2="select bill_id from(select * from sakila.node_water_bill order by bill_id desc)b limit 1";
+    var query1="select max(bill_id) bill_id from (select bill_id from sakila.node_electricity_bill union all select bill_id from sakila.node_water_bill)r";
     var elec_query_1="insert into sakila.node_electricity_bill values(?,?,?,?,?,?,?,?)";
     var elec_query_2="insert into sakila.node_electricity_bill values(?,?,?,null,?,?,?,null)";
     var water_query_1="insert into sakila.node_water_bill values(?,?,?,?,?,?,?,?)";
@@ -1174,6 +1173,7 @@ route.post('/issue-bill',function(req,res)
         else
         {
             bill_id=r1[0]["bill_id"]+1;
+            console.log(bill_id);
             if(!Number.isNaN(paid_amount))
             {
                 connection.query(elec_query_1,[bill_id,user_id,i_date,p_date,used,usage_cost,extra,paid_amount],function(err,r)
@@ -1196,7 +1196,7 @@ route.post('/issue-bill',function(req,res)
 
 else if(service=="Water")
 {
-    connection.query(query2,function(err1,r1)
+    connection.query(query1,function(err1,r1)
 {
     if(err1)
     {
@@ -1205,6 +1205,7 @@ else if(service=="Water")
     else
     {
         bill_id=r1[0]["bill_id"]+1;
+        console.log(bill_id);
          if(!Number.isNaN(paid_amount))
         {
             connection.query(water_query_1,[bill_id,user_id,i_date,p_date,used,usage_cost,extra,paid_amount],function(err,r)
