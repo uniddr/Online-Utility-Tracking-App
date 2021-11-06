@@ -799,7 +799,119 @@ $(document).ready(function()
         });
      });
 
+     $("#service").change(function()
+     {
+         var input=document.querySelectorAll("input[type='text']");
+         for(var k=0;k<input.length;k++)
+         {
+             input[k].value="";
+         }
+     });
+
+     $("#user_id").change(function()
+     {
+         var i_date=document.getElementById("issue_date");
+         var p_date=document.getElementById("payment_date");;
+         var used=document.getElementById("used_resource");
+         var extra=document.getElementById("extra_cost");
+         var usage_cost=document.getElementById("usage_cost");
+
+         var id=document.getElementById("user_id").value;
+         var date=new Date().toISOString().substr(0,8)+"01";
+         var service=$("#service").children("option:selected").val();
+         console.log(id+" "+date+" "+service);
+
+         i_date.value=date;
+         $.post('/get-used_amount',
+         {
+             date:date,
+             id: id,
+             service:service
+         },
+         function(data)
+         {
+             var res=JSON.parse(data);
+             console.log(res);
+             if(res.length==1)
+             {
+               var used_amount=res[0]["used_amount"];
+               used.value=used_amount;
+             }
+             else
+             {
+                 used.value=0;
+             }
+
+         });
+
+         $.post('/get-due_bill',
+         {
+             id: id,
+             service:service
+         },
+         function(data)
+         {
+             var res=JSON.parse(data);
+             console.log(res);
+             if(res.length==1 && service=="Water")
+             {
+                  var due_bill=res[0]["water_due"];
+                  if(due_bill!=null)
+                  {
+                      extra.value=due_bill;
+                  }
+                  else
+                  {
+                      extra.value=0;
+                  }
+             }
+
+             else if(res.length==1 && service=="Electricity")
+             {
+                  var due_bill=res[0]["elec_due"];
+                  if(due_bill!=null)
+                  {
+                      extra.value=due_bill;
+                  }
+                  else
+                  {
+                      extra.value=0;
+                  }
+             }
+             else
+             {
+                 extra.value=0;
+             }
+         });
+
+         $.post('/get-usage_cost',
+         {
+             id: id,
+             service:service,
+             date:date
+         },
+         function(data)
+         {
+             var res=JSON.parse(data);
+             console.log(res);
+             if(res.length==1)
+             {
+                  var cost=res[0]["usage_cost"];
+                  if(cost!=null)
+                  {
+                      usage_cost.value=cost;
+                  }
+             }
+             else
+             {
+                 usage_cost.value=0;
+             }
+         });
+
+     });
+
 });
+
 
 
 const modal = document.querySelector('#my-modal');

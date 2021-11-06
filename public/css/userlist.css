@@ -298,6 +298,8 @@ td a
     border-radius:8px;
 }
 
+
+
 .modal {
     display: none;
     position: fixed;
@@ -330,11 +332,6 @@ td a
     border-top-right-radius: 5px;
 }
   
-.modal-body {
-    padding: 10px 20px;
-    background: #d8746d;
-}
-
 .close {
     color: #ccc;
     float: right;
@@ -358,14 +355,30 @@ td a
     }
 }
 
+.modal-body {
+    padding: 10px 20px;
+    background: #fbcddc;
+}
+
+
 #username, #password, #email, #location, #user_type, #sub_type{
     width: 800px;
     height: 40px;
     align-items: center;
+    outline:none;
+    border:1px solid white;
+    border-radius:2px;
 }
 
+#username:focus, #password:focus , #email:focus, #location:focus , #user_type:focus , #sub_type:focus
+{
+     border:2px solid #994540;
+     border-radius:5px;
+}
+
+
 #add_user{
-    background: #8a322cbd;
+    background: #994540;
     padding: 1em 2em;
     color: #fff;
     border: 0;
@@ -373,8 +386,10 @@ td a
     cursor: pointer;
 }
 
-
-
+#add_user:hover
+{
+    background: #f55c8d;
+}
 
 
 

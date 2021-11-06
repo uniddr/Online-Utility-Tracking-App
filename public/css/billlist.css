@@ -296,7 +296,7 @@ td a
     border-radius:8px;
 }
 
-input[type=text]
+#user-id-input
 {
     position:absolute;
     top:130px;
@@ -309,7 +309,7 @@ input[type=text]
 }
 
 
-input[type=text]:focus
+#user-id-input:focus
 {
     border:3px solid #994540;
     border-radius:8px;
@@ -370,11 +370,6 @@ input[type=text]:focus
     border-top-right-radius: 5px;
 }
   
-.modal-body {
-    padding: 10px 20px;
-    background: #d8746d;
-}
-
 .close {
     color: #ccc;
     float: right;
@@ -398,19 +393,55 @@ input[type=text]:focus
     }
 }
 
+.modal-body {
+    padding: 10px 20px;
+    background: #fbcddc;
+}
+
+
 #username, #password, #email, #location, #user_type, #sub_type{
     width: 800px;
     height: 40px;
     align-items: center;
+    outline:none;
+    border:1px solid white;
+    border-radius:2px;
+}
+
+#username:focus, #password:focus , #email:focus, #location:focus , #user_type:focus , #sub_type:focus
+{
+     border:2px solid #994540;
+     border-radius:5px;
+}
+
+#user_id,#issue_date,#payment_date,#used_resource,#usage_cost,#extra_cost,#paid_amount
+{
+    width: 800px;
+    height: 40px;
+    align-items: center;
+    outline:none;
+    border:1px solid white;
+    border-radius:2px;
+}
+
+#user_id:focus, #issue_date:focus ,#payment_date:focus ,#used_resource:focus ,#usage_cost:focus ,#extra_cost:focus ,#paid_amount:focus
+{
+    border:2px solid #994540;
+    border-radius:5px;
 }
 
 #add_bill{
-    background: #8a322cbd;
+    background: #994540;
     padding: 1em 2em;
     color: #fff;
     border: 0;
     border-radius: 5px;
     cursor: pointer;
+}
+
+#add_bill:hover
+{
+    background: #f55c8d;
 }
 
 

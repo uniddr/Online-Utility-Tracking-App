@@ -50,27 +50,20 @@
                 </div>
                 <div class="modal-body">
                     <form action="add_bill" method="post">
-                        <input type="username" id="username" placeholder="Enter Client's name" name="username"><br>
-                        <input type="password" id="password" placeholder="Enter Client's password" name="password"><br>
-                        <input type="email" id="email" placeholder="Enter Client's email" name="email"><br>
-                        <input type="user_type" id="user_type" placeholder="Enter Client's type (A/C)" name="user_type"><br>
-                        <input type="location" id="location" placeholder="Enter Client's Location" name="location"><br>
-                        <input type="sub_type" id="sub_type" placeholder="Enter Client's Subtype" name="sub_type"><br>
-                        <label for="elec_service">Consume Electricity Service:</label><br>
-                        <select name="elec_service" id="elec_service">
-                            <option selected hidden value="">Select Service</option>
-                            <option value="Yes">Yes</option>
-                            <option value="No">No</option>
-                        </select>
+                        <label for="service">Select Client's Service:</label><br>
+                        <select name="service" id="service">
+                            <option value="Water">Water</option>
+                            <option value="Electricity">Electricity</option>
+                        </select><br><br>
+                        <input type="text" id="user_id" placeholder="Enter Client's ID" name="user_id"><br>
+                        <input type="text" id="issue_date" placeholder="Enter Issue Date" name="issue_date"><br>
+                        <input type="text" id="used_resource" placeholder="Enter Total Usage Amount" name="used_resource"><br>
+                        <input type="text" id="usage_cost" placeholder="Enter Total Usage Cost" name="usage_cost"><br>
+                        <input type="text" id="extra_cost" placeholder="Enter Extra Usage Cost" name="extra_cost"><br>
+                        <input type="text" id="payment_date" placeholder="Enter Payment Date" name="payment_date"><br>
+                        <input type="text" id="paid_amount" placeholder="Enter Paid Amount" name="paid_amount"><br>
                         <br>
-                        <label for="water_service">Consume Water Service:</label><br>
-                        <select name="water_service" id="water_service">
-                            <option selected hidden value="">Select Service</option>
-                            <option value="Yes">Yes</option>
-                            <option value="No">No</option>
-                        </select><br>
-                        <br>
-                        <button id="add_bill" name="add_bill">Add the Client to Database</button>
+                        <button id="add_bill" name="add_bill">Add the Bill to Database</button>
                         <p id="changed"></p>
                     </form>
                 </div>

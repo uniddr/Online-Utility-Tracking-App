@@ -882,17 +882,17 @@ route.post('/get-user-type',function(req,res)
 
 route.get('/bill-list',function(req,res)
 {
-    if(req.session.loggedin && req.session.usertype=="A")
+    //if(req.session.loggedin && req.session.usertype=="A")
     {
         res.sendFile(path.join(__dirname,"..","public","html","billlist.html"));
     }
-    else if(req.session.loggedin && req.session.usertype=="C")
+    //else if(req.session.loggedin && req.session.usertype=="C")
     {
-        res.send("Oops!!!You have no permission to view this page");
+        //res.send("Oops!!!You have no permission to view this page");
     }
-    else
+    //else
     {
-        res.send("You are not logged in");
+        //res.send("You are not logged in");
     }
 });
 
@@ -999,8 +999,14 @@ route.post('/add_user', function(request, response)
         console.log(request.body);
         var qry = "insert into sakila.node_users (`Username`,`Password`,`Email`,`User_type`,`Location`,`Sub_type`,`Elec_service`,`Elec_due`,`Water_service`,`Water_due`) values('"+ request.body.username +"', '"+ request.body.password +"', '"+ request.body.email +"', '"+ request.body.user_type +"', '"+ request.body.location +"', '"+ request.body.sub_type +"', '"+ request.body.elec_service +"', '"+ 0.00 +"', '"+ request.body.water_service +"', '"+ 0.00 +"')";
         connection.query(qry, function(err){
-            if(err) throw err;
-            response.send('Data Inserted Successfully');
+            if(err) 
+            {
+                throw (err);
+            }
+            else
+            {
+                response.send('Data Inserted Successfully');
+            }
         });
     }
 );
@@ -1024,7 +1030,73 @@ route.get('/user_manager', function(request, response)
     }
 );
 
+
+route.post('/get-used_amount',function(req,res)
+{
+    var date=req.body.date;
+    var id=req.body.id;
+    var service=req.body.service;
+    var query="select used_amount from sakila.node_usage_history where record_date>=(select date_sub(?,interval 1 month)) and user_id=? and resource_type=?";
+    console.log(date);
+    connection.query(query,[date,id,service],function(err,result)
+    {
+        res.send(JSON.stringify(result));
+    });
+});
+
+route.post('/get-due_bill',function(req,res)
+{
+    var id=req.body.id;
+    var service=req.body.service;
+    if(service=="Water")
+    {
+     var query="select location,water_due from sakila.node_users where id=?";
+    connection.query(query,[id],function(err,result)
+    {
+        console.log(result);
+        res.send(JSON.stringify(result));
+    });
+}
+
+else if(service=="Electricity")
+{
+
+var query="select location,elec_due from sakila.node_users where id=?";
+connection.query(query,[id],function(err,result)
+{
+    console.log(result);
+    res.send(JSON.stringify(result));
+});
+}
+});
+
+route.post('/get-usage_cost',function(req,res)
+{
+    var date=req.body.date;
+    var id=req.body.id;
+    var service=req.body.service;
+    if(service=="Water")
+    {
+        var query="select usage_cost,extra_cost from sakila.node_water_bill where issue_date>=(select date_sub(?,interval 1 month)) and user_id=?";
+        connection.query(query,[date,id],function(err,result)
+        {
+            res.send(JSON.stringify(result));
+        });
+    }
+
+    else if(service=="Electricity")
+    {
+        var query="select usage_cost from sakila.node_electricity_bill where issue_date>=(select date_sub(?,interval 1 month)) and user_id=?";
+        connection.query(query,[date,id],function(err,result)
+        {
+            res.send(JSON.stringify(result));
+        });
+    }
+});
+
 module.exports = route;
+
+
 
 
 
