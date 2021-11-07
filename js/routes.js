@@ -1129,10 +1129,17 @@ route.post('/get-usage_cost',function(req,res)
     var query="select Rate from sakila.node_area_rates where Area=(select Location from sakila.node_users where ID=?) and resource_type=?";
     connection.query(query,[id,service],function(err,result1)
     {
-        connection.query("select (used_amount*?) usage_cost from sakila.node_usage_history where record_date=(select date_sub(?,interval 1 month)) and user_id=? and resource_type=?",[result1[0].Rate,date,id,service],function(err, result2)
+        if(err)
         {
-            res.send(JSON.stringify(result2));
-        });
+            res.send("User is not registered for the selected service!");
+        }
+        else
+        {
+            connection.query("select (used_amount*?) usage_cost from sakila.node_usage_history where record_date=(select date_sub(?,interval 1 month)) and user_id=? and resource_type=?",[result1[0].Rate,date,id,service],function(err, result2)
+            {
+                res.send(JSON.stringify(result2));
+            });
+        }
     });
 });
 

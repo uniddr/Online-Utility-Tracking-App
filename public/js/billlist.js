@@ -285,7 +285,7 @@ $(document).ready(function()
 
                 var date="";
                 a=document.createElement("A");
-                date=data[k]["issue_date"].substr(0,10);
+                date=new Date(data[k]["issue_date"]).toString().substr(3,12);
                 a.appendChild(document.createTextNode(date));
                 url="/detail?"+"u_id="+data[k]["user_id"];
                 a.href=url;
@@ -293,8 +293,15 @@ $(document).ready(function()
                 cell.appendChild(a);
 
                 a=document.createElement("A");
-                date=data[k]["payment_date"].substr(0,10);
-                a.appendChild(document.createTextNode(date));
+                if(data[k]["payment_date"] == null)
+                {
+                    a.appendChild(document.createTextNode("---"));
+                }
+                else
+                {
+                    var date=new Date(data[k]["payment_date"]).toString().substr(3,12);
+                    a.appendChild(document.createTextNode(date));
+                }
                 url="/detail?"+"u_id="+data[k]["user_id"];
                 a.href=url;
                 cell=row.insertCell(3);
@@ -441,7 +448,7 @@ $(document).ready(function()
  
                 var date="";
                 a=document.createElement("A");
-                date=data[start]["issue_date"].substr(0,10);
+                date=new Date(data[start]["issue_date"]).toString().substr(3,12);
                 a.appendChild(document.createTextNode(date));
                 url="/detail?"+"u_id="+data[start]["user_id"];
                 a.href=url;
@@ -449,8 +456,15 @@ $(document).ready(function()
                 cell.appendChild(a);
  
                 a=document.createElement("A");
-                date=data[start]["payment_date"].substr(0,10);
-                a.appendChild(document.createTextNode(date));
+                if(data[start]["payment_date"] == null)
+                {
+                    a.appendChild(document.createTextNode("---"));
+                }
+                else
+                {
+                    var date=new Date(data[start]["payment_date"]).toString().substr(3,12);
+                    a.appendChild(document.createTextNode(date));
+                }
                 url="/detail?"+"u_id="+data[start]["user_id"];
                 a.href=url;
                 cell=row.insertCell(3);
@@ -536,7 +550,7 @@ $(document).ready(function()
             console.log(baseData);
 
             var firstIndex=fTable.rows[1].cells[0].textContent;
-            var start=baseData[firstIndex]["Index"]-2;
+            var start=baseData[firstIndex]["Index"]-maxRow;
 
             if(length>0 && data[start]!=null)
             {
@@ -571,7 +585,7 @@ $(document).ready(function()
      
                     var date="";
                     a=document.createElement("A");
-                    date=data[start]["issue_date"].substr(0,10);
+                    date=new Date(data[start]["issue_date"]).toString().substr(3,12);
                     a.appendChild(document.createTextNode(date));
                     url="/detail?"+"u_id="+data[start]["user_id"];
                     a.href=url;
@@ -579,8 +593,15 @@ $(document).ready(function()
                     cell.appendChild(a);
      
                     a=document.createElement("A");
-                    date=data[start]["payment_date"].substr(0,10);
-                    a.appendChild(document.createTextNode(date));
+                    if(data[start]["payment_date"] == null)
+                    {
+                        a.appendChild(document.createTextNode("---"));
+                    }
+                    else
+                    {
+                        var date=new Date(data[start]["payment_date"]).toString().substr(3,12);
+                        a.appendChild(document.createTextNode(date));
+                    }
                     url="/detail?"+"u_id="+data[start]["user_id"];
                     a.href=url;
                     cell=row.insertCell(3);
@@ -720,7 +741,7 @@ $(document).ready(function()
 
                 var date="";
                 a=document.createElement("A");
-                date=data[k]["issue_date"].substr(0,10);
+                date=new Date(data[k]["issue_date"]).toString().substr(3,12);
                 a.appendChild(document.createTextNode(date));
                 url="/detail?"+"u_id="+data[k]["user_id"];
                 a.href=url;
@@ -728,8 +749,15 @@ $(document).ready(function()
                 cell.appendChild(a);
 
                 a=document.createElement("A");
-                date=data[k]["payment_date"].substr(0,10);
-                a.appendChild(document.createTextNode(date));
+                if(data[k]["payment_date"] == null)
+                {
+                    a.appendChild(document.createTextNode("---"));
+                }
+                else
+                {
+                    var date=new Date(data[k]["payment_date"]).toString().substr(3,12);
+                    a.appendChild(document.createTextNode(date));
+                }
                 url="/detail?"+"u_id="+data[k]["user_id"];
                 a.href=url;
                 cell=row.insertCell(3);
