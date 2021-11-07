@@ -357,7 +357,7 @@ td a
 
 .modal-body {
     padding: 10px 20px;
-    background: #fbcddc;
+    background: #b44545ce;
 }
 
 
@@ -388,7 +388,7 @@ td a
 
 #add_user:hover
 {
-    background: #f55c8d;
+    background: #681010;
 }
 
 #user-id-input

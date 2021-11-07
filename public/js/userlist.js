@@ -828,12 +828,24 @@ function openModal() {
 // Close
 function closeModal() {
     modal.style.display = 'none';
+    document.getElementById("username").value = "";
+    document.getElementById("password").value = "";
+    document.getElementById("email").value = "";
+    document.getElementById("user_type").value = "";
+    document.getElementById("location").value = "";
+    document.getElementById("sub_type").value = "";
 }
 
 // Close If Outside Click
 function outsideClick(e) {
     if (e.target == modal) {
         modal.style.display = 'none';
+        document.getElementById("username").value = "";
+        document.getElementById("password").value = "";
+        document.getElementById("email").value = "";
+        document.getElementById("user_type").value = "";
+        document.getElementById("location").value = "";
+        document.getElementById("sub_type").value = "";
     }
 }
 

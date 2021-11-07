@@ -958,12 +958,27 @@ function openModal() {
 // Close
 function closeModal() {
     modal.style.display = 'none';
+    document.getElementById("user_id").value = "";
+    document.getElementById("issue_date").value = "";
+    document.getElementById("used_resource").value = "";
+    document.getElementById("usage_cost").value = "";
+    document.getElementById("extra_cost").value = "";
+    document.getElementById("payment_date").value = "";
+    document.getElementById("paid_amount").value = "";
+
 }
 
 // Close If Outside Click
 function outsideClick(e) {
     if (e.target == modal) {
         modal.style.display = 'none';
+        document.getElementById("user_id").value = "";
+        document.getElementById("issue_date").value = "";
+        document.getElementById("used_resource").value = "";
+        document.getElementById("usage_cost").value = "";
+        document.getElementById("extra_cost").value = "";
+        document.getElementById("payment_date").value = "";
+        document.getElementById("paid_amount").value = "";
     }
 }
 

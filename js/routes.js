@@ -20,7 +20,7 @@ route.use(session(
         secret : 'utehss3eu7uh',
         resave : true,
         saveUninitialized : true,
-        cookie : { maxAge : 1000 * 60 * 10 }
+        cookie : { maxAge : 1000 * 60 * 20 }
     }
 ));
 route.use(express.urlencoded({ extended : true }));
