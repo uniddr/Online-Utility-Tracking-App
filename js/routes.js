@@ -31,8 +31,8 @@ var connection = mysql.createConnection(
     {
         host : 'localhost',
         user : 'root',
-        password : 'sql5d*&T^',
-        port : '3306'
+        password : 'DartrixDDR4L',
+        port : '3307'
     }
 );
 
@@ -1087,7 +1087,7 @@ route.post('/get-used_amount',function(req,res)
     var date=req.body.date;
     var id=req.body.id;
     var service=req.body.service;
-    var query="select used_amount from sakila.node_usage_history where record_date>=(select date_sub(?,interval 1 month)) and user_id=? and resource_type=?";
+    var query="select used_amount from sakila.node_usage_history where record_date=(select date_sub(?,interval 1 month)) and user_id=? and resource_type=?";
     console.log(date);
     connection.query(query,[date,id,service],function(err,result)
     {
@@ -1126,28 +1126,18 @@ route.post('/get-usage_cost',function(req,res)
     var date=req.body.date;
     var id=req.body.id;
     var service=req.body.service;
-    if(service=="Water")
+    var query="select Rate from sakila.node_area_rates where Area=(select Location from sakila.node_users where ID=?) and resource_type=?";
+    connection.query(query,[id,service],function(err,result1)
     {
-        var query="select usage_cost from sakila.node_water_bill where issue_date>=(select date_sub(?,interval 1 month)) and user_id=?";
-        connection.query(query,[date,id],function(err,result)
+        connection.query("select (used_amount*?) usage_cost from sakila.node_usage_history where record_date=(select date_sub(?,interval 1 month)) and user_id=? and resource_type=?",[result1[0].Rate,date,id,service],function(err, result2)
         {
-            res.send(JSON.stringify(result));
+            res.send(JSON.stringify(result2));
         });
-    }
-
-    else if(service=="Electricity")
-    {
-        var query="select usage_cost from sakila.node_electricity_bill where issue_date>=(select date_sub(?,interval 1 month)) and user_id=?";
-        connection.query(query,[date,id],function(err,result)
-        {
-            res.send(JSON.stringify(result));
-        });
-    }
+    });
 });
 
 route.post('/issue-bill',function(req,res)
 {
-    var bill_id="";
     var user_id=Number.parseInt(req.body.user_id);
     var used=Number.parseInt(req.body.used_resource);
     var extra=Number.parseInt(req.body.extra_cost);
@@ -1157,73 +1147,46 @@ route.post('/issue-bill',function(req,res)
     var p_date=req.body.payment_date;
     var service=req.body.service;
     console.log(user_id+" "+used+" "+extra+" "+usage_cost+" "+paid_amount+" "+i_date+" "+p_date+" "+service);
-    var query1="select max(bill_id) bill_id from (select bill_id from sakila.node_electricity_bill union all select bill_id from sakila.node_water_bill)r";
-    var elec_query_1="insert into sakila.node_electricity_bill values(?,?,?,?,?,?,?,?)";
-    var elec_query_2="insert into sakila.node_electricity_bill values(?,?,?,null,?,?,?,null)";
-    var water_query_1="insert into sakila.node_water_bill values(?,?,?,?,?,?,?,?)";
-    var water_query_2="insert into sakila.node_water_bill values(?,?,?,null,?,?,?,null)";
+    var elec_query_1="insert into sakila.node_electricity_bill (`user_id`, `issue_date`, `payment_date`, `used_resource`, `usage_cost`, `extra_cost`, `paid_amount`) values(?,?,?,?,?,?,?)";
+    var elec_query_2="INSERT INTO sakila.node_electricity_bill (`user_id`, `issue_date`, `used_resource`, `usage_cost`, `extra_cost`) VALUES (?,?,?,?,?)";
+    var water_query_1="insert into sakila.node_water_bill (`user_id`, `issue_date`, `payment_date`, `used_resource`, `usage_cost`, `extra_cost`, `paid_amount`) values(?,?,?,?,?,?,?)";
+    var water_query_2="INSERT INTO sakila.node_water_bill (`user_id`, `issue_date`, `used_resource`, `usage_cost`, `extra_cost`) VALUES (?,?,?,?,?)";
     if(service=="Electricity")
     {
-        connection.query(query1,function(err1,r1)
-    {
-        if(err1)
+        if(!Number.isNaN(paid_amount))
         {
-            console.log(err1);
-        }
-        else
-        {
-            bill_id=r1[0]["bill_id"]+1;
-            console.log(bill_id);
-            if(!Number.isNaN(paid_amount))
+            connection.query(elec_query_1,[user_id,i_date,p_date,used,usage_cost,extra,paid_amount],function(err,r)
             {
-                connection.query(elec_query_1,[bill_id,user_id,i_date,p_date,used,usage_cost,extra,paid_amount],function(err,r)
-                {
-                    res.end();
-                });
-            }
-
-            else if(Number.isNaN(paid_amount))
-            {
-                connection.query(elec_query_2,[bill_id,user_id,i_date,used,usage_cost,extra],function(err,r)
-                {
-                    res.end();
-                });
-            }
-
-        }
-    });
-}
-
-else if(service=="Water")
-{
-    connection.query(query1,function(err1,r1)
-{
-    if(err1)
-    {
-        console.log(err1);
-    }
-    else
-    {
-        bill_id=r1[0]["bill_id"]+1;
-        console.log(bill_id);
-         if(!Number.isNaN(paid_amount))
-        {
-            connection.query(water_query_1,[bill_id,user_id,i_date,p_date,used,usage_cost,extra,paid_amount],function(err,r)
-            {
-                res.end();
+                res.send("Successfully issued!");
             });
         }
 
         else if(Number.isNaN(paid_amount))
         {
-            connection.query(water_query_2,[bill_id,user_id,i_date,used,usage_cost,extra],function(err,r)
+            connection.query(elec_query_2,[user_id,i_date,used,usage_cost,extra],function(err,r)
             {
-                res.end();
+                res.send("Successfully issued!");
             });
         }
+}
 
+else if(service=="Water")
+{
+    if(!Number.isNaN(paid_amount))
+    {
+        connection.query(water_query_1,[user_id,i_date,p_date,used,usage_cost,extra,paid_amount],function(err,r)
+        {
+            res.send("Successfully issued!");
+        });
     }
-});
+
+    else if(Number.isNaN(paid_amount))
+    {
+        connection.query(water_query_2,[user_id,i_date,used,usage_cost,extra],function(err,r)
+        {
+            res.send("Successfully issued!");
+        });
+    }
 }
    
 });

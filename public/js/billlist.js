@@ -191,7 +191,7 @@ $(document).ready(function()
 
      $(".filter-div").on("click",".filter-menu",function(e)
      {
-        var maxRow=2;
+        var maxRow=10;
         var eventParent=e.target.parentNode;
         var column=$(eventParent.parentNode.children[0]).text();
         var value=$(e.target).text();
@@ -366,7 +366,7 @@ $(document).ready(function()
 
      $("#next").click(function()
      {
-         var maxRow=2;
+         var maxRow=10;
          var column=$(this).data("column");
          var value=$(this).data("value");
          var user_id=document.getElementById("user-id-input").value;
@@ -409,7 +409,7 @@ $(document).ready(function()
              var start=lastIndex+1;
              var url="";
 
-             if(length>0&& data[start]!=null)
+             if(length>0 && data[start]!=null)
              {
                  for(var k=0;k<length-1;k++)
                  {
@@ -500,7 +500,7 @@ $(document).ready(function()
 
      $("#prev").click(function()
      {
-        var maxRow=2;
+        var maxRow=10;
         var fTable=document.getElementById("filter-table");
         var length=fTable.rows.length;
         
@@ -632,7 +632,7 @@ $(document).ready(function()
 
      $(".submit-user-id").click(function()
      {
-        var maxRow=2;
+        var maxRow=10;
         var column=$("#prev").data("column");
         var value=$("#prev").data("value");
         console.log(column+" "+value);
