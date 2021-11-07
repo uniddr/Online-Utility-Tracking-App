@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<head>
+    <link rel="stylesheet" href="css/billlist.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+    <div class="basecont" id="basecont">
+        <div class="leftmenucont" id="leftmenucont">
+            <div class="leftmenuback" id="leftmenuback"></div>
+            <div class="leftmenuopt" id="leftmenuopt">
+                <span class="leftmenuoptitem" id="leftmenuoptitem0"><a href="dashboard">Dashboard</a></span>
+                <span class="leftmenuoptitem" id="leftmenuoptitem1"><a href="userlist">User Manager</a></span>
+                <span class="leftmenuoptitem" id="leftmenuoptitem2"><a href="bill-list">Billing Info</a></span>
+                <span class="leftmenuoptitem" id="leftmenuoptitem3"><a href="analytics">Analytics</a></span>
+            </div>
+        </div>
+        <div class="topbar" id="topbar">
+            <div class="menuicon" id="menuicon"></div>
+            <div class="appname" id="appname">
+                Online Utility Tracker
+            </div>
+            <div class="profcont" id="profcont"></div>
+            <div class="profbtnoptcont" id="profbtnoptcont">
+                <!-- <a href="logout"> -->
+               <a href="#~">
+                    <span class="profoptval" id="profoptval0">Sign Out</span>
+                </a>
+            </div>
+        </div>
+    <div id="filter-container">
+        <button id="filter-by">Filter By</button>
+        <div class="filter-div">
+            <button class="filter-button">Issue Year</button>
+        </div>
+        <div class="filter-div">
+            <button class="filter-button">Service</button>
+        </div>
+        </div>
+    
+        <button class="cancel">Cancel</button>
+        <button class="new-bill">Issue New Bill</button>
+        <input type="text" id="user-id-input" placeholder="Filter By Client ID">
+        <button class="submit-user-id">Submit</button>
+
+        <div id="my-modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <span class="close">&times;</span>
+                    <h2>Issue New Bill</h2>
+                </div>
+                <div class="modal-body">
+                    <form action="issue-bill" method="post">
+                        <label for="service">Select Client's Service:</label><br>
+                        <select name="service" id="service">
+                            <option value="Water">Water</option>
+                            <option value="Electricity">Electricity</option>
+                        </select><br><br>
+                        <input type="text" id="user_id" placeholder="Enter Client's ID" name="user_id"><br>
+                        <input type="text" id="issue_date" placeholder="Enter Issue Date" name="issue_date"><br>
+                        <input type="text" id="used_resource" placeholder="Enter Total Usage Amount" name="used_resource"><br>
+                        <input type="text" id="usage_cost" placeholder="Enter Total Usage Cost" name="usage_cost"><br>
+                        <input type="text" id="extra_cost" placeholder="Enter Due Amount" name="extra_cost"><br>
+                        <input type="text" id="payment_date" placeholder="Enter Payment Date" name="payment_date"><br>
+                        <input type="text" id="paid_amount" placeholder="Enter Paid Amount" name="paid_amount"><br>
+                        <br>
+                        <button id="add_bill">Add the Bill to Database</button>
+                        <p id="changed"></p>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div id="filter-table-div">
+        <table id="filter-table">
+        </table>
+        <button id="prev">Previous Page</button>
+        <button id="next">Next Page</button>
+        </div>
+</body>
+</html>
+
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="js/billlist.js"></script>
+
+

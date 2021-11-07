@@ -78,10 +78,6 @@ document.getElementById("profbtnoptcont").getElementsByTagName("a")[0].addEventL
 
 
 
-
-
-
-
 $(document).ready(function()
 {
 
@@ -110,37 +106,17 @@ $(document).ready(function()
             }
         }
 
-        $.get('/get-filter-menu',function(d)
+        $.get('/get-filter-bill-menu',function(d)
         {
             var data=JSON.parse(d);
+            console.log(data);
 
             //fill with location
-            if(column=="Location")
+            if(column=="Issue Year")
             {
                 for(var k=0;k<data.length;k++)
                 {
-                    menu.add(data[k]["Location"]);
-                }
-                var itr=menu.values();
-                var childDiv=document.createElement("DIV");
-                childDiv.id="filter-menu-base";
-                for(var i of itr)
-                {
-                    //console.log(i);
-                    var childButton=document.createElement("BUTTON");
-                    childButton.className="filter-menu";
-                    childButton.appendChild(document.createTextNode(i));
-                    childDiv.appendChild(childButton);
-                }
-                eventParent.appendChild(childDiv);
-            }
-
-            //fill with Sub_type
-            else if(column=="Sub Type")
-            {
-                for(var k=0;k<data.length;k++)
-                {
-                    menu.add(data[k]["Sub_type"]);
+                    menu.add(data[k]["issue"]);
                 }
                 var itr=menu.values();
                 var childDiv=document.createElement("DIV");
@@ -184,7 +160,7 @@ $(document).ready(function()
             }
             else if(c!=-1&&c<k)
             {
-                fButton[k].style.top="-50px";
+                fButton[k].style.top="-40px";
             }
         }
     });
@@ -219,22 +195,19 @@ $(document).ready(function()
         var eventParent=e.target.parentNode;
         var column=$(eventParent.parentNode.children[0]).text();
         var value=$(e.target).text();
-        var uid=document.getElementById("user-id-input");
-        uid.value="";
+        var user_id=document.getElementById("user-id-input");
+        user_id.value="";
 
         $("#prev").data("column",column);
         $("#prev").data("value",value);
-        $("#prev").data("id",uid);
         $("#next").data("column",column);
         $("#next").data("value",value);
-        $("#next").data("id",uid);
 
-
-        $.post('get-filter-data',
+        $.post('get-filter-bill-data',
         {
             column:column,
             value:value,
-            id:""
+            user_id: ""
         },
         function(d)
         {
@@ -261,14 +234,19 @@ $(document).ready(function()
             var h5=document.createElement("TH");
             var h6=document.createElement("TH");
             var h7=document.createElement("TH");
+            var h8=document.createElement("TH");
+            var h9=document.createElement("TH");
             
-            h1.appendChild(document.createTextNode("ID"));
-            h2.appendChild(document.createTextNode("Username"));
-            h3.appendChild(document.createTextNode("Email"));
-            h4.appendChild(document.createTextNode("Location"));
-            h5.appendChild(document.createTextNode("Sub Type"));
-            h6.appendChild(document.createTextNode("Electricity Service"));
-            h7.appendChild(document.createTextNode("Water Service"));
+            h1.appendChild(document.createTextNode("Bill ID"));
+            h2.appendChild(document.createTextNode("User ID"));
+            h3.appendChild(document.createTextNode("Issue Date"));
+            h4.appendChild(document.createTextNode("Payment Date"));
+            h5.appendChild(document.createTextNode("Used Resource"));
+            h6.appendChild(document.createTextNode("Usage Cost"));
+            h7.appendChild(document.createTextNode("Total Payable"));
+            h8.appendChild(document.createTextNode("Paid Amount"));
+            h9.appendChild(document.createTextNode("Due Amount"));
+            
             
             row.appendChild(h1);
             row.appendChild(h2);
@@ -277,6 +255,8 @@ $(document).ready(function()
             row.appendChild(h5);
             row.appendChild(h6);
             row.appendChild(h7);
+            row.appendChild(h8);
+            row.appendChild(h9);
 
             length=0;
             
@@ -284,72 +264,83 @@ $(document).ready(function()
             {
                 if(data[k]!=null)
                 {
-                    length++;
+
+                length++;
                 row=fTable.insertRow(length);
 
                 var url="";
                 var a=document.createElement("A");
-                a.appendChild(document.createTextNode(data[k]["ID"]));
-                url="/detail?"+"u_id="+data[k]["ID"];
+                a.appendChild(document.createTextNode(data[k]["bill_id"]));
+                url="/detail?"+"u_id="+data[k]["user_id"];
                 a.href=url;
                 var cell=row.insertCell(0);
                 cell.appendChild(a);
 
                 a=document.createElement("A");
-                a.appendChild(document.createTextNode(data[k]["Username"]));
-                url="/detail?"+"u_id="+data[k]["ID"];
+                a.appendChild(document.createTextNode(data[k]["user_id"]));
+                url="/detail?"+"u_id="+data[k]["user_id"];
                 a.href=url;
                 cell=row.insertCell(1);
                 cell.appendChild(a);
 
+                var date="";
                 a=document.createElement("A");
-                a.appendChild(document.createTextNode(data[k]["Email"]));
-                url="/detail?"+"u_id="+data[k]["ID"];
+                date=new Date(data[k]["issue_date"]).toString().substr(3,12);
+                a.appendChild(document.createTextNode(date));
+                url="/detail?"+"u_id="+data[k]["user_id"];
                 a.href=url;
                 cell=row.insertCell(2);
                 cell.appendChild(a);
 
                 a=document.createElement("A");
-                a.appendChild(document.createTextNode(data[k]["Location"]));
-                url="/detail?"+"u_id="+data[k]["ID"];
+                if(data[k]["payment_date"] == null)
+                {
+                    a.appendChild(document.createTextNode("---"));
+                }
+                else
+                {
+                    var date=new Date(data[k]["payment_date"]).toString().substr(3,12);
+                    a.appendChild(document.createTextNode(date));
+                }
+                url="/detail?"+"u_id="+data[k]["user_id"];
                 a.href=url;
                 cell=row.insertCell(3);
                 cell.appendChild(a);
 
                 a=document.createElement("A");
-                a.appendChild(document.createTextNode(data[k]["Sub_type"]));
-                url="/detail?"+"u_id="+data[k]["ID"];
+                a.appendChild(document.createTextNode(data[k]["used_resource"]));
+                url="/detail?"+"u_id="+data[k]["user_id"];
                 a.href=url;
                 cell=row.insertCell(4);
                 cell.appendChild(a);
                 
                 a=document.createElement("A");
-                a.appendChild(document.createTextNode(data[k]["Elec_service"]));
-                url="/detail?"+"u_id="+data[k]["ID"];
+                a.appendChild(document.createTextNode(data[k]["usage_cost"]));
+                url="/detail?"+"u_id="+data[k]["user_id"];
                 a.href=url;
                 cell=row.insertCell(5);
-                if(data[k]["Elec_service"]!=null)
-                {
-                    cell.appendChild(a);
-                }
-                else
-                {
-                    cell.appendChild(document.createTextNode(""));
-                }
+                cell.appendChild(a);
 
                 a=document.createElement("A");
-                a.appendChild(document.createTextNode(data[k]["Water_service"]));
-                url="/detail?"+"u_id="+data[k]["ID"];
+                a.appendChild(document.createTextNode(data[k]["total_payable"]));
+                url="/detail?"+"u_id="+data[k]["user_id"];
                 a.href=url;
                 cell=row.insertCell(6);
-                if(data[k]["Water_service"]!=null)
-                {
-                    cell.appendChild(a);
-                }
-                else
-                {
-                    cell.appendChild(document.createTextNode(""));
-                }
+                cell.appendChild(a);
+
+                var a=document.createElement("A");
+                a.appendChild(document.createTextNode(data[k]["paid_amount"]));
+                url="/detail?"+"u_id="+data[k]["user_id"];
+                a.href=url;
+                var cell=row.insertCell(7);
+                cell.appendChild(a);
+
+                var a=document.createElement("A");
+                a.appendChild(document.createTextNode(data[k]["due_amount"]));
+                url="/detail?"+"u_id="+data[k]["user_id"];
+                a.href=url;
+                var cell=row.insertCell(8);
+                cell.appendChild(a);
 
             }
            }
@@ -380,21 +371,19 @@ $(document).ready(function()
         });
      });
 
-
      $("#next").click(function()
      {
          var maxRow=10;
          var column=$(this).data("column");
          var value=$(this).data("value");
-         var uid=document.getElementById("user-id-input").value;
-         //console.log(column+" "+value+" "+uid);
+         var user_id=document.getElementById("user-id-input").value;
          //console.log(column+" "+value);
 
-         $.post('get-filter-data',
+         $.post('get-filter-bill-data',
          {
              column:column,
              value:value,
-             id:uid
+             user_id:user_id
          },
          function(d)
          {
@@ -409,7 +398,7 @@ $(document).ready(function()
              var jsonObj={};
              for(var k=0;k<data.length;k++)
              {
-                 var idx=data[k]["ID"].toString();
+                 var idx=data[k]["bill_id"].toString();
                  jsonObj[idx]=data[k];
              }
 
@@ -427,7 +416,7 @@ $(document).ready(function()
              var start=lastIndex+1;
              var url="";
 
-             if(length>0&& data[start]!=null)
+             if(length>0 && data[start]!=null)
              {
                  for(var k=0;k<length-1;k++)
                  {
@@ -444,67 +433,78 @@ $(document).ready(function()
                  row=fTable.insertRow(length);
 
                 var a=document.createElement("A");
-                a.appendChild(document.createTextNode(data[start]["ID"]));
-                url="/detail?"+"u_id="+data[start]["ID"];
+                a.appendChild(document.createTextNode(data[start]["bill_id"]));
+                url="/detail?"+"u_id="+data[start]["user_id"];
                 a.href=url;
                 var cell=row.insertCell(0);
                 cell.appendChild(a);
  
                 a=document.createElement("A");
-                a.appendChild(document.createTextNode(data[start]["Username"]));
-                url="/detail?"+"u_id="+data[start]["ID"];
+                a.appendChild(document.createTextNode(data[start]["user_id"]));
+                url="/detail?"+"u_id="+data[start]["user_id"];
                 a.href=url;
                 cell=row.insertCell(1);
                 cell.appendChild(a);
  
+                var date="";
                 a=document.createElement("A");
-                a.appendChild(document.createTextNode(data[start]["Email"]));
-                url="/detail?"+"u_id="+data[start]["ID"];
+                date=new Date(data[start]["issue_date"]).toString().substr(3,12);
+                a.appendChild(document.createTextNode(date));
+                url="/detail?"+"u_id="+data[start]["user_id"];
                 a.href=url;
                 cell=row.insertCell(2);
                 cell.appendChild(a);
  
                 a=document.createElement("A");
-                a.appendChild(document.createTextNode(data[start]["Location"]));
-                url="/detail?"+"u_id="+data[start]["ID"];
+                if(data[start]["payment_date"] == null)
+                {
+                    a.appendChild(document.createTextNode("---"));
+                }
+                else
+                {
+                    var date=new Date(data[start]["payment_date"]).toString().substr(3,12);
+                    a.appendChild(document.createTextNode(date));
+                }
+                url="/detail?"+"u_id="+data[start]["user_id"];
                 a.href=url;
                 cell=row.insertCell(3);
                 cell.appendChild(a);
  
                 a=document.createElement("A");
-                a.appendChild(document.createTextNode(data[start]["Sub_type"]));
-                url="/detail?"+"u_id="+data[start]["ID"];
+                a.appendChild(document.createTextNode(data[start]["used_resource"]));
+                url="/detail?"+"u_id="+data[start]["user_id"];
                 a.href=url;
                 cell=row.insertCell(4);
                 cell.appendChild(a);
 
                 a=document.createElement("A");
-                a.appendChild(document.createTextNode(data[start]["Elec_service"]));
-                url="/detail?"+"u_id="+data[start]["ID"];
+                a.appendChild(document.createTextNode(data[start]["usage_cost"]));
+                url="/detail?"+"u_id="+data[start]["user_id"];
                 a.href=url;
                 cell=row.insertCell(5);
-                 if(data[start]["Elec_service"]!=null)
-                 {
-                     cell.appendChild(a);
-                 }
-                 else
-                 {
-                     cell.appendChild(document.createTextNode(""));
-                 }
+                cell.appendChild(a);
 
-                 a=document.createElement("A");
-                 a.appendChild(document.createTextNode(data[start]["Water_service"]));
-                 url="/detail?"+"u_id="+data[start]["ID"];
-                 a.href=url;
-                 cell=row.insertCell(6);
-                 if(data[start]["Water_service"]!=null)
-                 {
-                     cell.appendChild(a);
-                 }
-                 else
-                 {
-                     cell.appendChild(document.createTextNode(""));
-                 }
+                a=document.createElement("A");
+                a.appendChild(document.createTextNode(data[start]["total_payable"]));
+                url="/detail?"+"u_id="+data[start]["user_id"];
+                a.href=url;
+                cell=row.insertCell(6);
+                cell.appendChild(a);
+
+                a=document.createElement("A");
+                a.appendChild(document.createTextNode(data[start]["paid_amount"]));
+                url="/detail?"+"u_id="+data[start]["user_id"];
+                a.href=url;
+                cell=row.insertCell(7);
+                cell.appendChild(a);
+
+                a=document.createElement("A");
+                a.appendChild(document.createTextNode(data[start]["due_amount"]));
+                url="/detail?"+"u_id="+data[start]["user_id"];
+                a.href=url;
+                cell=row.insertCell(8);
+                cell.appendChild(a);
+
                  start++;
              }
             }
@@ -520,15 +520,14 @@ $(document).ready(function()
         
         var column=$(this).data("column");
         var value=$(this).data("value");
-        var uid=document.getElementById("user-id-input").value;
-        console.log(column+" "+value+" "+uid);
+        var user_id=document.getElementById("user-id-input").value;
         //console.log(column+" "+value);
 
-        $.post('get-filter-data',
+        $.post('get-filter-bill-data',
         {
             column:column,
             value:value,
-            id:uid
+            user_id:user_id
         },
         function(d)
         {
@@ -543,7 +542,7 @@ $(document).ready(function()
             var jsonObj={};
             for(var k=0;k<data.length;k++)
             {
-                var idx=data[k]["ID"].toString();
+                var idx=data[k]["bill_id"].toString();
                 jsonObj[idx]=data[k];
             }
 
@@ -551,7 +550,7 @@ $(document).ready(function()
             console.log(baseData);
 
             var firstIndex=fTable.rows[1].cells[0].textContent;
-            var start=baseData[firstIndex]["Index"]-2;
+            var start=baseData[firstIndex]["Index"]-maxRow;
 
             if(length>0 && data[start]!=null)
             {
@@ -569,99 +568,102 @@ $(document).ready(function()
                 
                     length++;
                     row=fTable.insertRow(length);
-   
-                   var a=document.createElement("A");
-                   a.appendChild(document.createTextNode(data[start]["ID"]));
-                   url="/detail?"+"u_id="+data[start]["ID"];
-                   a.href=url;
-                   var cell=row.insertCell(0);
-                   cell.appendChild(a);
-    
-                   a=document.createElement("A");
-                   a.appendChild(document.createTextNode(data[start]["Username"]));
-                   url="/detail?"+"u_id="+data[start]["ID"];
-                   a.href=url;
-                   cell=row.insertCell(1);
-                   cell.appendChild(a);
-    
-                   a=document.createElement("A");
-                   a.appendChild(document.createTextNode(data[start]["Email"]));
-                   url="/detail?"+"u_id="+data[start]["ID"];
-                   a.href=url;
-                   cell=row.insertCell(2);
-                   cell.appendChild(a);
-    
-                   a=document.createElement("A");
-                   a.appendChild(document.createTextNode(data[start]["Location"]));
-                   url="/detail?"+"u_id="+data[start]["ID"];
-                   a.href=url;
-                   cell=row.insertCell(3);
-                   cell.appendChild(a);
-    
-                   a=document.createElement("A");
-                   a.appendChild(document.createTextNode(data[start]["Sub_type"]));
-                   url="/detail?"+"u_id="+data[start]["ID"];
-                   a.href=url;
-                   cell=row.insertCell(4);
-                   cell.appendChild(a);
-   
-                   a=document.createElement("A");
-                   a.appendChild(document.createTextNode(data[start]["Elec_service"]));
-                   url="/detail?"+"u_id="+data[start]["ID"];
-                   a.href=url;
-                   cell=row.insertCell(5);
-                    if(data[start]["Elec_service"]!=null)
+
+                    var a=document.createElement("A");
+                    a.appendChild(document.createTextNode(data[start]["bill_id"]));
+                    url="/detail?"+"u_id="+data[start]["user_id"];
+                    a.href=url;
+                    var cell=row.insertCell(0);
+                    cell.appendChild(a);
+     
+                    a=document.createElement("A");
+                    a.appendChild(document.createTextNode(data[start]["user_id"]));
+                    url="/detail?"+"u_id="+data[start]["user_id"];
+                    a.href=url;
+                    cell=row.insertCell(1);
+                    cell.appendChild(a);
+     
+                    var date="";
+                    a=document.createElement("A");
+                    date=new Date(data[start]["issue_date"]).toString().substr(3,12);
+                    a.appendChild(document.createTextNode(date));
+                    url="/detail?"+"u_id="+data[start]["user_id"];
+                    a.href=url;
+                    cell=row.insertCell(2);
+                    cell.appendChild(a);
+     
+                    a=document.createElement("A");
+                    if(data[start]["payment_date"] == null)
                     {
-                        cell.appendChild(a);
+                        a.appendChild(document.createTextNode("---"));
                     }
                     else
                     {
-                        cell.appendChild(document.createTextNode(""));
+                        var date=new Date(data[start]["payment_date"]).toString().substr(3,12);
+                        a.appendChild(document.createTextNode(date));
                     }
-   
+                    url="/detail?"+"u_id="+data[start]["user_id"];
+                    a.href=url;
+                    cell=row.insertCell(3);
+                    cell.appendChild(a);
+     
                     a=document.createElement("A");
-                    a.appendChild(document.createTextNode(data[start]["Water_service"]));
-                    url="/detail?"+"u_id="+data[start]["ID"];
+                    a.appendChild(document.createTextNode(data[start]["used_resource"]));
+                    url="/detail?"+"u_id="+data[start]["user_id"];
+                    a.href=url;
+                    cell=row.insertCell(4);
+                    cell.appendChild(a);
+    
+                    a=document.createElement("A");
+                    a.appendChild(document.createTextNode(data[start]["usage_cost"]));
+                    url="/detail?"+"u_id="+data[start]["user_id"];
+                    a.href=url;
+                    cell=row.insertCell(5);
+                    cell.appendChild(a);
+    
+                    a=document.createElement("A");
+                    a.appendChild(document.createTextNode(data[start]["total_payable"]));
+                    url="/detail?"+"u_id="+data[start]["user_id"];
                     a.href=url;
                     cell=row.insertCell(6);
-                    if(data[start]["Water_service"]!=null)
-                    {
-                        cell.appendChild(a);
-                    }
-                    else
-                    {
-                        cell.appendChild(document.createTextNode(""));
-                    }
+                    cell.appendChild(a);
+    
+                    a=document.createElement("A");
+                    a.appendChild(document.createTextNode(data[start]["paid_amount"]));
+                    url="/detail?"+"u_id="+data[start]["user_id"];
+                    a.href=url;
+                    cell=row.insertCell(7);
+                    cell.appendChild(a);
+    
+                    a=document.createElement("A");
+                    a.appendChild(document.createTextNode(data[start]["due_amount"]));
+                    url="/detail?"+"u_id="+data[start]["user_id"];
+                    a.href=url;
+                    cell=row.insertCell(8);
+                    cell.appendChild(a);
+
                 start++;   
             }
            }
 
         });
+
+
      });
 
-
-     
-     $(".submit-user-id").click(function(e)
+     $(".submit-user-id").click(function()
      {
         var maxRow=10;
-        var eventParent=e.target.parentNode;
         var column=$("#prev").data("column");
         var value=$("#prev").data("value");
-        var uid=document.getElementById("user-id-input").value;
-        console.log(column+" "+value+" "+uid);
+        console.log(column+" "+value);
+        var user_id=document.getElementById("user-id-input").value;
 
-        $("#prev").data("column",column);
-        $("#prev").data("value",value);
-        $("#prev").data("id",uid);
-        $("#next").data("column",column);
-        $("#next").data("value",value);
-        $("#next").data("id",uid);
-
-        $.post('get-filter-data',
+        $.post('get-filter-bill-data',
         {
             column:column,
             value:value,
-            id: uid
+            user_id:user_id
         },
         function(d)
         {
@@ -688,14 +690,19 @@ $(document).ready(function()
             var h5=document.createElement("TH");
             var h6=document.createElement("TH");
             var h7=document.createElement("TH");
+            var h8=document.createElement("TH");
+            var h9=document.createElement("TH");
             
-            h1.appendChild(document.createTextNode("ID"));
-            h2.appendChild(document.createTextNode("Username"));
-            h3.appendChild(document.createTextNode("Email"));
-            h4.appendChild(document.createTextNode("Location"));
-            h5.appendChild(document.createTextNode("Sub Type"));
-            h6.appendChild(document.createTextNode("Electricity Service"));
-            h7.appendChild(document.createTextNode("Water Service"));
+            h1.appendChild(document.createTextNode("Bill ID"));
+            h2.appendChild(document.createTextNode("User ID"));
+            h3.appendChild(document.createTextNode("Issue Date"));
+            h4.appendChild(document.createTextNode("Payment Date"));
+            h5.appendChild(document.createTextNode("Used Resource"));
+            h6.appendChild(document.createTextNode("Usage Cost"));
+            h7.appendChild(document.createTextNode("Total Payable"));
+            h8.appendChild(document.createTextNode("Paid Amount"));
+            h9.appendChild(document.createTextNode("Due Amount"));
+            
             
             row.appendChild(h1);
             row.appendChild(h2);
@@ -704,6 +711,8 @@ $(document).ready(function()
             row.appendChild(h5);
             row.appendChild(h6);
             row.appendChild(h7);
+            row.appendChild(h8);
+            row.appendChild(h9);
 
             length=0;
             
@@ -711,72 +720,83 @@ $(document).ready(function()
             {
                 if(data[k]!=null)
                 {
-                    length++;
+
+                length++;
                 row=fTable.insertRow(length);
 
                 var url="";
                 var a=document.createElement("A");
-                a.appendChild(document.createTextNode(data[k]["ID"]));
-                url="/detail?"+"u_id="+data[k]["ID"];
+                a.appendChild(document.createTextNode(data[k]["bill_id"]));
+                url="/detail?"+"u_id="+data[k]["user_id"];
                 a.href=url;
                 var cell=row.insertCell(0);
                 cell.appendChild(a);
 
                 a=document.createElement("A");
-                a.appendChild(document.createTextNode(data[k]["Username"]));
-                url="/detail?"+"u_id="+data[k]["ID"];
+                a.appendChild(document.createTextNode(data[k]["user_id"]));
+                url="/detail?"+"u_id="+data[k]["user_id"];
                 a.href=url;
                 cell=row.insertCell(1);
                 cell.appendChild(a);
 
+                var date="";
                 a=document.createElement("A");
-                a.appendChild(document.createTextNode(data[k]["Email"]));
-                url="/detail?"+"u_id="+data[k]["ID"];
+                date=new Date(data[k]["issue_date"]).toString().substr(3,12);
+                a.appendChild(document.createTextNode(date));
+                url="/detail?"+"u_id="+data[k]["user_id"];
                 a.href=url;
                 cell=row.insertCell(2);
                 cell.appendChild(a);
 
                 a=document.createElement("A");
-                a.appendChild(document.createTextNode(data[k]["Location"]));
-                url="/detail?"+"u_id="+data[k]["ID"];
+                if(data[k]["payment_date"] == null)
+                {
+                    a.appendChild(document.createTextNode("---"));
+                }
+                else
+                {
+                    var date=new Date(data[k]["payment_date"]).toString().substr(3,12);
+                    a.appendChild(document.createTextNode(date));
+                }
+                url="/detail?"+"u_id="+data[k]["user_id"];
                 a.href=url;
                 cell=row.insertCell(3);
                 cell.appendChild(a);
 
                 a=document.createElement("A");
-                a.appendChild(document.createTextNode(data[k]["Sub_type"]));
-                url="/detail?"+"u_id="+data[k]["ID"];
+                a.appendChild(document.createTextNode(data[k]["used_resource"]));
+                url="/detail?"+"u_id="+data[k]["user_id"];
                 a.href=url;
                 cell=row.insertCell(4);
                 cell.appendChild(a);
                 
                 a=document.createElement("A");
-                a.appendChild(document.createTextNode(data[k]["Elec_service"]));
-                url="/detail?"+"u_id="+data[k]["ID"];
+                a.appendChild(document.createTextNode(data[k]["usage_cost"]));
+                url="/detail?"+"u_id="+data[k]["user_id"];
                 a.href=url;
                 cell=row.insertCell(5);
-                if(data[k]["Elec_service"]!=null)
-                {
-                    cell.appendChild(a);
-                }
-                else
-                {
-                    cell.appendChild(document.createTextNode(""));
-                }
+                cell.appendChild(a);
 
                 a=document.createElement("A");
-                a.appendChild(document.createTextNode(data[k]["Water_service"]));
-                url="/detail?"+"u_id="+data[k]["ID"];
+                a.appendChild(document.createTextNode(data[k]["total_payable"]));
+                url="/detail?"+"u_id="+data[k]["user_id"];
                 a.href=url;
                 cell=row.insertCell(6);
-                if(data[k]["Water_service"]!=null)
-                {
-                    cell.appendChild(a);
-                }
-                else
-                {
-                    cell.appendChild(document.createTextNode(""));
-                }
+                cell.appendChild(a);
+
+                var a=document.createElement("A");
+                a.appendChild(document.createTextNode(data[k]["paid_amount"]));
+                url="/detail?"+"u_id="+data[k]["user_id"];
+                a.href=url;
+                var cell=row.insertCell(7);
+                cell.appendChild(a);
+
+                var a=document.createElement("A");
+                a.appendChild(document.createTextNode(data[k]["due_amount"]));
+                url="/detail?"+"u_id="+data[k]["user_id"];
+                a.href=url;
+                var cell=row.insertCell(8);
+                cell.appendChild(a);
 
             }
            }
@@ -806,13 +826,123 @@ $(document).ready(function()
             document.getElementById("next").style.visibility="visible";
         });
      });
-     
 
+     $("#service").change(function()
+     {
+         var input=document.querySelectorAll("input[type='text']");
+         for(var k=0;k<input.length;k++)
+         {
+             input[k].value="";
+         }
+     });
+
+     $("#user_id").change(function()
+     {
+         var i_date=document.getElementById("issue_date");
+         var p_date=document.getElementById("payment_date");;
+         var used=document.getElementById("used_resource");
+         var extra=document.getElementById("extra_cost");
+         var usage_cost=document.getElementById("usage_cost");
+
+         var id=document.getElementById("user_id").value;
+         var date=new Date().toISOString().substr(0,8)+"01";
+         var service=$("#service").children("option:selected").val();
+         console.log(id+" "+date+" "+service);
+
+         i_date.value=date;
+         $.post('/get-used_amount',
+         {
+             date:date,
+             id: id,
+             service:service
+         },
+         function(data)
+         {
+             var res=JSON.parse(data);
+             console.log(res);
+             if(res.length==1)
+             {
+               var used_amount=res[0]["used_amount"];
+               used.value=used_amount;
+             }
+             else
+             {
+                 used.value=0;
+             }
+
+         });
+
+         $.post('/get-due_bill',
+         {
+             id: id,
+             service:service
+         },
+         function(data)
+         {
+             var res=JSON.parse(data);
+             console.log(res);
+             if(res.length==1 && service=="Water")
+             {
+                  var due_bill=res[0]["water_due"];
+                  if(due_bill!=null)
+                  {
+                      extra.value=due_bill;
+                  }
+                  else
+                  {
+                      extra.value=0;
+                  }
+             }
+
+             else if(res.length==1 && service=="Electricity")
+             {
+                  var due_bill=res[0]["elec_due"];
+                  if(due_bill!=null)
+                  {
+                      extra.value=due_bill;
+                  }
+                  else
+                  {
+                      extra.value=0;
+                  }
+             }
+             else
+             {
+                 extra.value=0;
+             }
+         });
+
+         $.post('/get-usage_cost',
+         {
+             id: id,
+             service:service,
+             date:date
+         },
+         function(data)
+         {
+             var res=JSON.parse(data);
+             console.log(res);
+             if(res.length==1)
+             {
+                  var cost=res[0]["usage_cost"];
+                  if(cost!=null)
+                  {
+                      usage_cost.value=cost;
+                  }
+             }
+             else
+             {
+                 usage_cost.value=0;
+             }
+         });
+
+     });
 
 });
 
+
 const modal = document.querySelector('#my-modal');
-const modalBtn = document.querySelector('.new-user');
+const modalBtn = document.querySelector('.new-bill');
 const closeBtn = document.querySelector('.close');
 
 // Events
@@ -828,27 +958,28 @@ function openModal() {
 // Close
 function closeModal() {
     modal.style.display = 'none';
-    document.getElementById("username").value = "";
-    document.getElementById("password").value = "";
-    document.getElementById("email").value = "";
-    document.getElementById("user_type").value = "";
-    document.getElementById("location").value = "";
-    document.getElementById("sub_type").value = "";
+    document.getElementById("user_id").value = "";
+    document.getElementById("issue_date").value = "";
+    document.getElementById("used_resource").value = "";
+    document.getElementById("usage_cost").value = "";
+    document.getElementById("extra_cost").value = "";
+    document.getElementById("payment_date").value = "";
+    document.getElementById("paid_amount").value = "";
+
 }
 
 // Close If Outside Click
 function outsideClick(e) {
     if (e.target == modal) {
         modal.style.display = 'none';
-        document.getElementById("username").value = "";
-        document.getElementById("password").value = "";
-        document.getElementById("email").value = "";
-        document.getElementById("user_type").value = "";
-        document.getElementById("location").value = "";
-        document.getElementById("sub_type").value = "";
+        document.getElementById("user_id").value = "";
+        document.getElementById("issue_date").value = "";
+        document.getElementById("used_resource").value = "";
+        document.getElementById("usage_cost").value = "";
+        document.getElementById("extra_cost").value = "";
+        document.getElementById("payment_date").value = "";
+        document.getElementById("paid_amount").value = "";
     }
 }
-
-
 
 

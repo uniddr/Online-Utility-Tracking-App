@@ -106,7 +106,7 @@ body {
     width: 0;
     position: absolute;
     left: 0;
-    z-index: 3;
+    z-index: 30;
     box-sizing: border-box;
     border-radius: 8px 4px 4px 8px;
     box-shadow: 0.9px 0.5px rgb(185, 180, 180);

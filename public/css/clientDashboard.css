@@ -1,0 +1,98 @@
+.rc {
+    height: 65%;
+    width: 24%;
+    /* background-color: rgb(255, 255, 255); */
+    float: left;
+    position: relative;
+    margin-top: 1%;
+    margin-left: 10%;
+    font: 700 20px Arial;
+}
+
+.rc p {
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    bottom: 60%;
+    width: 99.9%;
+    color: rgb(214, 186, 29);
+    /* background-color: rgb(255, 255, 255); */
+}
+
+.rcvalue {
+    height: 50%;
+    width: 100%;
+    /* background-color: rgb(255, 255, 255); */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font: 700 24px Arial;
+    position: absolute;
+    bottom: 8px;
+}
+
+.uc {
+    height: 65%;
+    width: 22%;
+    /* background-color: rgb(72, 72, 206); */
+    float: left;
+    position: relative;
+    margin-top: 1%;
+    margin-left: 3%;
+    font: 700 20px Arial;
+}
+
+.uc p {
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    bottom: 60%;
+    width: 99.9%;
+    color: rgb(5, 151, 5);
+    /* background-color: antiquewhite; */
+}
+
+.ucvalue {
+    height: 50%;
+    width: 100%;
+    /* background-color: aliceblue; */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font: 700 24px Arial;
+    position: absolute;
+    bottom: 8px;
+}
+
+.ec {
+    height: 65%;
+    width: 22%;
+    /* background-color: rgb(72, 72, 206); */
+    float: left;
+    position: relative;
+    margin-top: 1%;
+    margin-left: 3%;
+    font: 700 20px Arial;
+}
+
+.ec p {
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    bottom: 60%;
+    width: 99.9%;
+    color: rgb(221, 105, 51);
+    /* background-color: antiquewhite; */
+}
+
+.ecvalue {
+    height: 50%;
+    width: 100%;
+    /* background-color: aliceblue; */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font: 700 24px Arial;
+    position: absolute;
+    bottom: 8px;
+}

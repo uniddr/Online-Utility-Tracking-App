@@ -88,8 +88,7 @@ $(document).ready(function()
         if(d.type=="C")
         {
             var leftmenuDiv=document.getElementById("leftmenuopt");
-            leftmenuDiv.removeChild(leftmenuDiv.children[1]);
-            leftmenuDiv.removeChild(leftmenuDiv.children[1]);
+            leftmenuDiv.removeChild(leftmenuDiv.children[2]);
         }
     });
 
@@ -162,7 +161,7 @@ $(document).ready(function()
             var pelec_due=document.createElement('P');
             pelec_due.style.marginLeft="20px";
             pelec_due.style.color="white";
-            if(res[0]["Elec_service"]=="yes")
+            if(res[0]["Elec_service"]=="Yes")
             {
                 pelec_due.appendChild(document.createTextNode(res[0]["Elec_due"]));
                 divelec_due.appendChild(pelec_due);
@@ -182,7 +181,7 @@ $(document).ready(function()
             pwater_due.style.color="white";
             //pwater_due.appendChild(document.createTextNode("pwater_due"));
             //divwater_due.appendChild(pwater_due);
-            if(res[0]["Water_service"]=="yes")
+            if(res[0]["Water_service"]=="Yes")
             {
                 pwater_due.appendChild(document.createTextNode(res[0]["Water_due"]));
                 divwater_due.appendChild(pwater_due);
@@ -222,10 +221,10 @@ $(document).ready(function()
     {
         console.log(d);
         var data=JSON.parse(d);
-        console.log(data);
+        //console.log(data);
         for(var k=0;k<data.length;k++)
         {
-            var text=data[k]["(YEAR(idate))"];
+            var text=data[k]["issue_year"];
             var resource_op=document.createElement("OPTION");
             resource_op.setAttribute("value",text);
             resource_op.appendChild(document.createTextNode(text));
@@ -255,7 +254,7 @@ $(document).ready(function()
             console.log(data);
             for(var k=0;k<data.length;k++)
             {
-                var text=data[k]["(YEAR(idate))"];
+                var text=data[k]["issue_year"];
                 var resource_op=document.createElement("OPTION");
                 resource_op.setAttribute("value",text);
                 resource_op.appendChild(document.createTextNode(text));
@@ -341,8 +340,15 @@ $(document).ready(function()
             cell2.appendChild(document.createTextNode(date));
 
             var cell3=row.insertCell(2);
-            var date=new Date(data[k]["payment_date"]).toString().substr(3,12);
-            cell3.appendChild(document.createTextNode(date));
+            if(data[k]["payment_date"] == null)
+            {
+                cell3.appendChild(document.createTextNode("---"));
+            }
+            else
+            {
+                var date=new Date(data[k]["payment_date"]).toString().substr(3,12);
+                cell3.appendChild(document.createTextNode(date));
+            }
 
             var cell4=row.insertCell(3);
             cell4.appendChild(document.createTextNode(data[k]["used_resource"]));
@@ -428,8 +434,15 @@ $("#next").click(function()
             cell2.appendChild(document.createTextNode(date));
 
             var cell3=row.insertCell(2);
-            var date=new Date(data[start]["payment_date"]).toString().substr(3,12);
-            cell3.appendChild(document.createTextNode(date));
+            if(data[start]["payment_date"] == null)
+            {
+                cell3.appendChild(document.createTextNode("---"));
+            }
+            else
+            {
+                var date=new Date(data[start]["payment_date"]).toString().substr(3,12);
+                cell3.appendChild(document.createTextNode(date));
+            }
 
             var cell4=row.insertCell(3);
             cell4.appendChild(document.createTextNode(data[start]["used_resource"]));
@@ -516,8 +529,15 @@ $("#prev").click(function()
             cell2.appendChild(document.createTextNode(date));
 
             var cell3=row.insertCell(2);
-            var date=new Date(data[start]["payment_date"]).toString().substr(3,12);
-            cell3.appendChild(document.createTextNode(date));
+            if(data[start]["payment_date"] == null)
+            {
+                cell3.appendChild(document.createTextNode("---"));
+            }
+            else
+            {
+                var date=new Date(data[start]["payment_date"]).toString().substr(3,12);
+                cell3.appendChild(document.createTextNode(date));
+            }
 
             var cell4=row.insertCell(3);
             cell4.appendChild(document.createTextNode(data[start]["used_resource"]));
