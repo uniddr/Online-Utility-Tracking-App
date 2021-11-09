@@ -933,11 +933,11 @@ route.post('/get-user-type',function(req,res)
 
 route.get('/bill-list',function(req,res)
 {
-    if(req.session.loggedin && req.session.usertype=="A")
+    //if(req.session.loggedin && req.session.usertype=="A")
     {
         res.sendFile(path.join(__dirname,"..","public","html","billlist.html"));
     }
-    else if(req.session.loggedin && req.session.usertype=="C")
+    /*else if(req.session.loggedin && req.session.usertype=="C")
     {
         res.send("Oops!!!You have no permission to view this page");
     }
@@ -945,7 +945,10 @@ route.get('/bill-list',function(req,res)
     {
         res.send("You are not logged in");
     }
+    */
+
 });
+
 
 route.get('/get-filter-bill-menu',function(req,res)
 {
@@ -979,7 +982,7 @@ route.post('/get-filter-bill-data',function(req,res)
             var query="select bill_id, user_id, issue_date, payment_date, used_resource, usage_cost, extra_cost, (usage_cost+extra_cost) total_payable, paid_amount,(usage_cost+extra_cost-paid_amount) due_amount from sakila.node_water_bill ";
             connection.query(query,function(err,result)
             {
-                //console.log(result);
+                console.log(result);
                 var data=JSON.stringify(result);
                 res.send(data);
             });
@@ -989,7 +992,7 @@ route.post('/get-filter-bill-data',function(req,res)
             var query="select bill_id, user_id, issue_date,payment_date, used_resource, usage_cost, extra_cost, (usage_cost+extra_cost) total_payable, paid_amount,(usage_cost+extra_cost-paid_amount) due_amount from sakila.node_electricity_bill";
             connection.query(query,function(err,result)
             {
-                //console.log(result);
+                console.log(result);
                 var data=JSON.stringify(result);
                 res.send(data);
             });
@@ -1000,7 +1003,7 @@ route.post('/get-filter-bill-data',function(req,res)
             var query="select bill_id, user_id, issue_date, payment_date, used_resource, usage_cost, extra_cost, (usage_cost+extra_cost) total_payable, paid_amount,(usage_cost+extra_cost-paid_amount) due_amount from sakila.node_water_bill where user_id=?";
             connection.query(query,[user_id],function(err,result)
             {
-                //console.log(result);
+                console.log(result);
                 var data=JSON.stringify(result);
                 res.send(data);
             });
@@ -1010,7 +1013,7 @@ route.post('/get-filter-bill-data',function(req,res)
             var query="select bill_id, user_id,  issue_date,  payment_date, used_resource, usage_cost, extra_cost, (usage_cost+extra_cost) total_payable, paid_amount,(usage_cost+extra_cost-paid_amount) due_amount from sakila.node_electricity_bill  where user_id=?";
             connection.query(query,[user_id],function(err,result)
             {
-                //console.log(result);
+                console.log(result);
                 var data=JSON.stringify(result);
                 res.send(data);
             });
@@ -1227,6 +1230,46 @@ else if(service=="Water")
 }
    
 });
+
+route.post('/get-date',function(req,res)
+{
+    var data={};
+    var date=new Date(req.body.date);
+    console.log(req.body.date);
+    //var i_date=new Date("Mar 02 2021");
+    var newDate=get_date(date);
+    console.log(newDate);
+    data["date"]=newDate;
+    res.send(JSON.stringify(data));
+
+    function get_date(d)
+    {
+        var date=d.getDate();
+        var month=d.getMonth()+1;
+        var year=d.getFullYear();
+        var date_str="";
+        date_str+=year.toString()+"-";
+        if(month<10)
+        {
+            date_str+="0"+month.toString()+"-";
+        }
+        if(month==10 || month>10)
+        {
+            date_str+=month.toString()+"-";
+        }
+        if(date<10)
+        {
+            date_str+="0"+date.toString();
+        }
+        if(date==10 || date>10)
+        {
+            date_str+=date.toString();
+        }
+        return date_str;
+    }
+});
+
+
 
 
 module.exports = route;

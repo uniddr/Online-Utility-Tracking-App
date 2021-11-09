@@ -268,72 +268,56 @@ $(document).ready(function()
                 length++;
                 row=fTable.insertRow(length);
 
-                var url="";
-                var a=document.createElement("A");
-                a.appendChild(document.createTextNode(data[k]["bill_id"]));
-                url="/detail?"+"u_id="+data[k]["user_id"];
-                a.href=url;
                 var cell=row.insertCell(0);
-                cell.appendChild(a);
+                cell.appendChild(document.createTextNode(data[k]["bill_id"]));
 
-                a=document.createElement("A");
-                a.appendChild(document.createTextNode(data[k]["user_id"]));
-                url="/detail?"+"u_id="+data[k]["user_id"];
-                a.href=url;
                 cell=row.insertCell(1);
-                cell.appendChild(a);
+                cell.appendChild(document.createTextNode(data[k]["user_id"]));
 
                 var date="";
                 a=document.createElement("A");
-                date=data[k]["issue_date"].substr(0,10);
-                a.appendChild(document.createTextNode(date));
-                url="/detail?"+"u_id="+data[k]["user_id"];
-                a.href=url;
+               // console.log("Issue_Date : "+data[k]["issue_date"]);
+                if(data[k]["issue_date"]!=null)
+               {
                 cell=row.insertCell(2);
-                cell.appendChild(a);
+                date=new Date(data[k]["issue_date"]);
+                console.log(date);
+                cell.appendChild(document.createTextNode(date.toString().substr(3,12)));
+               }
+               else
+               {
+                   cell=row.insertCell(2);
+                   cell.appendChild(document.createTextNode(""));
+               }
 
-                a=document.createElement("A");
-                date=data[k]["payment_date"].substr(0,10);
-                a.appendChild(document.createTextNode(date));
-                url="/detail?"+"u_id="+data[k]["user_id"];
-                a.href=url;
+                if(data[k]["payment_date"]!=null)
+               {
                 cell=row.insertCell(3);
-                cell.appendChild(a);
-
-                a=document.createElement("A");
-                a.appendChild(document.createTextNode(data[k]["used_resource"]));
-                url="/detail?"+"u_id="+data[k]["user_id"];
-                a.href=url;
-                cell=row.insertCell(4);
-                cell.appendChild(a);
+                date=new Date(data[k]["payment_date"]);
+                //console.log(date);
+                cell.appendChild(document.createTextNode(date.toString().substr(3,12)));
                 
-                a=document.createElement("A");
-                a.appendChild(document.createTextNode(data[k]["usage_cost"]));
-                url="/detail?"+"u_id="+data[k]["user_id"];
-                a.href=url;
+               }
+               else
+               {
+                   cell=row.insertCell(3);
+                   cell.appendChild(document.createTextNode(""));
+               }
+               
+                cell=row.insertCell(4);
+                cell.appendChild(document.createTextNode(data[k]["used_resource"]));
+                
                 cell=row.insertCell(5);
-                cell.appendChild(a);
+                cell.appendChild(document.createTextNode(data[k]["usage_cost"]));
 
-                a=document.createElement("A");
-                a.appendChild(document.createTextNode(data[k]["total_payable"]));
-                url="/detail?"+"u_id="+data[k]["user_id"];
-                a.href=url;
                 cell=row.insertCell(6);
-                cell.appendChild(a);
+                cell.appendChild(document.createTextNode(data[k]["total_payable"]));
+                
+                cell=row.insertCell(7);
+                cell.appendChild(document.createTextNode(data[k]["paid_amount"]));
 
-                var a=document.createElement("A");
-                a.appendChild(document.createTextNode(data[k]["paid_amount"]));
-                url="/detail?"+"u_id="+data[k]["user_id"];
-                a.href=url;
-                var cell=row.insertCell(7);
-                cell.appendChild(a);
-
-                var a=document.createElement("A");
-                a.appendChild(document.createTextNode(data[k]["due_amount"]));
-                url="/detail?"+"u_id="+data[k]["user_id"];
-                a.href=url;
-                var cell=row.insertCell(8);
-                cell.appendChild(a);
+                cell=row.insertCell(8);
+                cell.appendChild(document.createTextNode(data[k]["due_amount"]));
 
             }
            }
@@ -422,81 +406,64 @@ $(document).ready(function()
              {
                  if(data[start]!=null)
                  {
-                     length++;
+                 length++;
                  row=fTable.insertRow(length);
 
-                var a=document.createElement("A");
-                a.appendChild(document.createTextNode(data[start]["bill_id"]));
-                url="/detail?"+"u_id="+data[start]["user_id"];
-                a.href=url;
-                var cell=row.insertCell(0);
-                cell.appendChild(a);
+                 var cell=row.insertCell(0);
+                 cell.appendChild(document.createTextNode(data[start]["bill_id"]));
  
-                a=document.createElement("A");
-                a.appendChild(document.createTextNode(data[start]["user_id"]));
-                url="/detail?"+"u_id="+data[start]["user_id"];
-                a.href=url;
-                cell=row.insertCell(1);
-                cell.appendChild(a);
+                var cell=row.insertCell(1);
+                cell.appendChild(document.createTextNode(data[start]["user_id"]));
  
                 var date="";
-                a=document.createElement("A");
-                date=data[start]["issue_date"].substr(0,10);
-                a.appendChild(document.createTextNode(date));
-                url="/detail?"+"u_id="+data[start]["user_id"];
-                a.href=url;
-                cell=row.insertCell(2);
-                cell.appendChild(a);
+                if(data[start]["issue_date"]!=null)
+                {
+                 cell=row.insertCell(2);
+                 date=new Date(data[start]["issue_date"]);
+                 //console.log(date);
+                 cell.appendChild(document.createTextNode(date.toString().substr(3,12)));
+                }
+                else
+                {
+                    cell=row.insertCell(2);
+                    cell.appendChild(document.createTextNode(""));
+                }
  
-                a=document.createElement("A");
-                date=data[start]["payment_date"].substr(0,10);
-                a.appendChild(document.createTextNode(date));
-                url="/detail?"+"u_id="+data[start]["user_id"];
-                a.href=url;
-                cell=row.insertCell(3);
-                cell.appendChild(a);
+                 if(data[start]["payment_date"]!=null)
+                {
+                 cell=row.insertCell(3);
+                 date=new Date(data[start]["payment_date"]);
+                 //console.log(date);
+                 cell.appendChild(document.createTextNode(date.toString().substr(3,12)));
+                }
+                else
+                {
+                    cell=row.insertCell(3);
+                    cell.appendChild(document.createTextNode(""));
+                } 
  
-                a=document.createElement("A");
-                a.appendChild(document.createTextNode(data[start]["used_resource"]));
-                url="/detail?"+"u_id="+data[start]["user_id"];
-                a.href=url;
                 cell=row.insertCell(4);
-                cell.appendChild(a);
+                cell.appendChild(document.createTextNode(data[start]["used_resource"]));
 
-                a=document.createElement("A");
-                a.appendChild(document.createTextNode(data[start]["usage_cost"]));
-                url="/detail?"+"u_id="+data[start]["user_id"];
-                a.href=url;
                 cell=row.insertCell(5);
-                cell.appendChild(a);
+                cell.appendChild(document.createTextNode(data[start]["usage_cost"]));
 
-                a=document.createElement("A");
-                a.appendChild(document.createTextNode(data[start]["total_payable"]));
-                url="/detail?"+"u_id="+data[start]["user_id"];
-                a.href=url;
                 cell=row.insertCell(6);
-                cell.appendChild(a);
+                cell.appendChild(document.createTextNode(data[start]["total_payable"]));
 
-                a=document.createElement("A");
-                a.appendChild(document.createTextNode(data[start]["paid_amount"]));
-                url="/detail?"+"u_id="+data[start]["user_id"];
-                a.href=url;
                 cell=row.insertCell(7);
-                cell.appendChild(a);
+                cell.appendChild(document.createTextNode(data[start]["paid_amount"]));
 
-                a=document.createElement("A");
-                a.appendChild(document.createTextNode(data[start]["due_amount"]));
-                url="/detail?"+"u_id="+data[start]["user_id"];
-                a.href=url;
                 cell=row.insertCell(8);
-                cell.appendChild(a);
-
+                cell.appendChild(document.createTextNode(data[start]["due_amount"]));
+                
                  start++;
              }
             }
          });
 
      });
+
 
      $("#prev").click(function()
      {
@@ -536,7 +503,7 @@ $(document).ready(function()
             console.log(baseData);
 
             var firstIndex=fTable.rows[1].cells[0].textContent;
-            var start=baseData[firstIndex]["Index"]-2;
+            var start=baseData[firstIndex]["Index"]-maxRow;
 
             if(length>0 && data[start]!=null)
             {
@@ -555,71 +522,54 @@ $(document).ready(function()
                     length++;
                     row=fTable.insertRow(length);
 
-                    var a=document.createElement("A");
-                    a.appendChild(document.createTextNode(data[start]["bill_id"]));
-                    url="/detail?"+"u_id="+data[start]["user_id"];
-                    a.href=url;
                     var cell=row.insertCell(0);
-                    cell.appendChild(a);
+                    cell.appendChild(document.createTextNode(data[start]["bill_id"]));
      
-                    a=document.createElement("A");
-                    a.appendChild(document.createTextNode(data[start]["user_id"]));
-                    url="/detail?"+"u_id="+data[start]["user_id"];
-                    a.href=url;
                     cell=row.insertCell(1);
-                    cell.appendChild(a);
+                    cell.appendChild(document.createTextNode(data[start]["user_id"]));
      
                     var date="";
-                    a=document.createElement("A");
-                    date=data[start]["issue_date"].substr(0,10);
-                    a.appendChild(document.createTextNode(date));
-                    url="/detail?"+"u_id="+data[start]["user_id"];
-                    a.href=url;
+                    if(data[start]["issue_date"]!=null)
+                    {
+                    date=new Date(data[start]["issue_date"]);
                     cell=row.insertCell(2);
-                    cell.appendChild(a);
+                     //console.log(date);
+                     cell.appendChild(document.createTextNode(date.toString().substr(3,12)));
+                    }
+                    else
+                    {
+                        cell=row.insertCell(2);
+                        cell.appendChild(document.createTextNode(""));
+                    }
      
-                    a=document.createElement("A");
-                    date=data[start]["payment_date"].substr(0,10);
-                    a.appendChild(document.createTextNode(date));
-                    url="/detail?"+"u_id="+data[start]["user_id"];
-                    a.href=url;
-                    cell=row.insertCell(3);
-                    cell.appendChild(a);
+                    
+                     if(data[start]["payment_date"]!=null)
+                    {
+                     date=new Date(data[start]["payment_date"]);
+                     cell=row.insertCell(3);
+                     //console.log(date);
+                     cell.appendChild(document.createTextNode(date.toString().substr(3,12)));
+                    }
+                    else
+                    {
+                        cell=row.insertCell(3);
+                        cell.appendChild(document.createTextNode(""));
+                    }     
      
-                    a=document.createElement("A");
-                    a.appendChild(document.createTextNode(data[start]["used_resource"]));
-                    url="/detail?"+"u_id="+data[start]["user_id"];
-                    a.href=url;
                     cell=row.insertCell(4);
-                    cell.appendChild(a);
+                    cell.appendChild(document.createTextNode(data[start]["used_resource"]));
     
-                    a=document.createElement("A");
-                    a.appendChild(document.createTextNode(data[start]["usage_cost"]));
-                    url="/detail?"+"u_id="+data[start]["user_id"];
-                    a.href=url;
                     cell=row.insertCell(5);
-                    cell.appendChild(a);
+                    cell.appendChild(document.createTextNode(data[start]["usage_cost"]));
     
-                    a=document.createElement("A");
-                    a.appendChild(document.createTextNode(data[start]["total_payable"]));
-                    url="/detail?"+"u_id="+data[start]["user_id"];
-                    a.href=url;
                     cell=row.insertCell(6);
-                    cell.appendChild(a);
+                    cell.appendChild(document.createTextNode(data[start]["total_payable"]));
     
-                    a=document.createElement("A");
-                    a.appendChild(document.createTextNode(data[start]["paid_amount"]));
-                    url="/detail?"+"u_id="+data[start]["user_id"];
-                    a.href=url;
                     cell=row.insertCell(7);
-                    cell.appendChild(a);
+                    cell.appendChild(document.createTextNode(data[start]["paid_amount"]));
     
-                    a=document.createElement("A");
-                    a.appendChild(document.createTextNode(data[start]["due_amount"]));
-                    url="/detail?"+"u_id="+data[start]["user_id"];
-                    a.href=url;
                     cell=row.insertCell(8);
-                    cell.appendChild(a);
+                    cell.appendChild(document.createTextNode(data[start]["due_amount"]));
 
                 start++;   
             }
@@ -672,6 +622,7 @@ $(document).ready(function()
             var h8=document.createElement("TH");
             var h9=document.createElement("TH");
             
+
             h1.appendChild(document.createTextNode("Bill ID"));
             h2.appendChild(document.createTextNode("User ID"));
             h3.appendChild(document.createTextNode("Issue Date"));
@@ -699,78 +650,65 @@ $(document).ready(function()
             {
                 if(data[k]!=null)
                 {
-
-                length++;
-                row=fTable.insertRow(length);
-
-                var url="";
-                var a=document.createElement("A");
-                a.appendChild(document.createTextNode(data[k]["bill_id"]));
-                url="/detail?"+"u_id="+data[k]["user_id"];
-                a.href=url;
-                var cell=row.insertCell(0);
-                cell.appendChild(a);
-
-                a=document.createElement("A");
-                a.appendChild(document.createTextNode(data[k]["user_id"]));
-                url="/detail?"+"u_id="+data[k]["user_id"];
-                a.href=url;
-                cell=row.insertCell(1);
-                cell.appendChild(a);
-
-                var date="";
-                a=document.createElement("A");
-                date=data[k]["issue_date"].substr(0,10);
-                a.appendChild(document.createTextNode(date));
-                url="/detail?"+"u_id="+data[k]["user_id"];
-                a.href=url;
-                cell=row.insertCell(2);
-                cell.appendChild(a);
-
-                a=document.createElement("A");
-                date=data[k]["payment_date"].substr(0,10);
-                a.appendChild(document.createTextNode(date));
-                url="/detail?"+"u_id="+data[k]["user_id"];
-                a.href=url;
-                cell=row.insertCell(3);
-                cell.appendChild(a);
-
-                a=document.createElement("A");
-                a.appendChild(document.createTextNode(data[k]["used_resource"]));
-                url="/detail?"+"u_id="+data[k]["user_id"];
-                a.href=url;
-                cell=row.insertCell(4);
-                cell.appendChild(a);
-                
-                a=document.createElement("A");
-                a.appendChild(document.createTextNode(data[k]["usage_cost"]));
-                url="/detail?"+"u_id="+data[k]["user_id"];
-                a.href=url;
-                cell=row.insertCell(5);
-                cell.appendChild(a);
-
-                a=document.createElement("A");
-                a.appendChild(document.createTextNode(data[k]["total_payable"]));
-                url="/detail?"+"u_id="+data[k]["user_id"];
-                a.href=url;
-                cell=row.insertCell(6);
-                cell.appendChild(a);
-
-                var a=document.createElement("A");
-                a.appendChild(document.createTextNode(data[k]["paid_amount"]));
-                url="/detail?"+"u_id="+data[k]["user_id"];
-                a.href=url;
-                var cell=row.insertCell(7);
-                cell.appendChild(a);
-
-                var a=document.createElement("A");
-                a.appendChild(document.createTextNode(data[k]["due_amount"]));
-                url="/detail?"+"u_id="+data[k]["user_id"];
-                a.href=url;
-                var cell=row.insertCell(8);
-                cell.appendChild(a);
-
-            }
+                    if(data[k]!=null)
+                    {
+    
+                    length++;
+                    row=fTable.insertRow(length);
+    
+                    var cell=row.insertCell(0);
+                    cell.appendChild(document.createTextNode(data[k]["bill_id"]));
+    
+                    cell=row.insertCell(1);
+                    cell.appendChild(document.createTextNode(data[k]["user_id"]));
+    
+                    var date="";
+                    a=document.createElement("A");
+                   // console.log("Issue_Date : "+data[k]["issue_date"]);
+                    if(data[k]["issue_date"]!=null)
+                   {
+                    cell=row.insertCell(2);
+                    date=new Date(data[k]["issue_date"]);
+                    console.log(date);
+                    cell.appendChild(document.createTextNode(date.toString().substr(3,12)));
+                   }
+                   else
+                   {
+                       cell=row.insertCell(2);
+                       cell.appendChild(document.createTextNode(""));
+                   }
+    
+                    if(data[k]["payment_date"]!=null)
+                   {
+                    cell=row.insertCell(3);
+                    date=new Date(data[k]["payment_date"]);
+                    //console.log(date);
+                    cell.appendChild(document.createTextNode(date.toString().substr(3,12)));
+                    
+                   }
+                   else
+                   {
+                       cell=row.insertCell(3);
+                       cell.appendChild(document.createTextNode(""));
+                   }
+                   
+                    cell=row.insertCell(4);
+                    cell.appendChild(document.createTextNode(data[k]["used_resource"]));
+                    
+                    cell=row.insertCell(5);
+                    cell.appendChild(document.createTextNode(data[k]["usage_cost"]));
+    
+                    cell=row.insertCell(6);
+                    cell.appendChild(document.createTextNode(data[k]["total_payable"]));
+                    
+                    cell=row.insertCell(7);
+                    cell.appendChild(document.createTextNode(data[k]["paid_amount"]));
+    
+                    cell=row.insertCell(8);
+                    cell.appendChild(document.createTextNode(data[k]["due_amount"]));
+    
+                }
+                }
            }
 
             var divParent=document.getElementsByClassName("filter-div");
@@ -910,17 +848,112 @@ $(document).ready(function()
 
      });
 
+     $("#filter-table").on("click","tr",function(e)
+     {
+             var bill_id=document.getElementById("edit-bill_id");
+             var user_id=document.getElementById("edit-user_id");
+             var i_date=document.getElementById("edit-issue_date");
+             var p_date=document.getElementById("edit-payment_date");
+             var used=document.getElementById("edit-used_resource");
+             var usage_cost=document.getElementById("edit-usage_cost");
+             var extra=document.getElementById("edit-extra_cost");
+             var paid_amount=document.getElementById("edit-paid_amount");
+             var value="";
+             var total_payable=0;
+             var total_usage_cost=0;
+             var paid=0;
+
+             $(this).children("td").each(function(k,val)
+             {
+                 value=$(val).text();
+                 if(k==0)
+                 {
+                    //console.log(value);
+                    bill_id.value=value;
+                 }
+                 else if(k==1)
+                 {
+                    //console.log(value);
+                    user_id.value=value;
+                 }
+                 else if(k==2)
+                 {
+                     $.post('/get-date',{
+                         date:value
+                     }
+                     ,
+                     function(res)
+                     {
+                         var data=JSON.parse(res);
+                         console.log(data["date"]);
+                         i_date.value=data["date"];
+                     });
+                 }
+
+                 else if(k==3)
+                 {
+                     $.post('/get-date',{
+                         date:value
+                     }
+                     ,
+                     function(res)
+                     {
+                         var data=JSON.parse(res);
+                         console.log(data["date"]);
+                         p_date.value=data["date"];
+                     });
+                 }
+
+                 else if(k==4)
+                 {
+                    //console.log(value);
+                    used.value=value;
+                 }
+
+                 else if(k==5)
+                 {
+                    total_usage_cost=value;
+                 }
+
+                 else if(k==6)
+                 {
+                     total_payable=value;
+                     usage_cost.value=total_payable;
+                 }
+
+                 else if(k==7)
+                 {
+                    //console.log(value);
+                    paid_amount.value=value;
+                    paid=value;
+                 }
+
+                 else if(k==8)
+                 {
+                     extra.value=total_payable-total_usage_cost;
+                 }
+
+             });
+             var edit_modal = document.querySelector('#edit-modal');
+             edit_modal.style.display="block";
+
+     });
+
 });
+
 
 
 const modal = document.querySelector('#my-modal');
 const modalBtn = document.querySelector('.new-bill');
 const closeBtn = document.querySelector('.close');
+const closeEditBtn = document.querySelector('.edit-close');
+const edit_modal = document.querySelector('#edit-modal');
 
 // Events
 modalBtn.addEventListener('click', openModal);
 closeBtn.addEventListener('click', closeModal);
 window.addEventListener('click', outsideClick);
+closeEditBtn.addEventListener('click',closeEditModal);
 
 // Open
 function openModal() {
@@ -932,11 +965,21 @@ function closeModal() {
     modal.style.display = 'none';
 }
 
+function closeEditModal() {
+    edit_modal.style.display = 'none';
+}
+
 // Close If Outside Click
 function outsideClick(e) {
     if (e.target == modal) {
         modal.style.display = 'none';
     }
+    else if (e.target == edit_modal) {
+        edit_modal.style.display = 'none';
+        
+    }
 }
+
+
 
 

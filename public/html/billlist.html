@@ -42,7 +42,7 @@
         <input type="text" id="user-id-input" placeholder="Filter By Client ID">
         <button class="submit-user-id">Submit</button>
 
-        <div id="my-modal" class="modal">
+       <div id="my-modal" class="modal">
             <div class="modal-content">
                 <div class="modal-header">
                     <span class="close">&times;</span>
@@ -57,14 +57,42 @@
                         </select><br><br>
                         <input type="text" id="user_id" placeholder="Enter Client's ID" name="user_id"><br>
                         <input type="text" id="issue_date" placeholder="Enter Issue Date" name="issue_date"><br>
+                        <input type="text" id="payment_date" placeholder="Enter Payment Date" name="payment_date"><br>
                         <input type="text" id="used_resource" placeholder="Enter Total Usage Amount" name="used_resource"><br>
                         <input type="text" id="usage_cost" placeholder="Enter Total Usage Cost" name="usage_cost"><br>
                         <input type="text" id="extra_cost" placeholder="Enter Due Amount" name="extra_cost"><br>
-                        <input type="text" id="payment_date" placeholder="Enter Payment Date" name="payment_date"><br>
                         <input type="text" id="paid_amount" placeholder="Enter Paid Amount" name="paid_amount"><br>
                         <br>
                         <button id="add_bill">Add the Bill to Database</button>
                         <p id="changed"></p>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div id="edit-modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <span class="edit-close">&times;</span>
+                    <h2>Edit Bill Information</h2>
+                </div>
+                <div class="modal-body">
+                    <form action="edit-bill" method="post">
+                        <label for="service">Select Client's Service:</label><br>
+                        <select name="service" id="service">
+                            <option value="Water">Water</option>
+                            <option value="Electricity">Electricity</option>
+                        </select><br><br>   
+                        <p>Bill ID <input type="text" id="edit-bill_id" name="bill_id" readonly></p>
+                        <p>Client ID <input type="text" id="edit-user_id" placeholder="Enter Client's ID" name="user_id" readonly></p>
+                        <p>Enter Issue Date <input type="text" id="edit-issue_date" placeholder="Enter Issue Date" name="issue_date"></p>
+                        <p>Enter Payment Date <input type="text" id="edit-payment_date" placeholder="Enter Payment Date" name="payment_date"></p>
+                        <p>Enter Total Usage Amount <input type="text" id="edit-used_resource" placeholder="Enter Total Usage Amount" name="used_resource"></p>
+                        <p>Enter Total Usage Cost <input type="text" id="edit-usage_cost" placeholder="Enter Total Usage Cost" name="usage_cost"></p>
+                        <p>Enter Extra Cost <input type="text" id="edit-extra_cost" placeholder="Enter Extra Cost" name="extra_cost"></p>
+                        <p>Enter Paid Amount <input type="text" id="edit-paid_amount" placeholder="Enter Paid Amount" name="paid_amount"></p>
+                        <br>
+                        <button id="edit_bill">Save</button>
                     </form>
                 </div>
             </div>
