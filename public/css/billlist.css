@@ -395,24 +395,11 @@ td a
 
 .modal-body {
     padding: 10px 20px;
-    background: #f4ddd4;
+    background: #b93c36da;
+    /* background: #992a25da; */
+    
 }
 
-
-#username, #password, #email, #location, #user_type, #sub_type{
-    width: 800px;
-    height: 40px;
-    align-items: center;
-    outline:none;
-    border:1px solid white;
-    border-radius:2px;
-}
-
-#username:focus, #password:focus , #email:focus, #location:focus , #user_type:focus , #sub_type:focus
-{
-     border:3px solid #c66740;
-     border-radius:5px;
-}
 
 #user_id,#issue_date,#payment_date,#used_resource,#usage_cost,#extra_cost,#paid_amount
 {
@@ -426,7 +413,7 @@ td a
 
 #user_id:focus, #issue_date:focus ,#payment_date:focus ,#used_resource:focus ,#usage_cost:focus ,#extra_cost:focus ,#paid_amount:focus
 {
-    border:3px solid #c66740;
+    border:3px solid#ffd30e98;
     border-radius:5px;
 }
 
@@ -456,7 +443,7 @@ td a
 
 #edit-bill_id:focus,#edit-user_id:focus, #edit-issue_date:focus ,#edit-payment_date:focus ,#edit-used_resource:focus ,#edit-usage_cost:focus ,#edit-extra_cost:focus ,#edit-paid_amount:focus
 {
-    border:3px solid #c66740;
+    border:3px solid #ffd30e98;
     border-radius:5px;
 }
 

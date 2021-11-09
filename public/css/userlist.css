@@ -357,7 +357,7 @@ td a
 
 .modal-body {
     padding: 10px 20px;
-    background: #f4ddd4;
+    background: #b93c36da;
 }
 
 
@@ -372,7 +372,7 @@ td a
 
 #username:focus, #password:focus , #email:focus, #location:focus , #user_type:focus , #sub_type:focus
 {
-     border:3px solid #c66740;
+     border:3px solid #ffd30e98;
      border-radius:5px;
 }
 

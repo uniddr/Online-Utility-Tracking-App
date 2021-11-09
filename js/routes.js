@@ -31,8 +31,8 @@ var connection = mysql.createConnection(
     {
         host : 'localhost',
         user : 'root',
-        password : 'DartrixDDR4L',
-        port : '3307'
+        password : 'sql5d*&T^',
+        port : '3306'
     }
 );
 
