@@ -191,7 +191,7 @@ $(document).ready(function()
 
      $(".filter-div").on("click",".filter-menu",function(e)
      {
-        var maxRow=2;
+        var maxRow=10;
         var eventParent=e.target.parentNode;
         var column=$(eventParent.parentNode.children[0]).text();
         var value=$(e.target).text();
@@ -287,7 +287,7 @@ $(document).ready(function()
                else
                {
                    cell=row.insertCell(2);
-                   cell.appendChild(document.createTextNode(""));
+                   cell.appendChild(document.createTextNode("---"));
                }
 
                 if(data[k]["payment_date"]!=null)
@@ -301,7 +301,7 @@ $(document).ready(function()
                else
                {
                    cell=row.insertCell(3);
-                   cell.appendChild(document.createTextNode(""));
+                   cell.appendChild(document.createTextNode("---"));
                }
                
                 cell=row.insertCell(4);
@@ -350,7 +350,7 @@ $(document).ready(function()
 
      $("#next").click(function()
      {
-         var maxRow=2;
+         var maxRow=10;
          var column=$(this).data("column");
          var value=$(this).data("value");
          var user_id=document.getElementById("user-id-input").value;
@@ -393,7 +393,7 @@ $(document).ready(function()
              var start=lastIndex+1;
              var url="";
 
-             if(length>0&& data[start]!=null)
+             if(length>0 && data[start]!=null)
              {
                  for(var k=0;k<length-1;k++)
                  {
@@ -426,7 +426,7 @@ $(document).ready(function()
                 else
                 {
                     cell=row.insertCell(2);
-                    cell.appendChild(document.createTextNode(""));
+                    cell.appendChild(document.createTextNode("---"));
                 }
  
                  if(data[start]["payment_date"]!=null)
@@ -439,7 +439,7 @@ $(document).ready(function()
                 else
                 {
                     cell=row.insertCell(3);
-                    cell.appendChild(document.createTextNode(""));
+                    cell.appendChild(document.createTextNode("---"));
                 } 
  
                 cell=row.insertCell(4);
@@ -467,7 +467,7 @@ $(document).ready(function()
 
      $("#prev").click(function()
      {
-        var maxRow=2;
+        var maxRow=10;
         var fTable=document.getElementById("filter-table");
         var length=fTable.rows.length;
         
@@ -553,7 +553,7 @@ $(document).ready(function()
                     else
                     {
                         cell=row.insertCell(3);
-                        cell.appendChild(document.createTextNode(""));
+                        cell.appendChild(document.createTextNode("---"));
                     }     
      
                     cell=row.insertCell(4);
@@ -582,7 +582,7 @@ $(document).ready(function()
 
      $(".submit-user-id").click(function()
      {
-        var maxRow=2;
+        var maxRow=10;
         var column=$("#prev").data("column");
         var value=$("#prev").data("value");
         console.log(column+" "+value);
@@ -675,7 +675,7 @@ $(document).ready(function()
                    else
                    {
                        cell=row.insertCell(2);
-                       cell.appendChild(document.createTextNode(""));
+                       cell.appendChild(document.createTextNode("---"));
                    }
     
                     if(data[k]["payment_date"]!=null)
@@ -689,7 +689,7 @@ $(document).ready(function()
                    else
                    {
                        cell=row.insertCell(3);
-                       cell.appendChild(document.createTextNode(""));
+                       cell.appendChild(document.createTextNode("---"));
                    }
                    
                     cell=row.insertCell(4);
@@ -963,6 +963,14 @@ function openModal() {
 // Close
 function closeModal() {
     modal.style.display = 'none';
+    document.getElementById("user_id").value = "";
+    document.getElementById("issue_date").value = "";
+    document.getElementById("used_resource").value = "";
+    document.getElementById("usage_cost").value = "";
+    document.getElementById("extra_cost").value = "";
+    document.getElementById("payment_date").value = "";
+    document.getElementById("paid_amount").value = "";
+
 }
 
 function closeEditModal() {
@@ -973,6 +981,13 @@ function closeEditModal() {
 function outsideClick(e) {
     if (e.target == modal) {
         modal.style.display = 'none';
+        document.getElementById("user_id").value = "";
+        document.getElementById("issue_date").value = "";
+        document.getElementById("used_resource").value = "";
+        document.getElementById("usage_cost").value = "";
+        document.getElementById("extra_cost").value = "";
+        document.getElementById("payment_date").value = "";
+        document.getElementById("paid_amount").value = "";
     }
     else if (e.target == edit_modal) {
         edit_modal.style.display = 'none';

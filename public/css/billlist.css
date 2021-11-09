@@ -229,9 +229,9 @@ td
 
 #prev
 {
-    position:relative;
-    left:15px;
-    top:-30px;
+    display:block;
+    margin-top:15px;
+    margin-left:230px;
     width:190px;
     height:30px;
     background-color:#994540;
@@ -243,9 +243,9 @@ td
 
 #next
 {
-    display:block;
-    margin-top:15px;
-    margin-left:230px;
+    position:relative;
+    left:15px;
+    top:-30px;
     width:190px;
     height:30px;
     background-color:#994540;

@@ -340,8 +340,15 @@ $(document).ready(function()
             cell2.appendChild(document.createTextNode(date));
 
             var cell3=row.insertCell(2);
-            var date=new Date(data[k]["payment_date"]).toString().substr(3,12);
-            cell3.appendChild(document.createTextNode(date));
+            if(data[k]["payment_date"] == null)
+            {
+                cell3.appendChild(document.createTextNode("---"));
+            }
+            else
+            {
+                var date=new Date(data[k]["payment_date"]).toString().substr(3,12);
+                cell3.appendChild(document.createTextNode(date));
+            }
 
             var cell4=row.insertCell(3);
             cell4.appendChild(document.createTextNode(data[k]["used_resource"]));
@@ -427,8 +434,15 @@ $("#next").click(function()
             cell2.appendChild(document.createTextNode(date));
 
             var cell3=row.insertCell(2);
-            var date=new Date(data[start]["payment_date"]).toString().substr(3,12);
-            cell3.appendChild(document.createTextNode(date));
+            if(data[start]["payment_date"] == null)
+            {
+                cell3.appendChild(document.createTextNode("---"));
+            }
+            else
+            {
+                var date=new Date(data[start]["payment_date"]).toString().substr(3,12);
+                cell3.appendChild(document.createTextNode(date));
+            }
 
             var cell4=row.insertCell(3);
             cell4.appendChild(document.createTextNode(data[start]["used_resource"]));
@@ -515,8 +529,15 @@ $("#prev").click(function()
             cell2.appendChild(document.createTextNode(date));
 
             var cell3=row.insertCell(2);
-            var date=new Date(data[start]["payment_date"]).toString().substr(3,12);
-            cell3.appendChild(document.createTextNode(date));
+            if(data[start]["payment_date"] == null)
+            {
+                cell3.appendChild(document.createTextNode("---"));
+            }
+            else
+            {
+                var date=new Date(data[start]["payment_date"]).toString().substr(3,12);
+                cell3.appendChild(document.createTextNode(date));
+            }
 
             var cell4=row.insertCell(3);
             cell4.appendChild(document.createTextNode(data[start]["used_resource"]));
