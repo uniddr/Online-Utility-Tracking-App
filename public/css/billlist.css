@@ -370,15 +370,15 @@ td a
     border-top-right-radius: 5px;
 }
   
-.close {
+.close, .edit-close {
     color: #ccc;
     float: right;
     font-size: 30px;
     color: #fff;
 }
   
-.close:hover,
-.close:focus {
+.close:hover, .close:focus, .edit-close:hover, .edit-close:focus
+{
     color: #000;
     text-decoration: none;
     cursor: pointer;
@@ -395,24 +395,11 @@ td a
 
 .modal-body {
     padding: 10px 20px;
-    background: #b44545ce;
+    background: #b93c36da;
+    /* background: #992a25da; */
+    
 }
 
-
-#username, #password, #email, #location, #user_type, #sub_type{
-    width: 800px;
-    height: 40px;
-    align-items: center;
-    outline:none;
-    border:1px solid white;
-    border-radius:2px;
-}
-
-#username:focus, #password:focus , #email:focus, #location:focus , #user_type:focus , #sub_type:focus
-{
-     border:2px solid #994540;
-     border-radius:5px;
-}
 
 #user_id,#issue_date,#payment_date,#used_resource,#usage_cost,#extra_cost,#paid_amount
 {
@@ -426,7 +413,7 @@ td a
 
 #user_id:focus, #issue_date:focus ,#payment_date:focus ,#used_resource:focus ,#usage_cost:focus ,#extra_cost:focus ,#paid_amount:focus
 {
-    border:2px solid #994540;
+    border:3px solid#ffd30e98;
     border-radius:5px;
 }
 
@@ -441,7 +428,47 @@ td a
 
 #add_bill:hover
 {
-    background: #681010;
+    background: #7c1010;
 }
+
+
+#edit-bill_id,#edit-user_id,#edit-issue_date,#edit-payment_date,#edit-used_resource,#edit-usage_cost,#edit-extra_cost,#edit-paid_amount
+{
+    width: 800px;
+    height: 30px;
+    outline:none;
+    border:1px solid white;
+    border-radius:2px;
+}
+
+#edit-bill_id:focus,#edit-user_id:focus, #edit-issue_date:focus ,#edit-payment_date:focus ,#edit-used_resource:focus ,#edit-usage_cost:focus ,#edit-extra_cost:focus ,#edit-paid_amount:focus
+{
+    border:3px solid #ffd30e98;
+    border-radius:8px;
+}
+
+#edit_bill{
+    background: #994540;
+    padding: 1em 2em;
+    color: #fff;
+    border: 0;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#edit_bill:hover
+{
+    background: #7c1010;
+}
+
+.modal-body p
+{
+    text-align:left;
+    margin-right:700px;
+    display:inline-block;
+    margin-top:-2px;
+    color:white;
+}
+
 
 

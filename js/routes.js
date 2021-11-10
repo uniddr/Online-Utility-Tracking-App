@@ -7,6 +7,8 @@ var cookieparser = require('cookie-parser');
 const util = require('util');
 
 const sendmail = require('./fphandler.js');
+const { request } = require('http');
+const { response } = require('express');
 var route = express();
 
 route.use('/css', express.static(path.join(__dirname, '..', 'public', 'css')));
@@ -939,13 +941,14 @@ route.get('/bill-list',function(req,res)
     }
     else if(req.session.loggedin && req.session.usertype=="C")
     {
-        res.send("Oops!!!You have no permission to view this page");
+        res.send("This page does not exist!");
     }
     else
     {
         res.send("You are not logged in");
     }
 });
+
 
 route.get('/get-filter-bill-menu',function(req,res)
 {
@@ -976,20 +979,20 @@ route.post('/get-filter-bill-data',function(req,res)
     {
         if(value=="Water" && Number.isNaN(user_id))
         {
-            var query="select bill_id, user_id, issue_date, payment_date, used_resource, usage_cost, extra_cost, (usage_cost+extra_cost) total_payable, paid_amount,(usage_cost+extra_cost-paid_amount) due_amount from sakila.node_water_bill ";
+            var query="select bill_id, user_id, issue_date, payment_date, used_resource, usage_cost, extra_cost, (usage_cost+extra_cost) total_payable, paid_amount,(usage_cost+extra_cost-paid_amount) due_amount from sakila.node_water_bill order by issue_date desc";
             connection.query(query,function(err,result)
             {
-                //console.log(result);
+                console.log(result);
                 var data=JSON.stringify(result);
                 res.send(data);
             });
         }
         else if(value=="Electricity" && Number.isNaN(user_id))
         {
-            var query="select bill_id, user_id, issue_date,payment_date, used_resource, usage_cost, extra_cost, (usage_cost+extra_cost) total_payable, paid_amount,(usage_cost+extra_cost-paid_amount) due_amount from sakila.node_electricity_bill";
+            var query="select bill_id, user_id, issue_date,payment_date, used_resource, usage_cost, extra_cost, (usage_cost+extra_cost) total_payable, paid_amount,(usage_cost+extra_cost-paid_amount) due_amount from sakila.node_electricity_bill order by issue_date desc";
             connection.query(query,function(err,result)
             {
-                //console.log(result);
+                console.log(result);
                 var data=JSON.stringify(result);
                 res.send(data);
             });
@@ -997,20 +1000,20 @@ route.post('/get-filter-bill-data',function(req,res)
 
         else if(value=="Water" && !Number.isNaN(user_id))
         {
-            var query="select bill_id, user_id, issue_date, payment_date, used_resource, usage_cost, extra_cost, (usage_cost+extra_cost) total_payable, paid_amount,(usage_cost+extra_cost-paid_amount) due_amount from sakila.node_water_bill where user_id=?";
+            var query="select bill_id, user_id, issue_date, payment_date, used_resource, usage_cost, extra_cost, (usage_cost+extra_cost) total_payable, paid_amount,(usage_cost+extra_cost-paid_amount) due_amount from sakila.node_water_bill where user_id=? order by issue_date desc";
             connection.query(query,[user_id],function(err,result)
             {
-                //console.log(result);
+                console.log(result);
                 var data=JSON.stringify(result);
                 res.send(data);
             });
         }
         else if(value=="Electricity" && !Number.isNaN(user_id))
         {
-            var query="select bill_id, user_id,  issue_date,  payment_date, used_resource, usage_cost, extra_cost, (usage_cost+extra_cost) total_payable, paid_amount,(usage_cost+extra_cost-paid_amount) due_amount from sakila.node_electricity_bill  where user_id=?";
+            var query="select bill_id, user_id,  issue_date,  payment_date, used_resource, usage_cost, extra_cost, (usage_cost+extra_cost) total_payable, paid_amount,(usage_cost+extra_cost-paid_amount) due_amount from sakila.node_electricity_bill  where user_id=? order by issue_date desc";
             connection.query(query,[user_id],function(err,result)
             {
-                //console.log(result);
+                console.log(result);
                 var data=JSON.stringify(result);
                 res.send(data);
             });
@@ -1022,7 +1025,7 @@ route.post('/get-filter-bill-data',function(req,res)
 
         if(Number.isNaN(user_id))
         {
-        var query="select bill_id, user_id,  issue_date,  payment_date, used_resource, usage_cost, extra_cost, (usage_cost+extra_cost) total_payable, paid_amount,(usage_cost+extra_cost-paid_amount) due_amount from sakila.node_electricity_bill where year(issue_date)=? union all select bill_id, user_id,  issue_date,  payment_date, used_resource, usage_cost, extra_cost, (usage_cost+extra_cost) total_payable, paid_amount,(usage_cost+extra_cost-paid_amount) due_amount from sakila.node_water_bill where year(issue_date)=? order by bill_id";
+        var query="select bill_id, user_id,  issue_date,  payment_date, used_resource, usage_cost, extra_cost, (usage_cost+extra_cost) total_payable, paid_amount,(usage_cost+extra_cost-paid_amount) due_amount from sakila.node_electricity_bill where year(issue_date)=? union all select bill_id, user_id,  issue_date,  payment_date, used_resource, usage_cost, extra_cost, (usage_cost+extra_cost) total_payable, paid_amount,(usage_cost+extra_cost-paid_amount) due_amount from sakila.node_water_bill where year(issue_date)=? order by issue_date desc";
         connection.query(query,[value,value],function(err,result)
         {
             console.log(result);
@@ -1033,7 +1036,7 @@ route.post('/get-filter-bill-data',function(req,res)
 
     else if(!Number.isNaN(user_id))
     {
-    var query="select * from(select bill_id, user_id, issue_date, payment_date, used_resource, usage_cost, extra_cost, (usage_cost+extra_cost) total_payable, paid_amount,(usage_cost+extra_cost-paid_amount) due_amount from sakila.node_electricity_bill where year(issue_date)=? union all select bill_id, user_id,  issue_date,  payment_date, used_resource, usage_cost, extra_cost, (usage_cost+extra_cost) total_payable, paid_amount,(usage_cost+extra_cost-paid_amount) due_amount from sakila.node_water_bill  where year(issue_date)=? order by bill_id) b where b.user_id=?";
+    var query="select * from(select bill_id, user_id, issue_date, payment_date, used_resource, usage_cost, extra_cost, (usage_cost+extra_cost) total_payable, paid_amount,(usage_cost+extra_cost-paid_amount) due_amount from sakila.node_electricity_bill where year(issue_date)=? union all select bill_id, user_id,  issue_date,  payment_date, used_resource, usage_cost, extra_cost, (usage_cost+extra_cost) total_payable, paid_amount,(usage_cost+extra_cost-paid_amount) due_amount from sakila.node_water_bill  where year(issue_date)=? order by issue_date desc) b where b.user_id=?";
     connection.query(query,[value,value,user_id],function(err,result)
     {
         console.log(result);
@@ -1047,18 +1050,25 @@ route.post('/get-filter-bill-data',function(req,res)
 ;
 route.post('/add_user', function(request, response)
     {
-        console.log(request.body);
-        var qry = "insert into sakila.node_users (`Username`,`Password`,`Email`,`User_type`,`Location`,`Sub_type`,`Elec_service`,`Elec_due`,`Water_service`,`Water_due`) values('"+ request.body.username +"', '"+ request.body.password +"', '"+ request.body.email +"', '"+ request.body.user_type +"', '"+ request.body.location +"', '"+ request.body.sub_type +"', '"+ request.body.elec_service +"', '"+ 0.00 +"', '"+ request.body.water_service +"', '"+ 0.00 +"')";
-        connection.query(qry, function(err){
-            if(err) 
-            {
-                throw (err);
-            }
-            else
-            {
-                response.send('Data Inserted Successfully');
-            }
-        });
+        if(request.session.loggedin)
+        {
+            console.log(request.body);
+            var qry = "insert into sakila.node_users (`Username`,`Password`,`Email`,`User_type`,`Location`,`Sub_type`,`Elec_service`,`Elec_due`,`Water_service`,`Water_due`) values('"+ request.body.username +"', '"+ request.body.password +"', '"+ request.body.email +"', '"+ request.body.user_type +"', '"+ request.body.location +"', '"+ request.body.sub_type +"', '"+ request.body.elec_service +"', '"+ 0.00 +"', '"+ request.body.water_service +"', '"+ 0.00 +"')";
+            connection.query(qry, function(err){
+                if(err) 
+                {
+                    throw (err);
+                }
+                else
+                {
+                    response.send('Data Inserted Successfully');
+                }
+            });
+        }
+        else
+        {
+            response.send("You are not logged in!");
+        }
     }
 );
 
@@ -1158,45 +1168,144 @@ route.post('/issue-bill',function(req,res)
     var elec_query_2="INSERT INTO sakila.node_electricity_bill (`user_id`, `issue_date`, `used_resource`, `usage_cost`, `extra_cost`) VALUES (?,?,?,?,?)";
     var water_query_1="insert into sakila.node_water_bill (`user_id`, `issue_date`, `payment_date`, `used_resource`, `usage_cost`, `extra_cost`, `paid_amount`) values(?,?,?,?,?,?,?)";
     var water_query_2="INSERT INTO sakila.node_water_bill (`user_id`, `issue_date`, `used_resource`, `usage_cost`, `extra_cost`) VALUES (?,?,?,?,?)";
-    if(service=="Electricity")
+    if(req.session.loggedin)
     {
-        if(!Number.isNaN(paid_amount))
+        if(service=="Electricity")
         {
-            connection.query(elec_query_1,[user_id,i_date,p_date,used,usage_cost,extra,paid_amount],function(err,r)
+            if(!Number.isNaN(paid_amount))
             {
-                res.send("Successfully issued!");
-            });
+                connection.query(elec_query_1,[user_id,i_date,p_date,used,usage_cost,extra,paid_amount],function(err,r)
+                {
+                    res.send("Successfully issued!");
+                });
+            }
+
+            else if(Number.isNaN(paid_amount))
+            {
+                connection.query(elec_query_2,[user_id,i_date,used,usage_cost,extra],function(err,r)
+                {
+                    res.send("Successfully issued!");
+                });
+            }
         }
 
-        else if(Number.isNaN(paid_amount))
+        else if(service=="Water")
         {
-            connection.query(elec_query_2,[user_id,i_date,used,usage_cost,extra],function(err,r)
+            if(!Number.isNaN(paid_amount))
             {
-                res.send("Successfully issued!");
-            });
+                connection.query(water_query_1,[user_id,i_date,p_date,used,usage_cost,extra,paid_amount],function(err,r)
+                {
+                    res.send("Successfully issued!");
+                });
+            }
+
+            else if(Number.isNaN(paid_amount))
+            {
+                connection.query(water_query_2,[user_id,i_date,used,usage_cost,extra],function(err,r)
+                {
+                    res.send("Successfully issued!");
+                });
+            }
         }
-}
-
-else if(service=="Water")
-{
-    if(!Number.isNaN(paid_amount))
-    {
-        connection.query(water_query_1,[user_id,i_date,p_date,used,usage_cost,extra,paid_amount],function(err,r)
-        {
-            res.send("Successfully issued!");
-        });
     }
-
-    else if(Number.isNaN(paid_amount))
+    else
     {
-        connection.query(water_query_2,[user_id,i_date,used,usage_cost,extra],function(err,r)
-        {
-            res.send("Successfully issued!");
-        });
+        res.send("You are not logged in!");
     }
-}
    
 });
+
+route.post('/get-date',function(req,res)
+{
+    var data={};
+    var date=new Date(req.body.date);
+    console.log(req.body.date);
+    //var i_date=new Date("Mar 02 2021");
+    var newDate=get_date(date);
+    console.log(newDate);
+    data["date"]=newDate;
+    res.send(JSON.stringify(data));
+
+    function get_date(d)
+    {
+        var date=d.getDate();
+        var month=d.getMonth()+1;
+        var year=d.getFullYear();
+        var date_str="";
+        date_str+=year.toString()+"-";
+        if(month<10)
+        {
+            date_str+="0"+month.toString()+"-";
+        }
+        if(month==10 || month>10)
+        {
+            date_str+=month.toString()+"-";
+        }
+        if(date<10)
+        {
+            date_str+="0"+date.toString();
+        }
+        if(date==10 || date>10)
+        {
+            date_str+=date.toString();
+        }
+        return date_str;
+    }
+});
+
+route.post('/edit-bill',function(req,res)
+{
+    var bill_id=Number.parseInt(req.body.bill_id);
+    var user_id=Number.parseInt(req.body.user_id);
+    var used=Number.parseInt(req.body.used_resource);
+    var paid_amount=Number.parseInt(req.body.paid_amount);
+    var total_payable=Number.parseInt(req.body.usage_cost);
+    var extra=Number.parseInt(req.body.extra_cost);
+    var i_date=req.body.issue_date;
+    var p_date=req.body.payment_date;
+    var service=req.body.service;
+    console.log(bill_id+" "+user_id+" "+used+" "+extra+" "+total_payable+" "+paid_amount+" "+i_date+" "+p_date+" "+service);
+    var water_query="update sakila.node_water_bill set issue_date=?,payment_date=?,used_resource=?,usage_cost=?,extra_cost=?,paid_amount=? where bill_id=? and user_id=?";
+    var elec_query="update sakila.node_electricity_bill set issue_date=?,payment_date=?,used_resource=?,usage_cost=?,extra_cost=?,paid_amount=? where bill_id=? and user_id=?";
+    if(req.session.loggedin)
+    {
+        if(service=="Water")
+        {
+            connection.query(water_query,[i_date,p_date,used,total_payable-extra,extra,paid_amount,bill_id,user_id],function(err,result)
+            {
+                if(err)
+                {
+                    res.send("No record found in Water Service");
+                }
+                else
+                {
+                    res.send("Bill statistics has been updated");
+                }
+            });
+        }
+
+        if(service=="Electricity")
+        {
+            connection.query(elec_query,[i_date,p_date,used,total_payable-extra,extra,paid_amount,bill_id,user_id],function(err,result)
+            {
+                if(err)
+                {
+                    res.send("No record found in Electricity Service");
+                }
+                else
+                {
+                    res.send("Bill statistics has been updated");
+                }
+            });
+        }
+    }
+    else
+    {
+        res.send("You are not logged in!");
+    }
+
+});
+
 
 
 module.exports = route;
