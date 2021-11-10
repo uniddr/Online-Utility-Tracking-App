@@ -31,8 +31,8 @@ var connection = mysql.createConnection(
     {
         host : 'localhost',
         user : 'root',
-        password : 'sql5d*&T^',
-        port : '3306'
+        password : 'DartrixDDR4L',
+        port : '3307'
     }
 );
 
@@ -979,7 +979,7 @@ route.post('/get-filter-bill-data',function(req,res)
     {
         if(value=="Water" && Number.isNaN(user_id))
         {
-            var query="select bill_id, user_id, issue_date, payment_date, used_resource, usage_cost, extra_cost, (usage_cost+extra_cost) total_payable, paid_amount,(usage_cost+extra_cost-paid_amount) due_amount from sakila.node_water_bill ";
+            var query="select bill_id, user_id, issue_date, payment_date, used_resource, usage_cost, extra_cost, (usage_cost+extra_cost) total_payable, paid_amount,(usage_cost+extra_cost-paid_amount) due_amount from sakila.node_water_bill order by issue_date desc";
             connection.query(query,function(err,result)
             {
                 console.log(result);
@@ -989,7 +989,7 @@ route.post('/get-filter-bill-data',function(req,res)
         }
         else if(value=="Electricity" && Number.isNaN(user_id))
         {
-            var query="select bill_id, user_id, issue_date,payment_date, used_resource, usage_cost, extra_cost, (usage_cost+extra_cost) total_payable, paid_amount,(usage_cost+extra_cost-paid_amount) due_amount from sakila.node_electricity_bill";
+            var query="select bill_id, user_id, issue_date,payment_date, used_resource, usage_cost, extra_cost, (usage_cost+extra_cost) total_payable, paid_amount,(usage_cost+extra_cost-paid_amount) due_amount from sakila.node_electricity_bill order by issue_date desc";
             connection.query(query,function(err,result)
             {
                 console.log(result);
@@ -1000,7 +1000,7 @@ route.post('/get-filter-bill-data',function(req,res)
 
         else if(value=="Water" && !Number.isNaN(user_id))
         {
-            var query="select bill_id, user_id, issue_date, payment_date, used_resource, usage_cost, extra_cost, (usage_cost+extra_cost) total_payable, paid_amount,(usage_cost+extra_cost-paid_amount) due_amount from sakila.node_water_bill where user_id=?";
+            var query="select bill_id, user_id, issue_date, payment_date, used_resource, usage_cost, extra_cost, (usage_cost+extra_cost) total_payable, paid_amount,(usage_cost+extra_cost-paid_amount) due_amount from sakila.node_water_bill where user_id=? order by issue_date desc";
             connection.query(query,[user_id],function(err,result)
             {
                 console.log(result);
@@ -1010,7 +1010,7 @@ route.post('/get-filter-bill-data',function(req,res)
         }
         else if(value=="Electricity" && !Number.isNaN(user_id))
         {
-            var query="select bill_id, user_id,  issue_date,  payment_date, used_resource, usage_cost, extra_cost, (usage_cost+extra_cost) total_payable, paid_amount,(usage_cost+extra_cost-paid_amount) due_amount from sakila.node_electricity_bill  where user_id=?";
+            var query="select bill_id, user_id,  issue_date,  payment_date, used_resource, usage_cost, extra_cost, (usage_cost+extra_cost) total_payable, paid_amount,(usage_cost+extra_cost-paid_amount) due_amount from sakila.node_electricity_bill  where user_id=? order by issue_date desc";
             connection.query(query,[user_id],function(err,result)
             {
                 console.log(result);
@@ -1025,7 +1025,7 @@ route.post('/get-filter-bill-data',function(req,res)
 
         if(Number.isNaN(user_id))
         {
-        var query="select bill_id, user_id,  issue_date,  payment_date, used_resource, usage_cost, extra_cost, (usage_cost+extra_cost) total_payable, paid_amount,(usage_cost+extra_cost-paid_amount) due_amount from sakila.node_electricity_bill where year(issue_date)=? union all select bill_id, user_id,  issue_date,  payment_date, used_resource, usage_cost, extra_cost, (usage_cost+extra_cost) total_payable, paid_amount,(usage_cost+extra_cost-paid_amount) due_amount from sakila.node_water_bill where year(issue_date)=? order by bill_id";
+        var query="select bill_id, user_id,  issue_date,  payment_date, used_resource, usage_cost, extra_cost, (usage_cost+extra_cost) total_payable, paid_amount,(usage_cost+extra_cost-paid_amount) due_amount from sakila.node_electricity_bill where year(issue_date)=? union all select bill_id, user_id,  issue_date,  payment_date, used_resource, usage_cost, extra_cost, (usage_cost+extra_cost) total_payable, paid_amount,(usage_cost+extra_cost-paid_amount) due_amount from sakila.node_water_bill where year(issue_date)=? order by issue_date desc";
         connection.query(query,[value,value],function(err,result)
         {
             console.log(result);
@@ -1036,7 +1036,7 @@ route.post('/get-filter-bill-data',function(req,res)
 
     else if(!Number.isNaN(user_id))
     {
-    var query="select * from(select bill_id, user_id, issue_date, payment_date, used_resource, usage_cost, extra_cost, (usage_cost+extra_cost) total_payable, paid_amount,(usage_cost+extra_cost-paid_amount) due_amount from sakila.node_electricity_bill where year(issue_date)=? union all select bill_id, user_id,  issue_date,  payment_date, used_resource, usage_cost, extra_cost, (usage_cost+extra_cost) total_payable, paid_amount,(usage_cost+extra_cost-paid_amount) due_amount from sakila.node_water_bill  where year(issue_date)=? order by bill_id) b where b.user_id=?";
+    var query="select * from(select bill_id, user_id, issue_date, payment_date, used_resource, usage_cost, extra_cost, (usage_cost+extra_cost) total_payable, paid_amount,(usage_cost+extra_cost-paid_amount) due_amount from sakila.node_electricity_bill where year(issue_date)=? union all select bill_id, user_id,  issue_date,  payment_date, used_resource, usage_cost, extra_cost, (usage_cost+extra_cost) total_payable, paid_amount,(usage_cost+extra_cost-paid_amount) due_amount from sakila.node_water_bill  where year(issue_date)=? order by issue_date desc) b where b.user_id=?";
     connection.query(query,[value,value,user_id],function(err,result)
     {
         console.log(result);
