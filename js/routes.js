@@ -1239,6 +1239,51 @@ route.post('/get-date',function(req,res)
     }
 });
 
+route.post('/edit-bill',function(req,res)
+{
+    var bill_id=Number.parseInt(req.body.bill_id);
+    var user_id=Number.parseInt(req.body.user_id);
+    var used=Number.parseInt(req.body.used_resource);
+    var paid_amount=Number.parseInt(req.body.paid_amount);
+    var total_payable=Number.parseInt(req.body.usage_cost);
+    var extra=Number.parseInt(req.body.extra_cost);
+    var i_date=req.body.issue_date;
+    var p_date=req.body.payment_date;
+    var service=req.body.service;
+    console.log(bill_id+" "+user_id+" "+used+" "+extra+" "+total_payable+" "+paid_amount+" "+i_date+" "+p_date+" "+service);
+    var water_query="update sakila.node_water_bill set issue_date=?,payment_date=?,used_resource=?,usage_cost=?,extra_cost=?,paid_amount=? where bill_id=? and user_id=?";
+    var elec_query="update sakila.node_electricity_bill set issue_date=?,payment_date=?,used_resource=?,usage_cost=?,extra_cost=?,paid_amount=? where bill_id=? and user_id=?";
+    if(service=="Water")
+    {
+                connection.query(water_query,[i_date,p_date,used,total_payable-extra,extra,paid_amount,bill_id,user_id],function(err,result)
+                {
+                    if(err)
+                    {
+                        res.send("No record found in Water Service");
+                    }
+                    else
+                    {
+                        res.send("Bill statistics has been updated");
+                    }
+                });
+    }
+
+    if(service=="Electricity")
+    {
+                connection.query(elec_query,[i_date,p_date,used,total_payable-extra,extra,paid_amount,bill_id,user_id],function(err,result)
+                {
+                    if(err)
+                    {
+                        res.send("No record found in Electricity Service");
+                    }
+                    else
+                    {
+                        res.send("Bill statistics has been updated");
+                    }
+                });
+            }
+
+});
 
 
 

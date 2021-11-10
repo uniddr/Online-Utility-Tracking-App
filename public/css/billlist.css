@@ -444,7 +444,7 @@ td a
 #edit-bill_id:focus,#edit-user_id:focus, #edit-issue_date:focus ,#edit-payment_date:focus ,#edit-used_resource:focus ,#edit-usage_cost:focus ,#edit-extra_cost:focus ,#edit-paid_amount:focus
 {
     border:3px solid #ffd30e98;
-    border-radius:5px;
+    border-radius:8px;
 }
 
 #edit_bill{
